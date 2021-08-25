@@ -141,10 +141,10 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Go Build.go build macos amd64" />
-      <item itemvalue="Go Build.go build macos arm64" />
       <item itemvalue="Go Build.go build linux amd64" />
       <item itemvalue="Go Build.go build linux arm64" />
+      <item itemvalue="Go Build.go build macos amd64" />
+      <item itemvalue="Go Build.go build macos arm64" />
       <item itemvalue="Go Build.go build windows amd64" />
       <item itemvalue="Go Build.go build windows arm64" />
       <item itemvalue="Node.js.index.js" />
