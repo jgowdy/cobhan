@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e1415213-01c4-47e7-b15f-90583807392b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node-ffi-napi/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/node-ffi-napi/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node-ffi-napi/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/node-ffi-napi/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node-ffi-napi/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node-ffi-napi/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/macos/arm64/libplugtest.dylib" beforeDir="false" afterPath="$PROJECT_DIR$/output/macos/arm64/libplugtest.dylib" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
