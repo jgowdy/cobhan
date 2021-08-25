@@ -1,0 +1,8 @@
+*.so
+*.dylib
+node_modules
+
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
