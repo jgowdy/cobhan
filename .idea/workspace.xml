@@ -5,21 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e1415213-01c4-47e7-b15f-90583807392b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/output/linux/amd64/libplugtest.so" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/output/linux/arm64/libplugtest.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/output/linux/arm64/libplugtest.so" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/output/macos/amd64/libplugtest.dylib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/output/macos/amd64/libplugtest.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/output/macos/arm64/libplugtest.dylib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/output/macos/arm64/libplugtest.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/output/windows/amd64/libplugtest.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/output/windows/amd64/libplugtest.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/output/windows/arm64/libplugtest.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/output/windows/arm64/libplugtest.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libplugtest.h" beforeDir="false" afterPath="$PROJECT_DIR$/output/linux/amd64/libplugtest.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node-ffi-napi/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/node-ffi-napi/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node-ffi-napi/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/node-ffi-napi/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node-ffi-napi/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node-ffi-napi/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,6 +29,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -47,12 +37,12 @@
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.modules.go.list.on.any.changes.was.set" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
-    <property name="javascript.nodejs.core.library.configured.version" value="14.17.5" />
-    <property name="javascript.nodejs.core.library.typings.version" value="14.17.5" />
+    <property name="javascript.nodejs.core.library.configured.version" value="16.7.0" />
+    <property name="javascript.nodejs.core.library.typings.version" value="16.7.0" />
     <property name="last_opened_file_path" value="$USER_HOME$" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
-  <component name="RunManager" selected="Go Build.go build windows arm64">
+  <component name="RunManager" selected="Node.js.index.js">
     <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="cobhan" />
       <working_directory value="$PROJECT_DIR$" />
@@ -178,6 +168,9 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>

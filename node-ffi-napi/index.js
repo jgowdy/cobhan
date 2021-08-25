@@ -1,6 +1,35 @@
 var ffi = require('ffi-napi');
+var process = require('process');
 
-var libplugtest = ffi.Library('../libplugtest', {
+var os_path;
+switch (process.platform.toLowerCase()) {
+    case 'win32':
+        os_path = 'windows';
+        break;
+    case 'linux':
+        os_path = 'linux';
+        break;
+    case 'darwin':
+        os_path = 'macos';
+        break;
+    default:
+        throw 'Unsupported operating system';
+}
+
+var arch_path;
+switch (process.arch.toLowerCase()) {
+    case 'arm64':
+        arch_path = 'arm64';
+        break;
+    case 'x64':
+        arch_path = 'amd64';
+        break;
+    default:
+        throw 'Unsupported architecture';
+}
+
+
+var libplugtest = ffi.Library('../output/' + os_path + '/' + arch_path + '/libplugtest', {
     'toUpperInC': ['void', ['char *']]
 });
 
