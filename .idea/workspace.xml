@@ -4,13 +4,29 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e1415213-01c4-47e7-b15f-90583807392b" name="Changes" comment="" />
+    <list default="true" id="e1415213-01c4-47e7-b15f-90583807392b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/output/linux/amd64/libplugtest.so" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/linux/arm64/libplugtest.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/linux/arm64/libplugtest.so" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/macos/amd64/libplugtest.dylib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/macos/amd64/libplugtest.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/macos/arm64/libplugtest.dylib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/macos/arm64/libplugtest.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/windows/amd64/libplugtest.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/windows/amd64/libplugtest.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/windows/arm64/libplugtest.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/windows/arm64/libplugtest.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libplugtest.h" beforeDir="false" afterPath="$PROJECT_DIR$/output/linux/amd64/libplugtest.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="GOROOT" url="file:///usr/local/Cellar/go/1.16.6/libexec" />
+  <component name="GOROOT" url="file:///snap/go/current" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -30,12 +46,13 @@
     <property name="go.formatter.settings.were.checked" value="true" />
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.modules.go.list.on.any.changes.was.set" value="true" />
+    <property name="go.sdk.automatically.set" value="true" />
     <property name="javascript.nodejs.core.library.configured.version" value="14.17.5" />
     <property name="javascript.nodejs.core.library.typings.version" value="14.17.5" />
     <property name="last_opened_file_path" value="$USER_HOME$" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
-  <component name="RunManager" selected="Node.js.index.js">
+  <component name="RunManager" selected="Go Build.go build windows arm64">
     <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="cobhan" />
       <working_directory value="$PROJECT_DIR$" />
@@ -45,18 +62,78 @@
       <filePath value="$PROJECT_DIR$" />
       <method v="2" />
     </configuration>
-    <configuration name="go build cobhan" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+    <configuration name="go build linux amd64" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="cobhan" />
       <working_directory value="$PROJECT_DIR$" />
-      <kind value="PACKAGE" />
-      <package value="cobhan" />
+      <go_parameters value="-buildmode=c-shared -o output/linux/amd64/libplugtest.so" />
+      <envs>
+        <env name="CGO_ENABLED" value="1 GOOS=linux GOARCH=amd64" />
+      </envs>
+      <kind value="DIRECTORY" />
       <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <option name="run" value="false" />
       <method v="2" />
     </configuration>
-    <configuration name="go build dylib" type="GoApplicationRunConfiguration" factoryName="Go Application">
+    <configuration name="go build linux arm64" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="cobhan" />
       <working_directory value="$PROJECT_DIR$" />
-      <go_parameters value="-buildmode=c-shared -o libplugtest.dylib" />
+      <go_parameters value="-buildmode=c-shared -o output/linux/arm64/libplugtest.so" />
+      <envs>
+        <env name="CGO_ENABLED" value="1 GOOS=linux GOARCH=arm64" />
+      </envs>
+      <kind value="DIRECTORY" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <option name="run" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go build macos amd64" type="GoApplicationRunConfiguration" factoryName="Go Application">
+      <module name="cobhan" />
+      <working_directory value="$PROJECT_DIR$" />
+      <go_parameters value="-buildmode=c-shared -o output/macos/amd64/libplugtest.dylib" />
+      <envs>
+        <env name="CGO_ENABLED" value="1 GOOS=darwin GOARCH=amd64" />
+      </envs>
+      <kind value="DIRECTORY" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <option name="run" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go build macos arm64" type="GoApplicationRunConfiguration" factoryName="Go Application">
+      <module name="cobhan" />
+      <working_directory value="$PROJECT_DIR$" />
+      <go_parameters value="-buildmode=c-shared -o output/macos/arm64/libplugtest.dylib" />
+      <envs>
+        <env name="CGO_ENABLED" value="1 GOOS=darwin GOARCH=arm64" />
+      </envs>
+      <kind value="DIRECTORY" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <option name="run" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go build windows amd64" type="GoApplicationRunConfiguration" factoryName="Go Application">
+      <module name="cobhan" />
+      <working_directory value="$PROJECT_DIR$" />
+      <go_parameters value="-buildmode=c-shared -o output/windows/amd64/libplugtest.dll" />
+      <envs>
+        <env name="CGO_ENABLED" value="1 GOOS=windows GOARCH=amd64" />
+      </envs>
+      <kind value="DIRECTORY" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <option name="run" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go build windows arm64" type="GoApplicationRunConfiguration" factoryName="Go Application">
+      <module name="cobhan" />
+      <working_directory value="$PROJECT_DIR$" />
+      <go_parameters value="-buildmode=c-shared -o output/windows/arm64/libplugtest.dll" />
+      <envs>
+        <env name="CGO_ENABLED" value="1 GOOS=windows GOARCH=arm64" />
+      </envs>
       <kind value="DIRECTORY" />
       <directory value="$PROJECT_DIR$" />
       <filePath value="$PROJECT_DIR$" />
@@ -73,19 +150,18 @@
       <framework value="gotest" />
       <method v="2" />
     </configuration>
-    <configuration name="index.js" type="NodeJSConfigurationType" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/node-ffi-napi/index.js" working-dir="$PROJECT_DIR$/node-ffi-napi">
+    <configuration name="index.js" type="NodeJSConfigurationType" nameIsGenerated="true" path-to-js-file="index.js" working-dir="$PROJECT_DIR$/node-ffi-napi">
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Go Build.go build dylib" />
-      <item itemvalue="Go Build.go build cobhan" />
+      <item itemvalue="Go Build.go build macos amd64" />
+      <item itemvalue="Go Build.go build macos arm64" />
+      <item itemvalue="Go Build.go build linux amd64" />
+      <item itemvalue="Go Build.go build linux arm64" />
+      <item itemvalue="Go Build.go build windows amd64" />
+      <item itemvalue="Go Build.go build windows arm64" />
       <item itemvalue="Node.js.index.js" />
     </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Go Build.go build cobhan" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TypeScriptGeneratedFilesManager">
@@ -101,6 +177,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>

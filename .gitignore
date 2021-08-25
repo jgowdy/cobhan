@@ -1,5 +1,3 @@
-*.so
-*.dylib
 node_modules
 
 .idea/**/tasks.xml

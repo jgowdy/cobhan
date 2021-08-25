@@ -22,7 +22,6 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 #line 3 "main.go"
 
  #include "toupper.h"
- #include <dlfcn.h>
 
 #line 1 "cgo-generated-wrapper"
 
