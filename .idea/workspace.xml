@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e1415213-01c4-47e7-b15f-90583807392b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node-ffi-napi/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/node-ffi-napi/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/windows/amd64/libplugtest.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/windows/amd64/libplugtest.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/windows/amd64/libplugtest.h" beforeDir="false" afterPath="$PROJECT_DIR$/output/windows/amd64/libplugtest.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/macos/arm64/libplugtest.dylib" beforeDir="false" afterPath="$PROJECT_DIR$/output/macos/arm64/libplugtest.dylib" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,8 +34,8 @@
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.modules.go.list.on.any.changes.was.set" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
-    <property name="javascript.nodejs.core.library.configured.version" value="16.6.0" />
-    <property name="javascript.nodejs.core.library.typings.version" value="16.6.0" />
+    <property name="javascript.nodejs.core.library.configured.version" value="16.7.0" />
+    <property name="javascript.nodejs.core.library.typings.version" value="16.7.0" />
     <property name="last_opened_file_path" value="$USER_HOME$" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
@@ -174,17 +171,5 @@
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/node-ffi-napi/index.js</url>
-          <line>31</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
