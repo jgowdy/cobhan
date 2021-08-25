@@ -30,7 +30,7 @@ switch (process.arch.toLowerCase()) {
 
 
 var libplugtest = ffi.Library('../output/' + os_path + '/' + arch_path + '/libplugtest', {
-    'toUpperInC': ['void', ['char *']]
+    'toUpper': ['void', ['char *']]
 });
 
 var maxStringLength = 200;
@@ -39,7 +39,7 @@ theStringBuffer.fill(0); //if you want to initially clear the buffer
 theStringBuffer.write("Initial value", 0, "utf-8"); //if you want to give it an initial value
 
 //call the function
-libplugtest.toUpperInC(theStringBuffer);
+libplugtest.toUpper(theStringBuffer);
 
 //retrieve and convert the result back to a javascript string
 var theString = theStringBuffer.toString('utf-8');
