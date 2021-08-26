@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e1415213-01c4-47e7-b15f-90583807392b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/output/macos/arm64/libplugtest.dylib" beforeDir="false" afterPath="$PROJECT_DIR$/output/macos/arm64/libplugtest.dylib" afterDir="false" />
+    <list default="true" id="e1415213-01c4-47e7-b15f-90583807392b" name="Changes" comment="Add library mappings">
+      <change afterPath="$PROJECT_DIR$/python-cffi/example.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,7 +40,7 @@
     <property name="last_opened_file_path" value="$USER_HOME$" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
-  <component name="RunManager" selected="Node.js.index.js">
+  <component name="RunManager" selected="Go Build.go build macos arm64">
     <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="cobhan" />
       <working_directory value="$PROJECT_DIR$" />
@@ -168,6 +169,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="Fix bad cross-compile of MacOS arm64" />
+    <MESSAGE value="Add library mappings" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add library mappings" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
