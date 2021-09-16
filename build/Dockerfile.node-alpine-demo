@@ -7,15 +7,13 @@ FROM libplugtest-linux-musl AS libplugtest-linux-musl
 
 # Test libplugtest.so built for linux-musl using the node-ffi-napi project
 
-FROM node:alpine
+FROM docker.io/node:alpine
 
 RUN apk add git python3 make libffi musl-dev gcc g++
 
 COPY --from=libplugtest-binaries-clone /libplugtest-binaries /node-test/output
 
 COPY --from=cobhan-clone /cobhan /cobhan
-
-#RUN git clone --depth 1 --branch main --single-branch https://github.com/jgowdy/cobhan.git
 
 # Copy the node-ffi-napi project
 RUN cp -r /cobhan/node-ffi-napi /node-test/node-ffi-napi
@@ -28,7 +26,7 @@ RUN npm i --no-update-notifier
 # This is for being able to debug with gdb and strace effectively - NOT FOR PROD
 # ******************************************************************************
 # USER root
-# RUN apk add gdb strace
+# RUN apk add gdb strace binutils # Note: binutils is for readelf
 # ******************************************************************************
 
 RUN node .

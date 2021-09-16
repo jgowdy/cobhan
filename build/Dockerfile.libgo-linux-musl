@@ -1,6 +1,6 @@
 FROM cobhan-clone AS cobhan-clone
 
-FROM alpine AS libgo-linux-musl
+FROM docker.io/alpine AS libgo-linux-musl
 
 # Install build dependencies
 RUN apk add git vim make automake autoconf gmp gmp-dev mpfr mpfr-dev mpc mpc1-dev flex abuild bison texinfo gawk zip zlib-dev libucontext-dev gcc-gnat-bootstrap linux-headers isl-dev build-base
@@ -18,14 +18,10 @@ RUN abuild-keygen -a -n
 WORKDIR /home/build
 
 # Shallow clone the aports repo to get the abuild files
-#RUN git clone --depth 1 --branch v3.14.1 --single-branch https://git.alpinelinux.org/aports
 RUN git clone --depth 1 --branch v3.14.1 --single-branch https://github.com/alpinelinux/aports.git
 
 # Copy the repo from the cobhan-clone container
 COPY --from=cobhan-clone /cobhan /cobhan
-
-# Shallow clone the cobhan repo to get the patches
-#RUN git clone --depth 1 --branch main --single-branch https://github.com/jgowdy/cobhan.git
 
 # Move to the gcc aports directory to build gcc apks
 WORKDIR /home/build/aports/main/gcc
@@ -36,5 +32,6 @@ RUN cp /cobhan/alpine-abuild-gcc/* .
 # Build the apk files using abuild
 RUN LANG_CXX=0 LANG_D=0 LANG_OBJC=0 LANG_FORTRAN=0 LANG_ADA=0 abuild -K -s /home/build/src
 
-# Output apk files are in /home/build/packages
+# libgo.so.16 is in /home/build/aports/main/gcc/pkg/libgo/usr/lib/libgo.so.16.0.0
 
+# Output apk files are in /home/build/packages

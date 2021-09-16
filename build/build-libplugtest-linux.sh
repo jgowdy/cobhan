@@ -10,14 +10,12 @@ $DOCKER build $DOCKER_BUILD_FLAGS -t libplugtest-linux - <Dockerfile.libplugtest
 $DOCKER run --cidfile ./libplugtest-linux-cid libplugtest-linux
 
 LIBPLUGTEST_CID=`cat ./libplugtest-linux-cid`
+MACHINE=`uname -m`
 
-$DOCKER export $LIBPLUGTEST_CID -o libplugtest-linux-`uname -m`.tar
+$DOCKER export $LIBPLUGTEST_CID -o libplugtest-linux-$MACHINE.tar
 
 $DOCKER rm $LIBPLUGTEST_CID
 
 rm ./libplugtest-linux-cid
 
-
-
-
-
+tar -x --strip-components=1 -f libplugtest-linux-musl-$MACHINE.tar output/libplugtest.*

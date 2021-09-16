@@ -1,15 +1,12 @@
 FROM cobhan-clone AS cobhan-clone
 
-FROM alpine AS build-libplugtest-linux-musl
+FROM docker.io/alpine AS build-libplugtest-linux-musl
 
 # Don't install gcc-go or build-base until our patched libgo apk is installed
 RUN apk add gcc-go build-base git
 
 # Copy the repo from the cobhan-clone container
 COPY --from=cobhan-clone /cobhan /cobhan
-
-# Shallow clone the cobhan repo to build libplugtest 
-#RUN git clone --depth 1 --branch main --single-branch https://github.com/jgowdy/cobhan.git
 
 # Move into cobhan directory
 WORKDIR /cobhan
