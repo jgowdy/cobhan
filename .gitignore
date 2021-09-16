@@ -1,0 +1,10 @@
+.DS_Store
+node_modules
+bin/
+obj/
+.idea
+.vscode
+/cobhan
+/build/*-cid
+/build/*.tar
+/output

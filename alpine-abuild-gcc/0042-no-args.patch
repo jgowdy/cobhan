@@ -1,0 +1,213 @@
+diff --git a/libgo/go/runtime/malloc.go b/libgo/go/runtime/malloc.go
+index 266f5eb..e0b9c9b 100644
+--- a/libgo/go/runtime/malloc.go
++++ b/libgo/go/runtime/malloc.go
+@@ -444,7 +444,8 @@ func mallocinit() {
+ 	// Check physPageSize.
+ 	if physPageSize == 0 {
+ 		// The OS init code failed to fetch the physical page size.
+-		throw("failed to get system page size")
++		print("Defaulting system page size to 4096")
++		physPageSize = 4096
+ 	}
+ 	if physPageSize > maxPhysPageSize {
+ 		print("system page size (", physPageSize, ") is larger than maximum page size (", maxPhysPageSize, ")\n")
+diff --git a/libgo/go/runtime/os_linux.go b/libgo/go/runtime/os_linux.go
+index 1e86446..27cd87b 100644
+--- a/libgo/go/runtime/os_linux.go
++++ b/libgo/go/runtime/os_linux.go
+@@ -5,7 +5,6 @@
+ package runtime
+ 
+ import (
+-	"runtime/internal/sys"
+ 	"unsafe"
+ )
+ 
+@@ -120,58 +119,53 @@ var addrspace_vec [1]byte
+ func mincore(addr unsafe.Pointer, n uintptr, dst *byte) int32
+ 
+ func sysargs(argc int32, argv **byte) {
+-	n := argc + 1
+-
+-	// skip over argv, envp to get to auxv
+-	for argv_index(argv, n) != nil {
+-		n++
+-	}
+-
+-	// skip NULL separator
+-	n++
+-
+-	// now argv+n is auxv
+-	auxv := (*[1 << 28]uintptr)(add(unsafe.Pointer(argv), uintptr(n)*sys.PtrSize))
+-	if sysauxv(auxv[:]) != 0 {
+-		return
+-	}
+ 	// In some situations we don't get a loader-provided
+ 	// auxv, such as when loaded as a library on Android.
+ 	// Fall back to /proc/self/auxv.
+ 	fd := open(&procAuxv[0], 0 /* O_RDONLY */, 0)
+-	if fd < 0 {
+-		// On Android, /proc/self/auxv might be unreadable (issue 9229), so we fallback to
+-		// try using mincore to detect the physical page size.
+-		// mincore should return EINVAL when address is not a multiple of system page size.
+-		const size = 256 << 10 // size of memory region to allocate
+-		p, err := mmap(nil, size, _PROT_READ|_PROT_WRITE, _MAP_ANON|_MAP_PRIVATE, -1, 0)
+-		if err != 0 {
++	if fd >= 0 {
++		var buf [128]uintptr
++		n := read(fd, noescape(unsafe.Pointer(&buf[0])), int32(unsafe.Sizeof(buf)))
++		closefd(fd)
++		if n < 0 {
++			mincore_pagesize()
+ 			return
+ 		}
+-		var n uintptr
+-		for n = 4 << 10; n < size; n <<= 1 {
+-			err := mincore(unsafe.Pointer(uintptr(p)+n), 1, &addrspace_vec[0])
+-			if err == 0 {
+-				physPageSize = n
+-				break
+-			}
+-		}
+-		if physPageSize == 0 {
+-			physPageSize = size
+-		}
+-		munmap(p, size)
+-		return
++		// Make sure buf is terminated, even if we didn't read
++		// the whole file.
++		buf[len(buf)-2] = _AT_NULL
++		sysauxv(buf[:])
+ 	}
+-	var buf [128]uintptr
+-	n = read(fd, noescape(unsafe.Pointer(&buf[0])), int32(unsafe.Sizeof(buf)))
+-	closefd(fd)
+-	if n < 0 {
++
++	// Don't leave without setting physPageSize
++	if physPageSize == 0 {
++		mincore_pagesize()
++	}
++}
++
++func mincore_pagesize() {
++	// On Android, /proc/self/auxv might be unreadable (issue 9229), so we fallback to
++	// try using mincore to detect the physical page size.
++	// mincore should return EINVAL when address is not a multiple of system page size.
++	const size = 256 << 10 // size of memory region to allocate
++	p, err := mmap(nil, size, _PROT_READ|_PROT_WRITE, _MAP_ANON|_MAP_PRIVATE, -1, 0)
++	if err != 0 {
++		physPageSize = size
+ 		return
+ 	}
+-	// Make sure buf is terminated, even if we didn't read
+-	// the whole file.
+-	buf[len(buf)-2] = _AT_NULL
+-	sysauxv(buf[:])
++	var n uintptr
++	for n = 4 << 10; n < size; n <<= 1 {
++		err := mincore(unsafe.Pointer(uintptr(p)+n), 1, &addrspace_vec[0])
++		if err == 0 {
++			physPageSize = n
++			break
++		}
++	}
++	if physPageSize == 0 {
++		physPageSize = size
++	}
++	munmap(p, size)
++	return
+ }
+ 
+ func sysauxv(auxv []uintptr) int {
+@@ -227,4 +221,7 @@ func getHugePageSize() uintptr {
+ func osinit() {
+ 	ncpu = getproccount()
+ 	physHugePageSize = getHugePageSize()
++	if physPageSize == 0 {
++		mincore_pagesize()
++	}
+ }
+diff --git a/libgo/go/runtime/proc.go b/libgo/go/runtime/proc.go
+index e098137..4948fb9 100644
+--- a/libgo/go/runtime/proc.go
++++ b/libgo/go/runtime/proc.go
+@@ -501,24 +501,6 @@ func cpuinit() {
+ 	switch GOOS {
+ 	case "aix", "darwin", "dragonfly", "freebsd", "netbsd", "openbsd", "illumos", "solaris", "linux":
+ 		cpu.DebugOptions = true
+-
+-		// Similar to goenv_unix but extracts the environment value for
+-		// GODEBUG directly.
+-		// TODO(moehrmann): remove when general goenvs() can be called before cpuinit()
+-		n := int32(0)
+-		for argv_index(argv, argc+1+n) != nil {
+-			n++
+-		}
+-
+-		for i := int32(0); i < n; i++ {
+-			p := argv_index(argv, argc+1+i)
+-			s := *(*string)(unsafe.Pointer(&stringStruct{unsafe.Pointer(p), findnull(p)}))
+-
+-			if hasPrefix(s, prefix) {
+-				env = gostring(p)[len(prefix):]
+-				break
+-			}
+-		}
+ 	}
+ 
+ 	cpu.Initialize(env)
+diff --git a/libgo/go/runtime/runtime1.go b/libgo/go/runtime/runtime1.go
+index 6edf7a5..4e35b79 100644
+--- a/libgo/go/runtime/runtime1.go
++++ b/libgo/go/runtime/runtime1.go
+@@ -57,46 +57,16 @@ func gotraceback() (level int32, all, crash bool) {
+ 	return
+ }
+ 
+-var (
+-	argc int32
+-	argv **byte
+-)
+-
+-// nosplit for use in linux startup sysargs
+-//go:nosplit
+-func argv_index(argv **byte, i int32) *byte {
+-	return *(**byte)(add(unsafe.Pointer(argv), uintptr(i)*sys.PtrSize))
+-}
+-
+ func args(c int32, v **byte) {
+-	argc = c
+-	argv = v
+ 	sysargs(c, v)
+ }
+ 
+ func goargs() {
+-	if GOOS == "windows" {
+-		return
+-	}
+-	argslice = make([]string, argc)
+-	for i := int32(0); i < argc; i++ {
+-		argslice[i] = gostringnocopy(argv_index(argv, i))
+-	}
++	argslice = make([]string, 0)
+ }
+ 
+ func goenvs_unix() {
+-	// TODO(austin): ppc64 in dynamic linking mode doesn't
+-	// guarantee env[] will immediately follow argv. Might cause
+-	// problems.
+-	n := int32(0)
+-	for argv_index(argv, argc+1+n) != nil {
+-		n++
+-	}
+-
+-	envs = make([]string, n)
+-	for i := int32(0); i < n; i++ {
+-		envs[i] = gostring(argv_index(argv, argc+1+i))
+-	}
++	envs = make([]string, 0)
+ }
+ 
+ func environ() []string {

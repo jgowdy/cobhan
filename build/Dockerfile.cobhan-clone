@@ -1,0 +1,3 @@
+FROM alpine
+RUN apk add git
+RUN git clone --depth 1 --branch main --single-branch https://github.com/jgowdy/cobhan
