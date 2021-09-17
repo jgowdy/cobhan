@@ -111,19 +111,6 @@ func CopyStringToCStr(str string, dstPtr *C.char, dstCap int) int {
 	return result
 }
 
-func strLenInGo(input *C.char) int {
-	ptr := unsafe.Pointer(input)
-	var i int
-	for ; ; i++ {
-		if *(*byte)(ptr) == 0 {
-			break
-		}
-		ptr = unsafe.Pointer(uintptr(ptr) + 1)
-		//ptr = unsafe.Add(ptr, 1)
-	}
-	return i
-}
-
 // Test functions
 
 const testStr = "Test String"
@@ -134,18 +121,6 @@ func allocateTestCharStar(size int32) *C.char {
 
 func freeTestCharStar(ptr *C.char) {
 	C.free(unsafe.Pointer(ptr))
-}
-
-func strLenInGoTest() {
-	input := C.CString(testStr)
-	defer C.free(unsafe.Pointer(input))
-
-	result := strLenInGo(input)
-	if result != len(testStr) {
-		panic(fmt.Sprintf("strLenInGoTest failed: Result: %d Expected: %d", result, len(testStr)))
-	}
-
-	fmt.Printf("strLenInGoTest success\n")
 }
 
 func toUpperTest() {
