@@ -7,4 +7,8 @@ obj/
 /cobhan
 /build/*-cid
 /build/*.tar
+/build/aarch64
+/build/*.0.0
+/build/*.so
+/build/*.h
 /output
