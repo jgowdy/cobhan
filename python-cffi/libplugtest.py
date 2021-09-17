@@ -16,7 +16,7 @@ ffi.cdef("""
     int32_t calculatePi(int32_t digits, char *output, int32_t outputCapacity);
 """)
 
-library_root_path = "../output/"
+library_root_path = str(os.path.abspath(os.path.join(os.path.dirname(__file__),"../output")))
 
 system = platform.system()
 need_chdir = 0
