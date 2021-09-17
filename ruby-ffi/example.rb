@@ -2,13 +2,8 @@ require 'ffi'
 
 UnsupportedPlatformError = Class.new(StandardError)
 
-if FFI::Platform::OS == 'linux'
-    Dir.children("/lib")
-    if Dir.glob("/lib/libc.musl*").length > 0
-        OS_PATH = 'linux-musl'
-    else
-        OS_PATH = 'linux'
-    end
+if FFI::Platform::OS == 'linux' && Dir.glob("/lib/libc.musl*").length > 0
+    OS_PATH = 'linux-musl'
 else
     OS_PATHS = { 'linux' => 'linux', 'darwin' => 'macos', 'windows' => 'windows' }.freeze
     OS_PATH = OS_PATHS[FFI::Platform::OS]
@@ -31,7 +26,7 @@ module MyLib
 
   # Switch to library directory
   Dir.chdir(lib_path)
-  
+
   # NOTE: Absolute path is required here
   ffi_lib "#{Dir.pwd}/libplugtest.#{EXT}"
 
