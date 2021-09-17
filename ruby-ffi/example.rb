@@ -24,7 +24,7 @@ raise UnsupportedPlatformError, "Unsupported CPU: #{FFI::Platform::CPU_ARCH}" un
 
 module MyLib
   extend FFI::Library
-  lib_path = "../output/#{os_path}/#{CPU_ARCH}/"
+  lib_path = "../output/#{OS_PATH}/#{CPU_ARCH}/"
   puts "Using path #{lib_path}"
   old_dir = Dir.pwd
   puts "Saving old directory #{old_dir}"
