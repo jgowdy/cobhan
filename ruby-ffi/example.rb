@@ -4,7 +4,7 @@ UnsupportedPlatformError = Class.new(StandardError)
 
 if FFI::Platform::OS == 'linux'
     Dir.children("/lib")
-    if Dir.glob("/lib/libc.musl*").length
+    if Dir.glob("/lib/libc.musl*").length > 0
         OS_PATH = 'linux-musl'
     else
         OS_PATH = 'linux'
@@ -25,11 +25,17 @@ raise UnsupportedPlatformError, "Unsupported CPU: #{FFI::Platform::CPU_ARCH}" un
 module MyLib
   extend FFI::Library
   lib_path = File.join(File.dirname(__FILE__), "../output/#{OS_PATH}/#{CPU_ARCH}")
-  puts "Using path #{lib_path}"
+
+  # Save current directory
   old_dir = Dir.pwd
-  puts "Saving old directory #{old_dir}"
+
+  # Switch to library directory
   Dir.chdir(lib_path)
-  ffi_lib File.join(lib_path, "libplugtest.#{EXT}")
+  
+  # NOTE: Absolute path is required here
+  ffi_lib "#{Dir.pwd}/libplugtest.#{EXT}"
+
+  # Restore directory
   Dir.chdir(old_dir)
 
   attach_function :calculatePi, [ :int32, :pointer, :int32 ], :int32
