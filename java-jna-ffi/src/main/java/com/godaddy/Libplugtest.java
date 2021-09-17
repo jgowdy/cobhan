@@ -2,6 +2,7 @@ package com.godaddy;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
+import java.nio.file.Path;
 
 import com.sun.jna.Library;
 import com.sun.jna.Native;
@@ -40,7 +41,7 @@ public class Libplugtest {
         }
 
         Path path = FileSystems.getDefault().getPath("../output/"+os_path+"/"+arch_path).toAbsolutePath().resolve("libplugtest." + ext);
-        
+
         libplugtest = (LibplugtestLibrary)Native.loadLibrary(path.toString(), Libplugtest.class);
     }
 
