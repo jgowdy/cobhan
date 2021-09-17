@@ -1,14 +1,24 @@
 import pathlib
 import platform
+import os
 
 from cffi import FFI
 ffi = FFI()
+
 ffi.cdef("""
-   void toUpper(char *input);
+   void sleepTest(int32_t seconds);
+   int32_t addInt32(int32_t x, int32_t y);
+   int64_t addInt64(int64_t x, int64_t y);
+   double addDouble(double x, double y);
+   int32_t toUpper(const char *input, int32_t inputLength, char *output, int32_t outputCapacity);
+   int32_t calculatePi(int32_t digits, char *output, int32_t outputCapacity);
 """)
+
+library_root_path = "../output/"
 
 system = platform.system()
 if system == "Linux":
+    # Check for /lib/libc.musl* so we can set the need_chdir flag
     os_path = "linux"
     ext = "so"
 elif system == "Darwin":
@@ -31,14 +41,23 @@ elif machine == "arm64":
 else:
     raise Exception("Unsupported CPU")
 
-library_path = pathlib.Path("../output/" + os_path + "/" + cpu_arch + "/libplugtest." + ext)
+# Get absolute library path
+library_path = pathlib.Path(os.path.join(library_root_path, os_path, cpu_arch)).resolve()
 
-lib = ffi.dlopen(str(library_path.resolve()))
+# Build library path with file name
+library_file_path = os.path.join(str(library_path), "libplugtest." + ext)
+
+# TODO: chdir if musl
+
+lib = ffi.dlopen(library_file_path)
+
+# TODO: restore directory
 
 input_str = 'Initial value'
 
 input_bytes = bytearray(input_str, 'utf8')
 cdata = ffi.from_buffer(input_bytes)
-lib.toUpper(cdata, input_bytes.count, cdata, input_bytes.count)
+
+lib.toUpper(cdata, len(input_bytes), cdata, len(input_bytes))
 
 print(input_bytes.decode())
