@@ -58,6 +58,11 @@ input_str = 'Initial value'
 input_bytes = bytearray(input_str, 'utf8')
 cdata = ffi.from_buffer(input_bytes)
 
-lib.toUpper(cdata, len(input_bytes), cdata, len(input_bytes))
+result = lib.toUpper(cdata, len(input_bytes), cdata, len(input_bytes))
+if result < 0:
+    raise Exception('toUpper failed')
 
-print(input_bytes.decode())
+output_str = ffi.unpack(cdata, result).decode('utf8')
+
+print("Output: " + output_str)
+print(type(output_str))
