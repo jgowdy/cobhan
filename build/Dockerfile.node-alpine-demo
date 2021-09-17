@@ -2,11 +2,6 @@ FROM cobhan-clone AS cobhan-clone
 
 FROM libplugtest-binaries-clone AS libplugtest-binaries-clone
 
-
-FROM libplugtest-linux-musl AS libplugtest-linux-musl
-
-# Test libplugtest.so built for linux-musl using the node-ffi-napi project
-
 FROM docker.io/node:alpine
 
 # libucontext is needed to support Linux-musl-arm64
@@ -21,12 +16,5 @@ WORKDIR /node-test/node-ffi-napi
 
 RUN npm i --no-update-notifier
 
-# ******************************************************************************
-# This is for being able to debug with gdb and strace effectively - NOT FOR PROD
-# ******************************************************************************
-# USER root
-# RUN apk add gdb strace binutils # Note: binutils is for readelf
-# ******************************************************************************
-
-RUN node .
+CMD node .
 
