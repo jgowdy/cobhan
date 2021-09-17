@@ -90,8 +90,8 @@ module Libplugtest
   end
 end
 
-#puts Libplugtest::calculate_pi(100)
-#puts Libplugtest::add_int32(10, 10)
-#puts Libplugtest::add_int64(20, 20)
-#puts Libplugtest::add_double(1.2, 2.3)
-#puts Libplugtest::to_upper('Initial value')
+#puts Libplugtest.calculate_pi(100)
+#puts Libplugtest.add_int32(10, 10)
+#puts Libplugtest.add_int64(20, 20)
+#puts Libplugtest.add_double(1.2, 2.3)
+#puts Libplugtest.to_upper('Initial value')
