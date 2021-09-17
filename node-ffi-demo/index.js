@@ -1,5 +1,7 @@
 
-let libplugtest = require('./libplugtest');
+let libplugtest = require('libplugtestjs');
+
+libplugtest.initializeLibPlugTest("../output/")
 
 console.log(libplugtest.toUpperInGoPointerInputsBufferFrom('Initial value'));
 console.log(libplugtest.toUpperInGoPointerInputsBufferFromBufferAllocUnsafe('Initial value'));

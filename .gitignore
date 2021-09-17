@@ -13,3 +13,4 @@ obj/
 /build/*.so
 /build/*.h
 /output
+/java-ffi/target

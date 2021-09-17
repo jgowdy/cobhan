@@ -2,16 +2,19 @@ const process = require('process');
 const path = require("path");
 const fs = require("fs");
 
-const library_root_path = '../output/'
-
 var initialized = false;
 var ffi, libplugtest;
 
-function initialize() {
+/**
+* @param {string} lib_root_path
+*/
+function initializeLibPlugTest(lib_root_path) {
     if (initialized) {
         throw 'Called initialize() again';
     }
     initialized = true;
+
+    var library_root_path = lib_root_path;
 
     let os_path = { 'win32': 'windows', 'linux': 'linux', 'darwin': 'macos' }[process.platform.toLowerCase()];
     if (typeof os_path === 'undefined') {
@@ -50,11 +53,11 @@ function initialize() {
         'addDouble': ['double', ['double', 'double']],
     });
 
-    libplugtestPointerInputs = ffi.Library(libplugtestpath, {
+    libplugtestPointerInputs = ffi.Library(libpath, {
         'toUpper': ['int32', ['char *', 'int32', 'char *', 'int32']]
     });
 
-    libplugtestStringInputs = ffi.Library(libplugtestpath, {
+    libplugtestStringInputs = ffi.Library(libpath, {
         'toUpper': ['int32', ['string', 'int32', 'char *', 'int32']]
     });
 
@@ -257,9 +260,8 @@ function sleepInGo(seconds) {
     });
 }
 
-initialize();
-
 module.exports = {
+    initializeLibPlugTest,    
     toUpperInGoPointerInputsCreateCString,
     toUpperInGoPointerInputsBufferFrom,
     toUpperInGoPointerInputsBufferFromBufferAllocUnsafe,
