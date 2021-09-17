@@ -15,7 +15,6 @@ console.log(libplugtest.addInt64InGo(2.9, 2.0));
 
 console.log(libplugtest.addDoubleInGo(2.9, 2.0));
 
-
 console.log("Start sleeping");
 libplugtest.sleepInGo(2).then(function(result) {
   console.log("Finished sleeping");
