@@ -1,20 +1,22 @@
+# frozen_string_literal: true
+
 require 'ffi'
 
 UnsupportedPlatformError = Class.new(StandardError)
 
-LIBRARY_ROOT_PATH = "../output/"
+LIBRARY_ROOT_PATH = '../output/'
 
-if FFI::Platform::OS == 'linux' && Dir.glob("/lib/libc.musl*").length > 0
-    OS_PATH = 'linux-musl'
-    NEED_CHDIR = 1
+if FFI::Platform::OS == 'linux' && Dir.glob('/lib/libc.musl*').positive?
+  OS_PATH = 'linux-musl'
+  NEED_CHDIR = 1
 else
-    OS_PATHS = { 'linux' => 'linux', 'darwin' => 'macos', 'windows' => 'windows' }.freeze
-    OS_PATH = OS_PATHS[FFI::Platform::OS]
-    NEED_CHDIR = 0
-    raise UnsupportedPlatformError, "Unsupported operating system: #{FFI::Platform::OS}" unless OS_PATH
+  OS_PATHS = { 'linux' => 'linux', 'darwin' => 'macos', 'windows' => 'windows' }.freeze
+  OS_PATH = OS_PATHS[FFI::Platform::OS]
+  NEED_CHDIR = 0
+  raise UnsupportedPlatformError, "Unsupported operating system: #{FFI::Platform::OS}" unless OS_PATH
 end
 
-EXTS = { 'linux' => 'so', 'darwin' => 'dylib', 'windows' => 'dll'}.freeze
+EXTS = { 'linux' => 'so', 'darwin' => 'dylib', 'windows' => 'dll' }.freeze
 EXT = EXTS[FFI::Platform::OS]
 
 CPU_ARCHS = { 'x86_64' => 'amd64', 'aarch64' => 'arm64' }.freeze
@@ -41,56 +43,52 @@ module MyLib
     Dir.chdir(old_dir)
   end
 
-  attach_function :calculatePi, [ :int32, :pointer, :int32 ], :int32
-  attach_function :sleepTest, [ :int32 ], :void
-  attach_function :addInt32, [:int32, :int32], :int32
-  attach_function :addInt64, [:int64, :int64], :int64
-  attach_function :addDouble, [:double, :double], :double
+  attach_function :calculatePi, %i[int32 pointer int32], :int32
+  attach_function :sleepTest, [:int32], :void
+  attach_function :addInt32, %i[int32 int32], :int32
+  attach_function :addInt64, %i[int64 int64], :int64
+  attach_function :addDouble, %i[double double], :double
 
-  attach_function :toUpper, [:pointer, :int32, :pointer, :int32], :int32
+  attach_function :toUpper, %i[pointer int32 pointer int32], :int32
 end
 
-def calculatePi(digits)
-    piBuffer = FFI::MemoryPointer.new(1, digits + 1, false)
+def calculate_pi(digits)
+  pi_buffer = FFI::MemoryPointer.new(1, digits + 1, false)
 
-    result = MyLib.calculatePi(digits, piBuffer, piBuffer.size)
-    if result < 0
-        raise 'Failed to calculate pi'
-    end
+  result = MyLib.calculatePi(digits, pi_buffer, pi_buffer.size)
+  raise 'Failed to calculate pi' if result.negative?
 
-    piBuffer.get_string(0, result)
+  pi_buffer.get_string(0, result)
 end
 
-def toUpper(input)
-    in_ptr = FFI::MemoryPointer.from_string(input)
-    out_ptr = FFI::MemoryPointer.new(1, in_ptr.size + 1, false)
+def to_upper(input)
+  in_ptr = FFI::MemoryPointer.from_string(input)
+  out_ptr = FFI::MemoryPointer.new(1, in_ptr.size + 1, false)
 
-    result = MyLib.toUpper(in_ptr, in_ptr.size, out_ptr, out_ptr.size)
-    if result < 0
-        raise 'Failed to convert toUpper'
-    end
+  result = MyLib.toUpper(in_ptr, in_ptr.size, out_ptr, out_ptr.size)
+  raise 'Failed to convert toUpper' if result.negative?
 
-    out_ptr.get_string(0, result)
+  out_ptr.get_string(0, result)
 end
 
-def sleepTest(seconds)
-    MyLib.sleepTest(seconds)
+def sleep_test(seconds)
+  MyLib.sleepTest(seconds)
 end
 
-def addInt32(x, y)
-    MyLib.addInt32(x, y)
+def add_int32(x, y)
+  MyLib.addInt32(x, y)
 end
 
-def addInt64(x, y)
-    MyLib.addInt64(x, y)
+def add_int64(x, y)
+  MyLib.addInt64(x, y)
 end
 
-def addDouble(x, y)
-    MyLib.addDouble(x, y)
+def add_double(x, y)
+  MyLib.addDouble(x, y)
 end
 
-puts calculatePi(100)
-puts addInt32(10, 10)
-puts addInt64(20, 20)
-puts addDouble(1.2, 2.3)
-puts toUpper('Initial value')
+puts calculate_pi(100)
+puts add_int32(10, 10)
+puts add_int64(20, 20)
+puts add_double(1.2, 2.3)
+puts to_upper('Initial value')
