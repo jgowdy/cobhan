@@ -1,19 +1,20 @@
 package com.godaddy;
 
+import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
+
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.Platform;
 
-import java.nio.charset.StandardCharsets;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-
-public class Main {
-    public interface Libplugtest extends Library {
-        void toUpper(byte[] input, int inputLen, byte[] output, int outputLen);
+public class Libplugtest {
+    private interface LibplugtestLibrary extends Library {
+        int toUpper(byte[] input, int inputLen, byte[] output, int outputLen);
     }
 
-    public static void main(String[] args) {
+    private LibplugtestLibrary libplugtest;
+
+    public Libplugtest() {
         String os_path, ext;
         if(Platform.isLinux()) {
             os_path = "linux";
@@ -38,12 +39,15 @@ public class Main {
             throw new UnsupportedOperationException("Unsupported CPU " + os_arch);
         }
 
-        System.out.println(os_arch);
         Path path = FileSystems.getDefault().getPath("../output/"+os_path+"/"+arch_path).toAbsolutePath().resolve("libplugtest." + ext);
-        var libplugtest = (Libplugtest)Native.loadLibrary(path.toString(), Libplugtest.class);
+        
+        libplugtest = (LibplugtestLibrary)Native.loadLibrary(path.toString(), Libplugtest.class);
+    }
+
+    public String toUpper(String input) {
         String input_str = "Initial value";
         var bytes = input_str.getBytes(StandardCharsets.UTF_8);
-        libplugtest.toUpper(bytes, bytes.length, bytes, bytes.length);
-        System.out.println(new String(bytes, StandardCharsets.UTF_8));
+        var result = libplugtest.toUpper(bytes, bytes.length, bytes, bytes.length);
+        return new String(bytes, 0, result, StandardCharsets.UTF_8);
     }
 }
