@@ -4,7 +4,7 @@ UnsupportedPlatformError = Class.new(StandardError)
 
 OS_PATHS = { 'linux' => 'linux', 'darwin' => 'macos', 'windows' => 'windows' }.freeze
 os_path = OS_PATHS[FFI::Platform::OS]
-raise UnsupportedPlatformError, "Unsupported operating system: #{FFI::Platform::OS}" unless OS_PATH
+raise UnsupportedPlatformError, "Unsupported operating system: #{FFI::Platform::OS}" unless os_path
 
 if os_path == 'linux'
     Dir.children("/lib")
