@@ -1,0 +1,32 @@
+FROM cobhan-clone AS cobhan-clone
+
+FROM libplugtest-binaries-clone AS libplugtest-binaries-clone
+
+
+FROM libplugtest-linux-musl AS libplugtest-linux-musl
+
+# Test libplugtest.so built for linux-musl using the ruby-ffi project
+
+FROM docker.io/ruby:3-alpine
+
+# libucontext is needed to support Linux-musl-arm64
+
+RUN apk add make gcc g++ libucontext
+
+COPY --from=libplugtest-binaries-clone /libplugtest-binaries /ruby-test/output
+
+COPY --from=cobhan-clone /cobhan/ruby-ffi /ruby-test/ruby-ffi
+
+WORKDIR /ruby-test/ruby-ffi
+
+RUN gem install ffi
+
+# ******************************************************************************
+# This is for being able to debug with gdb and strace effectively - NOT FOR PROD
+# ******************************************************************************
+# USER root
+# RUN apk add gdb strace binutils # Note: binutils is for readelf
+# ******************************************************************************
+
+RUN ruby example.rb
+
