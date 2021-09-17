@@ -19,5 +19,8 @@
   "homepage": "https://github.com/jgowdy/cobhan#readme",
   "dependencies": {
     "ffi-napi": "^4.0.3"
-  }
+  },
+  "files": [
+    "libplugtest-binaries/**"
+  ]
 }

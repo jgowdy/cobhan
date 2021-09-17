@@ -5,16 +5,10 @@ const fs = require("fs");
 var initialized = false;
 var ffi, libplugtest;
 
-/**
-* @param {string} lib_root_path
-*/
-function initializeLibPlugTest(lib_root_path) {
-    if (initialized) {
-        throw 'Called initialize() again';
-    }
+function initializeLibPlugTest() {
     initialized = true;
 
-    var library_root_path = lib_root_path;
+    var library_root_path = path.join(__dirname, 'libplugtest-binaries');
 
     let os_path = { 'win32': 'windows', 'linux': 'linux', 'darwin': 'macos' }[process.platform.toLowerCase()];
     if (typeof os_path === 'undefined') {
@@ -99,7 +93,7 @@ function toUpperInGoPointerInputsCreateCString(str) {
 */
 function toUpperInGoPointerInputsBufferFrom(str) {
     if (!initialized) {
-        throw 'libplugtest was not initialized';
+        initializeLibPlugTest();
     }
 
     // Create length delimited buffer
@@ -118,7 +112,7 @@ function toUpperInGoPointerInputsBufferFrom(str) {
 */
 function toUpperInGoPointerInputsBufferFromBufferAllocUnsafe(str) {
     if (!initialized) {
-        throw 'libplugtest was not initialized';
+        initializeLibPlugTest();
     }
 
     // Create length delimited buffer
@@ -144,7 +138,7 @@ function toUpperInGoPointerInputsBufferFromBufferAllocUnsafe(str) {
 */
 function toUpperInGoStringInputsCreateCString(str) {
     if (!initialized) {
-        throw 'libplugtest was not initialized';
+        initializeLibPlugTest();
     }
 
     // Create null delimited C string
@@ -164,7 +158,7 @@ function toUpperInGoStringInputsCreateCString(str) {
 */
 function toUpperInGoStringInputsBufferFrom(str) {
     if (!initialized) {
-        throw 'libplugtest was not initialized';
+        initializeLibPlugTest();
     }
 
     // Create length delimited buffer
@@ -183,7 +177,7 @@ function toUpperInGoStringInputsBufferFrom(str) {
 */
 function toUpperInGoStringInputsPassStringDirectlyBufferAllocUnsafe(str) {
     if (!initialized) {
-        throw 'libplugtest was not initialized';
+        initializeLibPlugTest();
     }
 
     // Create output buffer
@@ -202,7 +196,7 @@ function toUpperInGoStringInputsPassStringDirectlyBufferAllocUnsafe(str) {
 */
 function toUpperInGoStringInputsBufferFromBufferAllocUnsafe(str) {
     if (!initialized) {
-        throw 'libplugtest was not initialized';
+        initializeLibPlugTest();
     }
 
     // Create length delimited buffer
@@ -228,6 +222,9 @@ function toUpperInGoStringInputsBufferFromBufferAllocUnsafe(str) {
 * @param {number} y
 */
 function addInt32InGo(x, y) {
+    if (!initialized) {
+        initializeLibPlugTest();
+    }
     return libplugtest.addInt32(x, y);
 }
 
@@ -236,7 +233,9 @@ function addInt32InGo(x, y) {
 * @param {number} y
 */
 function addInt64InGo(x, y) {
-
+    if (!initialized) {
+        initializeLibPlugTest();
+    }
     return libplugtest.addInt64(x, y);
 }
 
@@ -245,6 +244,9 @@ function addInt64InGo(x, y) {
 * @param {number} y
 */
 function addDoubleInGo(x, y) {
+    if (!initialized) {
+        initializeLibPlugTest();
+    }
     return libplugtest.addDouble(x, y);
 }
 
@@ -253,7 +255,7 @@ function addDoubleInGo(x, y) {
 */
 function sleepInGo(seconds) {
     if (!initialized) {
-        throw 'libplugtest was not initialized';
+        initializeLibPlugTest();
     }
     return new Promise((resolve) => {
         libplugtest.sleepTest.async(seconds, () => {
@@ -263,7 +265,6 @@ function sleepInGo(seconds) {
 }
 
 module.exports = {
-    initializeLibPlugTest,    
     toUpperInGoPointerInputsCreateCString,
     toUpperInGoPointerInputsBufferFrom,
     toUpperInGoPointerInputsBufferFromBufferAllocUnsafe,

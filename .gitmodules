@@ -1,3 +1,3 @@
 [submodule "libplugtest-binaries"]
-	path = libplugtest-binaries
+	path = libplugtestjs/libplugtest-binaries
 	url = git@github.com:jgowdy/libplugtest-binaries.git
