@@ -55,14 +55,12 @@ lib = ffi.dlopen(library_file_path)
 
 input_str = 'Initial value'
 
-input_bytes = bytearray(input_str, 'utf8')
-cdata = ffi.from_buffer(input_bytes)
+cdata = ffi.from_buffer(input_str.encode())
 
-result = lib.toUpper(cdata, len(input_bytes), cdata, len(input_bytes))
+result = lib.toUpper(cdata, len(cdata), cdata, len(cdata))
 if result < 0:
     raise Exception('toUpper failed')
 
 output_str = ffi.unpack(cdata, result).decode('utf8')
 
-print("Output: " + output_str)
-print(type(output_str))
+print(output_str)
