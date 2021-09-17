@@ -19,4 +19,4 @@ $DOCKER rm $LIBPLUGTEST_CID
 
 rm ./libplugtest-linux-cid
 
-tar -x --strip-components=1 -f libplugtest-linux-musl-$MACHINE.tar output/libplugtest.*
+tar -x --strip-components=1 -f libplugtest-linux-$MACHINE.tar output/libplugtest.h output/libplugtest.so
