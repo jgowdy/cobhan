@@ -17,9 +17,14 @@ ffi.cdef("""
 library_root_path = "../output/"
 
 system = platform.system()
+need_chdir = 0
 if system == "Linux":
     # Check for /lib/libc.musl* so we can set the need_chdir flag
-    os_path = "linux"
+    if pathlib.Path("/lib").match("libc.musl*"):
+        os_path = "linux-musl"
+        need_chdir = 1
+    else:
+        os_path = "linux"
     ext = "so"
 elif system == "Darwin":
     os_path = "macos"
@@ -45,22 +50,25 @@ else:
 library_path = pathlib.Path(os.path.join(library_root_path, os_path, cpu_arch)).resolve()
 
 # Build library path with file name
-library_file_path = os.path.join(str(library_path), "libplugtest." + ext)
+library_file_path = os.path.join(str(library_path), f"libplugtest.{ext}")
 
-# TODO: chdir if musl
+if need_chdir:
+    old_dir = os.getcwd()
+    os.chdir(library_path)
 
 lib = ffi.dlopen(library_file_path)
 
-# TODO: restore directory
+if need_chdir:
+    os.chdir(old_dir)
 
-input_str = 'Initial value'
+input_str = "Initial value"
 
-cdata = ffi.from_buffer(input_str.encode('utf8'))
+cdata = ffi.from_buffer(input_str.encode("utf8"))
 
 result = lib.toUpper(cdata, len(cdata), cdata, len(cdata))
 if result < 0:
-    raise Exception('toUpper failed')
+    raise Exception("toUpper failed")
 
-output_str = ffi.unpack(cdata, result).decode('utf8')
+output_str = ffi.unpack(cdata, result).decode("utf8")
 
 print(output_str)
