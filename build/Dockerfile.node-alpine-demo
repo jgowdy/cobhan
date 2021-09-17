@@ -9,14 +9,14 @@ FROM libplugtest-linux-musl AS libplugtest-linux-musl
 
 FROM docker.io/node:alpine
 
-RUN apk add git python3 make libffi musl-dev gcc g++ libucontext
+RUN apk add python3 make gcc g++ libucontext #musl-dev
 
 COPY --from=libplugtest-binaries-clone /libplugtest-binaries /node-test/output
 
-COPY --from=cobhan-clone /cobhan /cobhan
+COPY --from=cobhan-clone /cobhan/node-ffi-napi /node-test/node-ffi-napi
 
 # Copy the node-ffi-napi project
-RUN cp -r /cobhan/node-ffi-napi /node-test/node-ffi-napi
+#RUN cp -r /cobhan/node-ffi-napi /node-test/node-ffi-napi
 
 WORKDIR /node-test/node-ffi-napi
 
