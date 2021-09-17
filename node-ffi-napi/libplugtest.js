@@ -166,7 +166,7 @@ function toUpperInGoPointerInputsBufferFromBufferAllocUnsafe(str) {
     // Create length delimited buffer
     let buf = Buffer.from(str)
 
-    let result = libplugtestStringInputs.toUpper(buf, buf.length);
+    let result = libplugtestStringInputs.toUpper(buf, buf.length, buf, buf.length);
     if (result < 0) {
         throw 'toUpperMutableLengthDelimited failed: ' + result
     }
