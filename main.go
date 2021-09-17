@@ -172,6 +172,5 @@ func calculatePiTest() {
 
 func main() {
 	toUpperTest()
-	strLenInGoTest()
 	calculatePiTest()
 }
