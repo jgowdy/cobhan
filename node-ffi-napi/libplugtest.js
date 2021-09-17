@@ -2,8 +2,9 @@ const process = require('process');
 const path = require("path");
 const fs = require("fs");
 
-var initialized = false;
+const library_root_path = '../output/'
 
+var initialized = false;
 var ffi, libplugtest;
 
 function initialize() {
@@ -17,30 +18,32 @@ function initialize() {
         throw 'Unsupported operating system'
     }
 
+    var need_chdir = 0;
     if (os_path == 'linux') {
         var files = fs.readdirSync('/lib').filter(fn => fn.startsWith('libc.musl'));
         if (files.length > 0) {
             os_path = 'linux-musl';
+            need_chdir = 1;
         }
     }
+
+    var libpath = path.join(library_root_path, os_path)
 
     let arch_path = { 'arm64': 'arm64', 'x64': 'amd64' }[process.arch.toLowerCase()];
     if (typeof arch_path === 'undefined') {
         throw 'Unsupported architecture';
     }
 
-    let libpath = path.resolve('../output/' + os_path + '/' + arch_path + '/');
+    libpath = path.resolve(path.join(libpath, arch_path))
     let libplugtestpath = path.join(libpath, 'libplugtest');
 
-    console.log('Loading ffi-napi');
     ffi = require('ffi-napi');
 
-    //let old_cwd = process.cwd();
-    //console.log(`Saving existing working directory ${old_cwd}`);
-    //console.log(`Changing to working directory ${libpath}`);
-    //process.chdir(libpath);
-
-    console.log(`Calling ffi.Library(${libplugtestpath}`);
+    var old_cwd;
+    if (need_chdir == 1) {
+        old_cwd = process.cwd();
+        process.chdir(libpath);
+    }
 
     libplugtest = ffi.Library(libplugtestpath, {
         'calculatePi': ['int32', ['int32', 'char *', 'int32']],
@@ -58,11 +61,10 @@ function initialize() {
         'toUpper': ['int32', ['string', 'int32', 'char *', 'int32']]
     });
 
-    //console.log(`Restoring old working directory ${old_cwd}`)
-    //process.chdir(old_cwd);
+    if (need_chdir == 1) {
+        process.chdir(old_cwd);
+    }
 }
-
-const constStr = 'Should Never Change';
 
 // ***********************************************************************************************************
 // Pointer input declarations

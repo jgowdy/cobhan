@@ -2,11 +2,15 @@ require 'ffi'
 
 UnsupportedPlatformError = Class.new(StandardError)
 
+LIBRARY_ROOT_PATH = "../output/"
+
 if FFI::Platform::OS == 'linux' && Dir.glob("/lib/libc.musl*").length > 0
     OS_PATH = 'linux-musl'
+    NEED_CHDIR = 1
 else
     OS_PATHS = { 'linux' => 'linux', 'darwin' => 'macos', 'windows' => 'windows' }.freeze
     OS_PATH = OS_PATHS[FFI::Platform::OS]
+    NEED_CHDIR = 0
     raise UnsupportedPlatformError, "Unsupported operating system: #{FFI::Platform::OS}" unless OS_PATH
 end
 
@@ -19,19 +23,23 @@ raise UnsupportedPlatformError, "Unsupported CPU: #{FFI::Platform::CPU_ARCH}" un
 
 module MyLib
   extend FFI::Library
-  lib_path = File.join(File.dirname(__FILE__), "../output/#{OS_PATH}/#{CPU_ARCH}")
+  lib_path = File.expand_path("#{LIBRARY_ROOT_PATH}/#{OS_PATH}/#{CPU_ARCH}")
 
-  # Save current directory
-  old_dir = Dir.pwd
+  if NEED_CHDIR == 1
+    # Save current directory
+    old_dir = Dir.pwd
 
-  # Switch to library directory
-  Dir.chdir(lib_path)
+    # Switch to library directory
+    Dir.chdir(lib_path)
+  end
 
   # NOTE: Absolute path is required here
-  ffi_lib "#{Dir.pwd}/libplugtest.#{EXT}"
+  ffi_lib "#{lib_path}/libplugtest.#{EXT}"
 
-  # Restore directory
-  Dir.chdir(old_dir)
+  if NEED_CHDIR == 1
+    # Restore directory
+    Dir.chdir(old_dir)
+  end
 
   attach_function :calculatePi, [ :int32, :pointer, :int32 ], :int32
   attach_function :sleepTest, [ :int32 ], :void
