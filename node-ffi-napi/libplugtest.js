@@ -27,15 +27,12 @@ function initialize() {
         }
     }
 
-    var libpath = path.join(library_root_path, os_path)
-
     let arch_path = { 'arm64': 'arm64', 'x64': 'amd64' }[process.arch.toLowerCase()];
     if (typeof arch_path === 'undefined') {
         throw 'Unsupported architecture';
     }
 
-    libpath = path.resolve(path.join(libpath, arch_path))
-    let libplugtestpath = path.join(libpath, 'libplugtest');
+    libpath = path.resolve(path.join(library_root_path, os_path, arch_path))
 
     ffi = require('ffi-napi');
 
@@ -45,7 +42,7 @@ function initialize() {
         process.chdir(libpath);
     }
 
-    libplugtest = ffi.Library(libplugtestpath, {
+    libplugtest = ffi.Library(path.join(libpath, 'libplugtest'), {
         'calculatePi': ['int32', ['int32', 'char *', 'int32']],
         'sleepTest': ['void', ['int32']],
         'addInt32': ['int32', ['int32', 'int32']],

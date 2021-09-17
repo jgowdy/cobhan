@@ -23,20 +23,21 @@ CPU_ARCHS = { 'x86_64' => 'amd64', 'aarch64' => 'arm64' }.freeze
 CPU_ARCH = CPU_ARCHS[FFI::Platform::ARCH]
 raise UnsupportedPlatformError, "Unsupported CPU: #{FFI::Platform::CPU_ARCH}" unless CPU_ARCH
 
+LIB_PATH = File.expand_path(File.join(LIBRARY_ROOT_PATH, OS_PATH, CPU_ARCH))
+
 module MyLib
   extend FFI::Library
-  lib_path = File.expand_path("#{LIBRARY_ROOT_PATH}/#{OS_PATH}/#{CPU_ARCH}")
-
+  
   if NEED_CHDIR == 1
     # Save current directory
     old_dir = Dir.pwd
 
     # Switch to library directory
-    Dir.chdir(lib_path)
+    Dir.chdir(LIB_PATH)
   end
 
   # NOTE: Absolute path is required here
-  ffi_lib "#{lib_path}/libplugtest.#{EXT}"
+  ffi_lib File.join(LIB_PATH, "libplugtest.#{EXT}")
 
   if NEED_CHDIR == 1
     # Restore directory
@@ -65,7 +66,7 @@ def to_upper(input)
   in_ptr = FFI::MemoryPointer.from_string(input)
   out_ptr = FFI::MemoryPointer.new(1, in_ptr.size + 1, false)
 
-  result = MyLib.toUpper(in_ptr, in_ptr.size, out_ptr, out_ptr.size)
+  result = MyLib.toUpper(input, input.length, out_ptr, out_ptr.size)
   raise 'Failed to convert toUpper' if result.negative?
 
   out_ptr.get_string(0, result)
