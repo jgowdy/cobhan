@@ -35,10 +35,10 @@ function initialize() {
     console.log('Loading ffi-napi');
     ffi = require('ffi-napi');
 
-    let old_cwd = process.cwd();
-    console.log(`Saving existing working directory ${old_cwd}`);
-    console.log(`Changing to working directory ${libpath}`);
-    process.chdir(libpath);
+    //let old_cwd = process.cwd();
+    //console.log(`Saving existing working directory ${old_cwd}`);
+    //console.log(`Changing to working directory ${libpath}`);
+    //process.chdir(libpath);
 
     console.log(`Calling ffi.Library(${libplugtestpath}`);
 
@@ -58,8 +58,8 @@ function initialize() {
         'toUpper': ['int32', ['string', 'int32', 'char *', 'int32']]
     });
 
-    console.log(`Restoring old working directory ${old_cwd}`)
-    process.chdir(old_cwd);
+    //console.log(`Restoring old working directory ${old_cwd}`)
+    //process.chdir(old_cwd);
 }
 
 const constStr = 'Should Never Change';
