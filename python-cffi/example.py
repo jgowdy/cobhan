@@ -19,7 +19,6 @@ library_root_path = "../output/"
 system = platform.system()
 need_chdir = 0
 if system == "Linux":
-    # Check for /lib/libc.musl* so we can set the need_chdir flag
     if pathlib.Path("/lib").match("libc.musl*"):
         os_path = "linux-musl"
         need_chdir = 1
