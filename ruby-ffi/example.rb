@@ -25,7 +25,7 @@ raise UnsupportedPlatformError, "Unsupported CPU: #{FFI::Platform::CPU_ARCH}" un
 
 LIB_PATH = File.expand_path(File.join(LIBRARY_ROOT_PATH, OS_PATH, CPU_ARCH))
 
-module MyLib
+module LibplugtestFfi
   extend FFI::Library
   
   if NEED_CHDIR == 1
@@ -53,43 +53,45 @@ module MyLib
   attach_function :toUpper, %i[pointer int32 pointer int32], :int32
 end
 
-def calculate_pi(digits)
-  pi_buffer = FFI::MemoryPointer.new(1, digits + 1, false)
+module Libplugtest
+  def calculate_pi(digits)
+    pi_buffer = FFI::MemoryPointer.new(1, digits + 1, false)
 
-  result = MyLib.calculatePi(digits, pi_buffer, pi_buffer.size)
-  raise 'Failed to calculate pi' if result.negative?
+    result = LibplugtestFfi.calculatePi(digits, pi_buffer, pi_buffer.size)
+    raise 'Failed to calculate pi' if result.negative?
 
-  pi_buffer.get_string(0, result)
+    pi_buffer.get_string(0, result)
+  end
+
+  def to_upper(input)
+    in_ptr = FFI::MemoryPointer.from_string(input)
+    out_ptr = FFI::MemoryPointer.new(1, in_ptr.size + 1, false)
+
+    result = LibplugtestFfi.toUpper(input, input.length, out_ptr, out_ptr.size)
+    raise 'Failed to convert toUpper' if result.negative?
+
+    out_ptr.get_string(0, result)
+  end
+
+  def sleep_test(seconds)
+    LibplugtestFfi.sleepTest(seconds)
+  end
+
+  def add_int32(x, y)
+    LibplugtestFfi.addInt32(x, y)
+  end
+
+  def add_int64(x, y)
+    LibplugtestFfi.addInt64(x, y)
+  end
+
+  def add_double(x, y)
+    LibplugtestFfi.addDouble(x, y)
+  end
 end
 
-def to_upper(input)
-  in_ptr = FFI::MemoryPointer.from_string(input)
-  out_ptr = FFI::MemoryPointer.new(1, in_ptr.size + 1, false)
-
-  result = MyLib.toUpper(input, input.length, out_ptr, out_ptr.size)
-  raise 'Failed to convert toUpper' if result.negative?
-
-  out_ptr.get_string(0, result)
-end
-
-def sleep_test(seconds)
-  MyLib.sleepTest(seconds)
-end
-
-def add_int32(x, y)
-  MyLib.addInt32(x, y)
-end
-
-def add_int64(x, y)
-  MyLib.addInt64(x, y)
-end
-
-def add_double(x, y)
-  MyLib.addDouble(x, y)
-end
-
-puts calculate_pi(100)
-puts add_int32(10, 10)
-puts add_int64(20, 20)
-puts add_double(1.2, 2.3)
-puts to_upper('Initial value')
+#puts Libplugtest::calculate_pi(100)
+#puts Libplugtest::add_int32(10, 10)
+#puts Libplugtest::add_int64(20, 20)
+#puts Libplugtest::add_double(1.2, 2.3)
+#puts Libplugtest::to_upper('Initial value')
