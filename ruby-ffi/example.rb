@@ -3,13 +3,13 @@ require 'ffi'
 UnsupportedPlatformError = Class.new(StandardError)
 
 OS_PATHS = { 'linux' => 'linux', 'darwin' => 'macos', 'windows' => 'windows' }.freeze
-OS_PATH = OS_PATHS[FFI::Platform::OS]
+os_path = OS_PATHS[FFI::Platform::OS]
 raise UnsupportedPlatformError, "Unsupported operating system: #{FFI::Platform::OS}" unless OS_PATH
 
-if OS_PATH == 'linux'
+if os_path == 'linux'
     Dir.children("/lib")
     if Dir.glob("/lib/libc.musl*").length
-        OS_PATH = 'linux-musl'
+        os_path = 'linux-musl'
     end
 end
 
@@ -22,7 +22,7 @@ raise UnsupportedPlatformError, "Unsupported CPU: #{FFI::Platform::CPU_ARCH}" un
 
 module MyLib
   extend FFI::Library
-  lib_path = "../output/#{OS_PATH}/#{CPU_ARCH}/"
+  lib_path = "../output/#{os_path}/#{CPU_ARCH}/"
   puts "Using path #{lib_path}"
   old_dir = Dir.pwd
   puts "Saving old directory #{old_dir}"
