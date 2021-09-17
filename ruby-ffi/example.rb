@@ -6,7 +6,7 @@ UnsupportedPlatformError = Class.new(StandardError)
 
 LIBRARY_ROOT_PATH = '../output/'
 
-if FFI::Platform::OS == 'linux' && Dir.glob('/lib/libc.musl*').positive?
+if FFI::Platform::OS == 'linux' && Dir.glob('/lib/libc.musl*').length.positive?
   OS_PATH = 'linux-musl'
   NEED_CHDIR = 1
 else
