@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
 
 public class Libplugtest 
 {
@@ -131,9 +132,9 @@ public class Libplugtest
         return addInt32Delegate(x, y);
     }
 
-    public void SleepTest(int seconds)
+    public Task SleepTest(int seconds)
     {
-        sleepTestDelegate(seconds);
+        return Task.Run(() => sleepTestDelegate(seconds));
     }
 
     public string CalculatePi(int digits)
