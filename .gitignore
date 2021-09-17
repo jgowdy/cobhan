@@ -8,6 +8,7 @@ obj/
 /build/*-cid
 /build/*.tar
 /build/aarch64
+/build/x86_64
 /build/*.0.0
 /build/*.so
 /build/*.h
