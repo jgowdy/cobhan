@@ -1,7 +1,7 @@
 
 let libplugtest = require('libplugtestjs');
 
-libplugtest.initializeLibPlugTest("../output/")
+libplugtest.initializeLibPlugTest("../libplugtest-binaries/")
 
 console.log(libplugtest.toUpperInGoPointerInputsBufferFrom('Initial value'));
 console.log(libplugtest.toUpperInGoPointerInputsBufferFromBufferAllocUnsafe('Initial value'));

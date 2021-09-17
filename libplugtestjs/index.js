@@ -35,7 +35,7 @@ function initializeLibPlugTest(lib_root_path) {
         throw 'Unsupported architecture';
     }
 
-    libpath = path.resolve(path.join(library_root_path, os_path, arch_path))
+    libpath = path.resolve(path.join(library_root_path, os_path, arch_path));
 
     ffi = require('ffi-napi');
 
@@ -45,7 +45,9 @@ function initializeLibPlugTest(lib_root_path) {
         process.chdir(libpath);
     }
 
-    libplugtest = ffi.Library(path.join(libpath, 'libplugtest'), {
+    libfile = path.join(libpath, 'libplugtest');
+
+    libplugtest = ffi.Library(libfile, {
         'calculatePi': ['int32', ['int32', 'char *', 'int32']],
         'sleepTest': ['void', ['int32']],
         'addInt32': ['int32', ['int32', 'int32']],
@@ -53,11 +55,11 @@ function initializeLibPlugTest(lib_root_path) {
         'addDouble': ['double', ['double', 'double']],
     });
 
-    libplugtestPointerInputs = ffi.Library(libpath, {
+    libplugtestPointerInputs = ffi.Library(libfile, {
         'toUpper': ['int32', ['char *', 'int32', 'char *', 'int32']]
     });
 
-    libplugtestStringInputs = ffi.Library(libpath, {
+    libplugtestStringInputs = ffi.Library(libfile, {
         'toUpper': ['int32', ['string', 'int32', 'char *', 'int32']]
     });
 
