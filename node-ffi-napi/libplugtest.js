@@ -71,8 +71,8 @@ function initialize() {
 // ***********************************************************************************************************
 
 /**
- * @param {string} str
- */
+* @param {string} str
+*/
 function toUpperInGoPointerInputsCreateCString(str) {
     if (!initialized) {
         throw 'libplugtest was not initialized';
@@ -93,9 +93,9 @@ function toUpperInGoPointerInputsCreateCString(str) {
 
 
 /**
- * @param {string} str
- */
- function toUpperInGoPointerInputsBufferFrom(str) {
+* @param {string} str
+*/
+function toUpperInGoPointerInputsBufferFrom(str) {
     if (!initialized) {
         throw 'libplugtest was not initialized';
     }
@@ -112,8 +112,8 @@ function toUpperInGoPointerInputsCreateCString(str) {
 }
 
 /**
- * @param {string} str
- */
+* @param {string} str
+*/
 function toUpperInGoPointerInputsBufferFromBufferAllocUnsafe(str) {
     if (!initialized) {
         throw 'libplugtest was not initialized';
@@ -138,9 +138,9 @@ function toUpperInGoPointerInputsBufferFromBufferAllocUnsafe(str) {
 // ***********************************************************************************************************
 
 /**
- * @param {string} str
- */
- function toUpperInGoStringInputsCreateCString(str) {
+* @param {string} str
+*/
+function toUpperInGoStringInputsCreateCString(str) {
     if (!initialized) {
         throw 'libplugtest was not initialized';
     }
@@ -158,9 +158,9 @@ function toUpperInGoPointerInputsBufferFromBufferAllocUnsafe(str) {
 }
 
 /**
- * @param {string} str
- */
- function toUpperInGoStringInputsBufferFrom(str) {
+* @param {string} str
+*/
+function toUpperInGoStringInputsBufferFrom(str) {
     if (!initialized) {
         throw 'libplugtest was not initialized';
     }
@@ -177,8 +177,8 @@ function toUpperInGoPointerInputsBufferFromBufferAllocUnsafe(str) {
 }
 
 /**
- * @param {string} str
- */
+* @param {string} str
+*/
 function toUpperInGoStringInputsPassStringDirectlyBufferAllocUnsafe(str) {
     if (!initialized) {
         throw 'libplugtest was not initialized';
@@ -196,8 +196,8 @@ function toUpperInGoStringInputsPassStringDirectlyBufferAllocUnsafe(str) {
 }
 
 /**
- * @param {string} str
- */
+* @param {string} str
+*/
 function toUpperInGoStringInputsBufferFromBufferAllocUnsafe(str) {
     if (!initialized) {
         throw 'libplugtest was not initialized';
@@ -222,33 +222,33 @@ function toUpperInGoStringInputsBufferFromBufferAllocUnsafe(str) {
 // ***********************************************************************************************************
 
 /**
- * @param {number} x
- * @param {number} y
- */
- function addInt32InGo(x, y) {
+* @param {number} x
+* @param {number} y
+*/
+function addInt32InGo(x, y) {
     return libplugtest.addInt32(x, y);
 }
 
 /**
- * @param {number} x
- * @param {number} y
- */
- function addInt64InGo(x, y) {
+* @param {number} x
+* @param {number} y
+*/
+function addInt64InGo(x, y) {
 
     return libplugtest.addInt64(x, y);
 }
 
 /**
- * @param {number} x
- * @param {number} y
- */
- function addDoubleInGo(x, y) {
+* @param {number} x
+* @param {number} y
+*/
+function addDoubleInGo(x, y) {
     return libplugtest.addDouble(x, y);
 }
 
 /**
- * @param {number} seconds
- */
+* @param {number} seconds
+*/
 function sleepInGo(seconds) {
     if (!initialized) {
         throw 'libplugtest was not initialized';
