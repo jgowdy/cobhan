@@ -2,15 +2,17 @@ require 'ffi'
 
 UnsupportedPlatformError = Class.new(StandardError)
 
-OS_PATHS = { 'linux' => 'linux', 'darwin' => 'macos', 'windows' => 'windows' }.freeze
-os_path = OS_PATHS[FFI::Platform::OS]
-raise UnsupportedPlatformError, "Unsupported operating system: #{FFI::Platform::OS}" unless os_path
-
-if os_path == 'linux'
+if FFI::Platform::OS == 'linux'
     Dir.children("/lib")
     if Dir.glob("/lib/libc.musl*").length
-        os_path = 'linux-musl'
+        OS_PATH = 'linux-musl'
+    else
+        OS_PATH = 'linux'
     end
+else
+    OS_PATHS = { 'linux' => 'linux', 'darwin' => 'macos', 'windows' => 'windows' }.freeze
+    OS_PATH = OS_PATHS[FFI::Platform::OS]
+    raise UnsupportedPlatformError, "Unsupported operating system: #{FFI::Platform::OS}" unless OS_PATH
 end
 
 EXTS = { 'linux' => 'so', 'darwin' => 'dylib', 'windows' => 'dll'}.freeze
