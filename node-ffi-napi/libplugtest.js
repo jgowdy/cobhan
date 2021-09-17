@@ -185,7 +185,7 @@ function toUpperInGoStringInputsPassStringDirectlyBufferAllocUnsafe(str) {
     // Create output buffer
     let out = Buffer.allocUnsafe(str.length + 1) //Pad this for demonstration purposes
 
-    let result = libplugtestStringInputs.toUpper(str, out, out.length);
+    let result = libplugtestStringInputs.toUpper(str, str.length, out, out.length);
     if (result < 0) {
         throw 'toUpperNullDelimitedToOutputBuffer failed: ' + result
     }
