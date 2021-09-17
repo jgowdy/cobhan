@@ -147,7 +147,7 @@ function toUpperInGoPointerInputsBufferFromBufferAllocUnsafe(str) {
     let buf = Buffer.allocUnsafe(str.length + 1);
     buf.writeCString(str);
 
-    let result = libplugtestStringInputs.toUpper(buf);
+    let result = libplugtestStringInputs.toUpper(buf, buf.length - 1, buf, buf.length);
     if (result < 0) {
         throw 'toUpperMutableNullDelimited failed: ' + result
     }
