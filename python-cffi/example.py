@@ -55,7 +55,7 @@ lib = ffi.dlopen(library_file_path)
 
 input_str = 'Initial value'
 
-cdata = ffi.from_buffer(input_str.encode())
+cdata = ffi.from_buffer(input_str.encode('utf8'))
 
 result = lib.toUpper(cdata, len(cdata), cdata, len(cdata))
 if result < 0:
