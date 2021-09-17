@@ -22,7 +22,13 @@ raise UnsupportedPlatformError, "Unsupported CPU: #{FFI::Platform::CPU_ARCH}" un
 
 module MyLib
   extend FFI::Library
-  ffi_lib File.join(File.dirname(__FILE__), "../output/#{OS_PATH}/#{CPU_ARCH}/libplugtest.#{EXT}")
+  lib_path = "../output/#{OS_PATH}/#{CPU_ARCH}/"
+  puts "Using path #{lib_path}"
+  old_dir = Dir.pwd
+  puts "Saving old directory #{old_dir}"
+  Dir.chdir(lib_path)
+  ffi_lib File.join(File.dirname(__FILE__), "#{lib_path}/libplugtest.#{EXT}")
+  Dir.chdir(old_dir)
 
   attach_function :calculatePi, [ :int32, :pointer, :int32 ], :int32
   attach_function :sleepTest, [ :int32 ], :void
