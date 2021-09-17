@@ -36,9 +36,6 @@ elif system == "Windows":
 else:
     raise Exception("Unsupported operating system")
 
-# Supposedly more reliable than bits = architecture()[0] == '64bit'
-# is_64bits = sys.maxsize > 2**32
-
 machine = platform.machine()
 if machine == "x86_64" or machine == "AMD64":
     cpu_arch = "amd64"
