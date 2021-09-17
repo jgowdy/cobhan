@@ -62,11 +62,31 @@ lib = ffi.dlopen(library_file_path)
 if need_chdir:
     os.chdir(old_dir)
 
-def toUpper(input):
+def to_upper(input):
     cdata = ffi.from_buffer(input.encode("utf8"))
 
     result = lib.toUpper(cdata, len(cdata), cdata, len(cdata))
     if result < 0:
         raise Exception("toUpper failed")
 
+    return ffi.unpack(cdata, result).decode("utf8")
+
+def sleep_test(seconds):
+    lib.sleepTest(seconds)
+
+def add_int32(x, y):
+    return lib.addInt32(x, y)
+
+def add_int64(x, y):
+    return lib.addInt64(x, y)
+
+def add_doubble(x, y):
+    return lib.addDouble(x, y)
+
+def calculate_pi(digits):
+    cdata = ffi.new(f"char [{digits}]")
+    result = lib.calculatePi(digits,cdata,len(cdata))
+    if result < 0:
+        raise Exception("calculatePi failed")
+    
     return ffi.unpack(cdata, result).decode("utf8")
