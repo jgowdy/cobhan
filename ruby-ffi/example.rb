@@ -5,6 +5,14 @@ UnsupportedPlatformError = Class.new(StandardError)
 OS_PATHS = { 'linux' => 'linux', 'darwin' => 'macos', 'windows' => 'windows' }.freeze
 OS_PATH = OS_PATHS[FFI::Platform::OS]
 raise UnsupportedPlatformError, "Unsupported operating system: #{FFI::Platform::OS}" unless OS_PATH
+
+if OS_PATH == 'linux'
+    Dir.children("/lib")
+    if Dir.glob("/lib/libc.musl*").length
+        OS_PATH = 'linux-musl'
+    end
+end
+
 EXTS = { 'linux' => 'so', 'darwin' => 'dylib', 'windows' => 'dll'}.freeze
 EXT = EXTS[FFI::Platform::OS]
 
