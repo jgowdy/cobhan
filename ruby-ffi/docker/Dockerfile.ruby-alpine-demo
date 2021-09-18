@@ -19,6 +19,6 @@ COPY lib/cobhan/version.rb $app/lib/cobhan/
 RUN bundle install
 
 COPY . $app
-COPY --from=libplugtest-binaries-clone /libplugtest-binaries $app/lib/cobhan/output
+COPY --from=libplugtest-binaries-clone /libplugtest-binaries/linux-musl $app/lib/cobhan/output/linux-musl
 
 CMD ruby example.rb

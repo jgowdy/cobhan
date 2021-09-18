@@ -25,11 +25,12 @@ Gem::Specification.new do |spec|
   #     (f == __FILE__) || f.match(%r{\A(?:(?:test|spec|features)/|\.(?:git|travis|circleci)|appveyor)})
   #   end
   # end
+  spec.files         = Dir['lib/**/*'] + ["cobhan.gemspec"]
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "ffi",    "~> 1.15.4"
+  spec.add_dependency "ffi", "~> 1.15.4"
 
-  spec.add_development_dependency "rspec",    "~> 3.10.0"
+  spec.add_development_dependency "rspec", "~> 3.10.0"
 end

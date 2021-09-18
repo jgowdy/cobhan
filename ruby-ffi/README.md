@@ -2,13 +2,31 @@
 
 ## Usage
 
-To run tests across all distros
+### Running specs
 
-    $ ./test.sh
+To run specs across all distros
 
-To run tests for specfic distro
+    ./bin/test.sh
 
-    $ ./test.sh alpine
+To run tests for specific distro
+
+    ./bin/test.sh alpine
+
+### Building gem
+
+To build gems across all distros
+
+    ./bin/build.sh
+
+To build a gem for specific distro
+
+    ./bin/build.sh alpine
+
+### Starting shell
+
+To start a shell for specific distro
+
+    ./bin/shell.sh alpine
 
 ## Contributing
 
