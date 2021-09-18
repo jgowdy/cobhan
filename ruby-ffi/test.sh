@@ -15,5 +15,5 @@ do
   echo "=> Testing $distro"
   $DOCKER build . $DOCKER_BUILD_FLAGS -f docker/Dockerfile.ruby-$distro-demo -t ruby-$distro-demo:latest
 
-  $DOCKER run ruby-$distro-demo
+  $DOCKER run ruby-$distro-demo rspec spec
 done

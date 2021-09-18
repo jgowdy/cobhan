@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "cobhan/version"
+require_relative "cobhan/cobhan_ffi"
 
 module Cobhan
-  class Error < StandardError; end
-  # Your code goes here...
 end

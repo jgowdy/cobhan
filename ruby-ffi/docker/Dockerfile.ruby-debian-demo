@@ -5,8 +5,6 @@ RUN git clone --depth 1 --branch main --single-branch https://github.com/jgowdy/
 
 FROM docker.io/ruby:3.0.2-bullseye
 
-COPY --from=libplugtest-binaries-clone /libplugtest-binaries /ruby-test/output
-
 ENV app /ruby-test/ruby-ffi
 RUN mkdir -p $app
 WORKDIR $app
@@ -18,4 +16,6 @@ COPY lib/cobhan/version.rb $app/lib/cobhan/
 RUN bundle install
 
 COPY . $app
+COPY --from=libplugtest-binaries-clone /libplugtest-binaries $app/lib/cobhan/output
+
 CMD ruby example.rb
