@@ -13,6 +13,8 @@ WORKDIR $app
 
 COPY Gemfile $app
 COPY Gemfile.lock $app
+COPY cobhan.gemspec $app
+COPY lib/cobhan/version.rb $app/lib/cobhan/
 RUN bundle install
 
 COPY . $app
