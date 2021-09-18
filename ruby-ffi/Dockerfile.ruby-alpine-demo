@@ -1,0 +1,23 @@
+FROM alpine:3.14 AS libplugtest-binaries-clone
+RUN apk add git
+
+RUN git clone --depth 1 --branch main --single-branch https://github.com/jgowdy/libplugtest-binaries
+
+FROM docker.io/ruby:3.0.2-alpine3.14
+
+# libucontext is needed to support Linux-musl-arm64
+
+RUN apk add make gcc g++ libucontext
+
+COPY --from=libplugtest-binaries-clone /libplugtest-binaries /ruby-test/output
+
+ENV app /ruby-test/ruby-ffi
+RUN mkdir -p $app
+WORKDIR $app
+
+COPY Gemfile $app
+COPY Gemfile.lock $app
+RUN bundle install
+
+COPY . $app
+CMD ruby example.rb
