@@ -6,7 +6,6 @@ RUN git clone --depth 1 --branch main --single-branch https://github.com/jgowdy/
 FROM docker.io/ruby:3.0.2-alpine3.14
 
 # libucontext is needed to support Linux-musl-arm64
-
 RUN apk add make gcc g++ libucontext
 
 COPY --from=libplugtest-binaries-clone /libplugtest-binaries /ruby-test/output

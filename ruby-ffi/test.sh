@@ -9,6 +9,11 @@ DOCKER_BUILD_FLAGS='--rm'
 
 DOCKER=`which podman 2>/dev/null || echo docker`
 
-$DOCKER build . $DOCKER_BUILD_FLAGS -f Dockerfile.ruby-alpine-demo -t ruby-alpine-demo:latest
+distros=${1:-"alpine debian"}
+for distro in $distros
+do
+  echo "=> Testing $distro"
+  $DOCKER build . $DOCKER_BUILD_FLAGS -f docker/Dockerfile.ruby-$distro-demo -t ruby-$distro-demo:latest
 
-$DOCKER run ruby-alpine-demo
+  $DOCKER run ruby-$distro-demo
+done
