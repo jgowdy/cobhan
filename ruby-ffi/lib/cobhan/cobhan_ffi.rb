@@ -8,38 +8,28 @@ module Cobhan
   module CobhanFFI
     extend FFI::Library
 
-    if FFI::Platform::OS == 'linux' && Dir.glob('/lib/libc.musl*').length.positive?
-      os_path = 'linux-musl'
-      need_chdir = true
-    else
-      os_paths = { 'linux' => 'linux', 'darwin' => 'macos', 'windows' => 'windows' }.freeze
-      os_path = os_paths[FFI::Platform::OS]
-      need_chdir = false
-      raise UnsupportedPlatformError, "Unsupported operating system: #{FFI::Platform::OS}" unless os_path
-    end
+    OS_PATHS   = { 'linux' => 'linux', 'darwin' => 'macos', 'windows' => 'windows' }.freeze
+    EXTS = { 'linux' => 'so', 'darwin' => 'dylib', 'windows' => 'dll' }.freeze
+    CPU_ARCHS = { 'x86_64' => 'amd64', 'aarch64' => 'arm64' }.freeze
 
-    exts = { 'linux' => 'so', 'darwin' => 'dylib', 'windows' => 'dll' }.freeze
-    ext = exts[FFI::Platform::OS]
+    os_path =
+      if FFI::Platform::OS == 'linux' && RbConfig::CONFIG['arch'].include?('musl')
+        'linux-musl'
+      else
+        OS_PATHS[FFI::Platform::OS]
+      end
+    raise UnsupportedPlatformError, "Unsupported operating system: #{FFI::Platform::OS}" unless os_path
 
-    cpu_archs = { 'x86_64' => 'amd64', 'aarch64' => 'arm64' }.freeze
-    cpu_arch = cpu_archs[FFI::Platform::ARCH]
+    cpu_arch = CPU_ARCHS[FFI::Platform::ARCH]
     raise UnsupportedPlatformError, "Unsupported CPU: #{FFI::Platform::CPU_ARCH}" unless cpu_arch
 
+    ext = EXTS.fetch(FFI::Platform::OS)
     lib_path = File.expand_path(File.join(__dir__, 'output', os_path, cpu_arch))
 
-    if need_chdir
-      # Save current directory
-      old_dir = Dir.pwd
-
-      # Switch to library directory
-      Dir.chdir(lib_path)
+    # To properly load libgo.so.16 on Alpine, we need to change to lib path directory
+    Dir.chdir(lib_path) do
+      ffi_lib File.join(lib_path, "libplugtest.#{ext}")
     end
-
-    # NOTE: Absolute path is required here
-    ffi_lib File.join(lib_path, "libplugtest.#{ext}")
-
-    # Restore directory
-    Dir.chdir(old_dir) if need_chdir
 
     attach_function :toUpper, %i[pointer int32 pointer int32], :int32
     attach_function :calculatePi, %i[int32 pointer int32], :int32
