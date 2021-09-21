@@ -2,31 +2,32 @@
 
 ## Usage
 
-### Running specs
+Start a shell
 
-To run specs across all distros
+    ./bin/docker.sh sh
 
-    ./bin/test.sh
+Start a shell for specific distro
 
-To run tests for specific distro
+    DISTRO=debian ./bin/docker.sh sh
 
-    ./bin/test.sh alpine
+Run tests
 
-### Building gem
+    ./bin/docker.sh rspec spec
 
-To build gems across all distros
+Build a single gem for all platforms
 
-    ./bin/build.sh
+    ./bin/docker.sh rake build
 
-To build a gem for specific distro
+Build gem per platform
 
-    ./bin/build.sh alpine
+    ./bin/docker.sh rake build_many
+
+Build a gem and run a smoke test
+
+    ./bin/docker.sh rake build_smoke_test
 
 ### Starting shell
 
-To start a shell for specific distro
-
-    ./bin/shell.sh alpine
 
 ## Contributing
 

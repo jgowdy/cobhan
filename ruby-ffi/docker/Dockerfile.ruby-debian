@@ -3,10 +3,7 @@ RUN apk add git
 
 RUN git clone --depth 1 --branch main --single-branch https://github.com/jgowdy/libplugtest-binaries
 
-FROM docker.io/ruby:3.0.2-alpine3.14
-
-# libucontext is needed to support Linux-musl-arm64
-RUN apk add make gcc g++ libucontext
+FROM docker.io/ruby:3.0.2-bullseye
 
 ENV app /ruby-test/ruby-ffi
 RUN mkdir -p $app
@@ -19,6 +16,6 @@ COPY lib/cobhan/version.rb $app/lib/cobhan/
 RUN bundle install
 
 COPY . $app
-COPY --from=libplugtest-binaries-clone /libplugtest-binaries/linux-musl $app/lib/cobhan/output/linux-musl
+COPY --from=libplugtest-binaries-clone /libplugtest-binaries $app/lib/cobhan/output/
 
-CMD ruby example.rb
+CMD rake
