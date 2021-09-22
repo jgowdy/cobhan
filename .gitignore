@@ -17,3 +17,6 @@ obj/
 __pycache__
 *.pyc
 *.class
+target/
+.classpath
+.project

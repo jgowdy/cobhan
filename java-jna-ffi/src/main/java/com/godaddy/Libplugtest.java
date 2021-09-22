@@ -42,7 +42,7 @@ public class Libplugtest {
 
         Path path = FileSystems.getDefault().getPath("../output/"+os_path+"/"+arch_path).toAbsolutePath().resolve("libplugtest." + ext);
 
-        libplugtest = (LibplugtestLibrary)Native.loadLibrary(path.toString(), Libplugtest.class);
+        libplugtest = (LibplugtestLibrary)Native.load(path.toString(), LibplugtestLibrary.class);
     }
 
     public String toUpper(String input) {
