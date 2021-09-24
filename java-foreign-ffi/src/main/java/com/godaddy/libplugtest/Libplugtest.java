@@ -36,9 +36,9 @@ public class Libplugtest {
         }
 
         String arch_path, os_arch = System.getProperty("os.arch");
-        if(os_arch.equals("amd64")) {
+        if(os_arch.equals("x86_64") || os_arch.equals("amd64")) {
             arch_path = "amd64";
-        } else if(os_arch.equals("aarch64")) {
+        } else if(os_arch.equals("aarch64") || os_arch.equals("arm64")) {
             arch_path = "arm64";
         } else {
             throw new UnsupportedOperationException("Unsupported CPU " + os_arch);
