@@ -1,0 +1,18 @@
+plugins
+{
+    id 'java'
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+compileJava.configure {
+    options.compilerArgs += [ '--add-modules=jdk.incubator.foreign' ]
+}
+
+compileTestJava.configure {
+    options.compilerArgs += [ '--add-modules=jdk.incubator.foreign' ]
+}
+
+test.configure {
+    jvmArgs += [ '--add-modules=jdk.incubator.foreign', '--enable-native-access=ALL-UNNAMED' ]
+}
