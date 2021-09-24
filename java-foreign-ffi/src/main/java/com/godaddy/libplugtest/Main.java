@@ -1,6 +1,5 @@
 package com.godaddy.libplugtest;
 
-
 public class Main {
     public static void main(String[] args) {
         System.out.println("Creating Libplugtest object");
