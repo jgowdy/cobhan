@@ -53,8 +53,7 @@ public class Libplugtest {
     }
 
     public String toUpper(String input) {
-        String input_str = "Initial value";
-        var bytes = input_str.getBytes(StandardCharsets.UTF_8);
+        var bytes = input.getBytes(StandardCharsets.UTF_8);
         var result = libplugtest.toUpper(bytes, bytes.length, bytes, bytes.length);
         return new String(bytes, 0, result, StandardCharsets.UTF_8);
     }
