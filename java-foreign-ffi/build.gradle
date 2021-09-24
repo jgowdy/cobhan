@@ -5,6 +5,17 @@ plugins
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
+repositories { 
+    mavenCentral() 
+}
+
+mainClassName = 'com.godaddy.libplugtest.Main'
+
+jar {
+    archiveBaseName = 'libplugtest'
+    archiveVersion = '0.1.0'
+}
+
 compileJava.configure {
     options.compilerArgs += [ '--add-modules=jdk.incubator.foreign' ]
 }
