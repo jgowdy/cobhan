@@ -11,40 +11,40 @@ let ffi; let libplugtest;
 function initializeLibPlugTest() {
   initialized = true;
 
-  const library_root_path = path.join(__dirname, 'libplugtest-binaries');
+  const libraryRootPath = path.join(__dirname, 'libplugtest-binaries');
 
-  let os_path = {'win32': 'windows', 'linux': 'linux', 'darwin': 'macos'}[process.platform.toLowerCase()];
-  if (typeof os_path === 'undefined') {
-    throw 'Unsupported operating system';
+  let osPath = {'win32': 'windows', 'linux': 'linux', 'darwin': 'macos'}[process.platform.toLowerCase()];
+  if (typeof osPath === 'undefined') {
+    throw new Error('Unsupported operating system');
   }
 
-  let need_chdir = 0;
-  if (os_path == 'linux') {
+  let needChdir = 0;
+  if (osPath == 'linux') {
     const files = fs.readdirSync('/lib').filter((fn) => fn.startsWith('libc.musl'));
     if (files.length > 0) {
-      os_path = 'linux-musl';
-      need_chdir = 1;
+      osPath = 'linux-musl';
+      needChdir = 1;
     }
   }
 
-  const arch_path = {'arm64': 'arm64', 'x64': 'amd64'}[process.arch.toLowerCase()];
-  if (typeof arch_path === 'undefined') {
-    throw 'Unsupported architecture';
+  const archPath = {'arm64': 'arm64', 'x64': 'amd64'}[process.arch.toLowerCase()];
+  if (typeof archPath === 'undefined') {
+    throw new Error('Unsupported architecture');
   }
 
-  libpath = path.resolve(path.join(library_root_path, os_path, arch_path));
+  libpath = path.resolve(path.join(libraryRootPath, osPath, archPath));
 
   ffi = require('ffi-napi');
 
-  let old_cwd;
-  if (need_chdir == 1) {
-    old_cwd = process.cwd();
+  let oldCwd;
+  if (needChdir == 1) {
+    oldCwd = process.cwd();
     process.chdir(libpath);
   }
 
   libfile = path.join(libpath, 'libplugtest');
 
-  libplugtest = ffi.Library(libfile, {
+  libplugtest = new ffi.Library(libfile, {
     'calculatePi': ['int32', ['int32', 'char *', 'int32']],
     'sleepTest': ['void', ['int32']],
     'addInt32': ['int32', ['int32', 'int32']],
@@ -52,16 +52,16 @@ function initializeLibPlugTest() {
     'addDouble': ['double', ['double', 'double']],
   });
 
-  libplugtestPointerInputs = ffi.Library(libfile, {
+  libplugtestPointerInputs = new ffi.Library(libfile, {
     'toUpper': ['int32', ['char *', 'int32', 'char *', 'int32']],
   });
 
-  libplugtestStringInputs = ffi.Library(libfile, {
+  libplugtestStringInputs = new ffi.Library(libfile, {
     'toUpper': ['int32', ['string', 'int32', 'char *', 'int32']],
   });
 
-  if (need_chdir == 1) {
-    process.chdir(old_cwd);
+  if (needChdir == 1) {
+    process.chdir(oldCwd);
   }
 }
 
@@ -71,10 +71,11 @@ function initializeLibPlugTest() {
 
 /**
 * @param {string} str
+* @return {string}
 */
 function toUpperInGoPointerInputsCreateCString(str) {
   if (!initialized) {
-    throw 'libplugtest was not initialized';
+    throw new Error('libplugtest was not initialized');
   }
 
   // Create null delimited C string
@@ -84,7 +85,7 @@ function toUpperInGoPointerInputsCreateCString(str) {
   // Must use buf.byteLength - 1 because of included null
   const result = libplugtestPointerInputs.toUpper(buf, buf.byteLength - 1, buf, buf.byteLength);
   if (result < 0) {
-    throw 'toUpperMutableNullDelimited failed: ' + result;
+    throw new Error('toUpperMutableNullDelimited failed: ' + result);
   }
 
   return buf.toString('utf-8', 0, result);
@@ -93,6 +94,7 @@ function toUpperInGoPointerInputsCreateCString(str) {
 
 /**
 * @param {string} str
+* @return {string}
 */
 function toUpperInGoPointerInputsBufferFrom(str) {
   if (!initialized) {
@@ -104,7 +106,7 @@ function toUpperInGoPointerInputsBufferFrom(str) {
 
   const result = libplugtestPointerInputs.toUpper(buf, buf.byteLength, buf, buf.byteLength);
   if (result < 0) {
-    throw 'toUpperMutableLengthDelimited failed: ' + result;
+    throw new Error('toUpperMutableLengthDelimited failed: ' + result);
   }
 
   return buf.toString('utf-8', 0, result);
@@ -112,6 +114,7 @@ function toUpperInGoPointerInputsBufferFrom(str) {
 
 /**
 * @param {string} str
+* @return {string}
 */
 function toUpperInGoPointerInputsBufferFromBufferAllocUnsafe(str) {
   if (!initialized) {
@@ -126,7 +129,7 @@ function toUpperInGoPointerInputsBufferFromBufferAllocUnsafe(str) {
 
   const result = libplugtestPointerInputs.toUpper(buf, buf.length, out, out.length);
   if (result < 0) {
-    throw 'toUpperLengthDelimitedToOutputBuffer failed: ' + result;
+    throw new Error('toUpperLengthDelimitedToOutputBuffer failed: ' + result);
   }
 
   return out.toString('utf-8', 0, result);
@@ -138,6 +141,7 @@ function toUpperInGoPointerInputsBufferFromBufferAllocUnsafe(str) {
 
 /**
 * @param {string} str
+* @return {string}
 */
 function toUpperInGoStringInputsCreateCString(str) {
   if (!initialized) {
@@ -150,7 +154,7 @@ function toUpperInGoStringInputsCreateCString(str) {
 
   const result = libplugtestStringInputs.toUpper(buf, buf.length - 1, buf, buf.length);
   if (result < 0) {
-    throw 'toUpperMutableNullDelimited failed: ' + result;
+    throw new Error('toUpperMutableNullDelimited failed: ' + result);
   }
 
   return buf.toString('utf-8', 0, result);
@@ -158,6 +162,7 @@ function toUpperInGoStringInputsCreateCString(str) {
 
 /**
 * @param {string} str
+* @return {string}
 */
 function toUpperInGoStringInputsBufferFrom(str) {
   if (!initialized) {
@@ -169,7 +174,7 @@ function toUpperInGoStringInputsBufferFrom(str) {
 
   const result = libplugtestStringInputs.toUpper(buf, buf.length, buf, buf.length);
   if (result < 0) {
-    throw 'toUpperMutableLengthDelimited failed: ' + result;
+    throw new Error('toUpperMutableLengthDelimited failed: ' + result);
   }
 
   return buf.toString('utf-8', 0, result);
@@ -177,6 +182,7 @@ function toUpperInGoStringInputsBufferFrom(str) {
 
 /**
 * @param {string} str
+* @return {string}
 */
 function toUpperInGoStringInputsPassStringDirectlyBufferAllocUnsafe(str) {
   if (!initialized) {
@@ -188,7 +194,7 @@ function toUpperInGoStringInputsPassStringDirectlyBufferAllocUnsafe(str) {
 
   const result = libplugtestStringInputs.toUpper(str, str.length, out, out.length);
   if (result < 0) {
-    throw 'toUpperNullDelimitedToOutputBuffer failed: ' + result;
+    throw new Error('toUpperNullDelimitedToOutputBuffer failed: ' + result);
   }
 
   return out.toString('utf-8', 0, result);
@@ -196,6 +202,7 @@ function toUpperInGoStringInputsPassStringDirectlyBufferAllocUnsafe(str) {
 
 /**
 * @param {string} str
+* @return {string}
 */
 function toUpperInGoStringInputsBufferFromBufferAllocUnsafe(str) {
   if (!initialized) {
@@ -210,7 +217,7 @@ function toUpperInGoStringInputsBufferFromBufferAllocUnsafe(str) {
 
   const result = libplugtestStringInputs.toUpper(buf, buf.length, out, out.length);
   if (result < 0) {
-    throw 'toUpperLengthDelimitedToOutputBuffer failed: ' + result;
+    throw new Error('toUpperLengthDelimitedToOutputBuffer failed: ' + result);
   }
 
   return out.toString('utf-8', 0, result);
@@ -223,6 +230,7 @@ function toUpperInGoStringInputsBufferFromBufferAllocUnsafe(str) {
 /**
 * @param {number} x
 * @param {number} y
+* @return {number}
 */
 function addInt32InGo(x, y) {
   if (!initialized) {
@@ -234,6 +242,7 @@ function addInt32InGo(x, y) {
 /**
 * @param {number} x
 * @param {number} y
+* @return {number}
 */
 function addInt64InGo(x, y) {
   if (!initialized) {
@@ -245,6 +254,7 @@ function addInt64InGo(x, y) {
 /**
 * @param {number} x
 * @param {number} y
+* @return {number}
 */
 function addDoubleInGo(x, y) {
   if (!initialized) {
@@ -255,6 +265,7 @@ function addDoubleInGo(x, y) {
 
 /**
 * @param {number} seconds
+* @return {Promise}
 */
 function sleepInGo(seconds) {
   if (!initialized) {
