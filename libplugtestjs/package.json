@@ -22,5 +22,9 @@
   },
   "files": [
     "libplugtest-binaries/**"
-  ]
+  ],
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-google": "^0.14.0"
+  }
 }
