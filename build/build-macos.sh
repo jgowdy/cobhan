@@ -2,7 +2,7 @@
 
 if [[ "$OSTYPE" != "darwin"* ]]; then
     echo 'Requires macOS'
-    exit -1
+    exit 255
 fi
 
 # Build MacOS for arm64
