@@ -2,17 +2,17 @@
 
 DOCKER_BUILD_FLAGS='--rm'
 
-DOCKER=`which podman 2>/dev/null || echo docker`
+DOCKER=$(which podman 2>/dev/null || echo docker)
 
 $DOCKER build $DOCKER_BUILD_FLAGS -t libgo-linux-musl - <Dockerfile.libgo-linux-musl
 
-MACHINE=`uname -m`
+MACHINE=$(uname -m)
 rm libgo-linux-musl-$MACHINE.tar libgo.so.16.0.0
 rm -rf aarch64
 
 $DOCKER run --cidfile ./libgo-linux-musl-cid libgo-linux-musl
 
-LIBGO_CID=`cat ./libgo-linux-musl-cid`
+LIBGO_CID=$(cat ./libgo-linux-musl-cid)
 
 $DOCKER export $LIBGO_CID -o libgo-linux-musl-$MACHINE.tar
 

@@ -7,7 +7,7 @@ DOCKER_BUILD_FLAGS='--rm'
 # Use --no-cache flag for docker to fetch latest libplugtest-binaries until it becomes versioned
 # DOCKER_BUILD_FLAGS='--rm --no-cache'
 
-DOCKER=`which podman 2>/dev/null || echo docker`
+DOCKER=$(which podman 2>/dev/null || echo docker)
 
 distro=${1?"Usage: $0 distro"}
 

@@ -85,5 +85,5 @@ def calculate_pi(digits):
     result = lib.calculatePi(digits,cdata,len(cdata))
     if result < 0:
         raise Exception("calculatePi failed")
-    
+
     return ffi.unpack(cdata, result).decode("utf8")

@@ -17,4 +17,3 @@ WORKDIR /node-test/node-ffi-napi
 RUN npm i --no-update-notifier
 
 CMD node .
-

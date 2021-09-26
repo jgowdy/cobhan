@@ -17,4 +17,3 @@ WORKDIR /ruby-test/ruby-ffi
 RUN gem install ffi
 
 CMD ruby example.rb
-

@@ -6,8 +6,8 @@ plugins
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-repositories { 
-    mavenCentral() 
+repositories {
+    mavenCentral()
 }
 
 mainClassName = 'com.godaddy.libplugtest.Main'

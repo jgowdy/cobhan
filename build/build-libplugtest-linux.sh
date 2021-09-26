@@ -2,16 +2,16 @@
 
 DOCKER_BUILD_FLAGS='--rm'
 
-DOCKER=`which podman 2>/dev/null || echo docker`
+DOCKER=$(which podman 2>/dev/null || echo docker)
 
 $DOCKER build $DOCKER_BUILD_FLAGS -t libplugtest-linux - <Dockerfile.libplugtest-linux
 
-MACHINE=`uname -m`
+MACHINE=$(uname -m)
 rm libplugtest-linux-$MACHINE.tar libplugtest.*
 
 $DOCKER run --cidfile ./libplugtest-linux-cid libplugtest-linux
 
-LIBPLUGTEST_CID=`cat ./libplugtest-linux-cid`
+LIBPLUGTEST_CID=$(cat ./libplugtest-linux-cid)
 
 $DOCKER export $LIBPLUGTEST_CID -o libplugtest-linux-$MACHINE.tar
 

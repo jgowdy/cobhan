@@ -20,7 +20,7 @@ public class Libplugtest {
 
     private final MethodHandle toUpperMethod;
 
-    public Libplugtest() {        
+    public Libplugtest() {
         String os_path, ext, os_name = System.getProperty("os.name").toLowerCase();
         if(os_name.contains("linux")) {
             os_path = "linux";
@@ -49,8 +49,8 @@ public class Libplugtest {
         Path libraryFile = libraryPath.resolve("libplugtest." + ext);
 
         System.load(libraryFile.toString());
-        
-        final var loader = SymbolLookup.loaderLookup();   	
+
+        final var loader = SymbolLookup.loaderLookup();
     	final var linker = CLinker.getInstance();
 
 		toUpperMethod = linker.downcallHandle(
@@ -61,19 +61,19 @@ public class Libplugtest {
     }
 
     public String toUpper(String input) throws Exception {
-        try (var scope = ResourceScope.newConfinedScope()) {            
+        try (var scope = ResourceScope.newConfinedScope()) {
             var nullDelimitedMemorySegment = CLinker.toCString(input, scope);
 
             //Due to working with length delimited strings, we take a slice of the null delimited string
             var memorySlice = nullDelimitedMemorySegment.asSlice(0, nullDelimitedMemorySegment.byteSize() - 1);
             int result;
             try {
-                result = (int)toUpperMethod.invokeExact(memorySlice.address(), (int)memorySlice.byteSize(), 
+                result = (int)toUpperMethod.invokeExact(memorySlice.address(), (int)memorySlice.byteSize(),
                     memorySlice.address(), (int)memorySlice.byteSize());
             } catch (Throwable t) {
                 throw new Exception("MethodHandle.invokeExact failed for toUpper", t);
-            }        
-            
+            }
+
             if (result < 0) {
                 throw new Exception("toUpper failed");
             }
