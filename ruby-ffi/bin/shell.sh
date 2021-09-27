@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 set -e
 
@@ -12,5 +12,5 @@ DOCKER=$(which podman 2>/dev/null || echo docker)
 distro=${1?"Usage: $0 distro"}
 
 echo "=> Starting shell for $distro"
-$DOCKER build . $DOCKER_BUILD_FLAGS -f docker/Dockerfile.ruby-$distro-demo -t ruby-$distro-demo:latest
-$DOCKER run -it --rm ruby-$distro-demo sh
+$DOCKER build . $DOCKER_BUILD_FLAGS -f docker/Dockerfile.ruby-"$distro"-demo -t ruby-"$distro"-demo:latest
+$DOCKER run -it --rm ruby-"$distro"-demo sh
