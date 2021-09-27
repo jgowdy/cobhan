@@ -14,17 +14,7 @@ import (
 // * Callers can re-use the input buffer as the output buffer (memmove semantics)
 // * Insufficient capacity in output buffer causes functions to fail by returning less than zero
 
-//One of the provided output buffers was too small to receive the output
-const TOO_SMALL = -1
 
-//Failed to copy the output into the output buffer (copy length != expected length)
-const COPY_FAIL = -2
-
-//Failed to marshal or unmarshal JSON
-const JSON_FAIL = -3
-
-//One of the provided input pointers was likely NULL
-const NULL_PTR = -4
 
 // Sample library exports for client testing
 
@@ -52,7 +42,7 @@ func addInt64(x int64, y int64) int64 {
 func toUpper(input *C.char, inputLen int32, output *C.char, outputCap int32) int32 {
 	str, err := GoString(input, inputLen)
 	if err != nil {
-		return NULL_PTR
+		return ERR_NULL_PTR
 	}
 
 	str = strings.ToUpper(str)
@@ -64,12 +54,12 @@ func toUpper(input *C.char, inputLen int32, output *C.char, outputCap int32) int
 func filterJson(input *C.char, inputLen int32, disallowedValue *C.char, disallowedValueLen int32, output *C.char, outputCap int32) int32 {
 	jsonList, err := LoadJson(input, inputLen)
 	if err != nil {
-		return JSON_FAIL
+		return ERR_JSON_FAIL
 	}
 
 	disallowedValueStr, err := GoString(disallowedValue, disallowedValueLen)
 	if err != nil {
-		return NULL_PTR
+		return ERR_NULL_PTR
 	}
 
 	for key := range jsonList {
@@ -83,7 +73,7 @@ func filterJson(input *C.char, inputLen int32, disallowedValue *C.char, disallow
 
 	outputBytes, err := json.Marshal(jsonList)
 	if err != nil {
-		return JSON_FAIL
+		return ERR_JSON_FAIL
 	}
 	return CopyBytesToCStr(outputBytes, output, outputCap)
 }

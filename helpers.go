@@ -8,6 +8,18 @@ import (
 	"unsafe"
 )
 
+//One of the provided output buffers was too small to receive the output
+const ERR_TOO_SMALL = -1
+
+//Failed to copy the output into the output buffer (copy length != expected length)
+const ERR_COPY_FAIL = -2
+
+//Failed to marshal or unmarshal JSON
+const ERR_JSON_FAIL = -3
+
+//One of the provided input pointers was likely NULL
+const ERR_NULL_PTR = -4
+
 // Reusable functions to facilitate FFI
 
 func GoString(srcPtr *C.char, srcLen int32) (string, error) {
@@ -31,7 +43,7 @@ func CopyBytesToCStr(src []byte, dstPtr *C.char, dstCap int32) int32 {
 	dstCapInt := int(dstCap)
 	srcLen := len(src)
 	if dstCapInt < srcLen {
-		return TOO_SMALL //Insufficient output buffer capacity
+		return ERR_TOO_SMALL //Insufficient output buffer capacity
 	}
 
 	var dst []byte
@@ -43,7 +55,7 @@ func CopyBytesToCStr(src []byte, dstPtr *C.char, dstCap int32) int32 {
 	result := copy(dst, src)
 
 	if result != srcLen {
-		return COPY_FAIL //Failed to copy the expected number of bytes
+		return ERR_COPY_FAIL //Failed to copy the expected number of bytes
 	}
 
 	//Return number of bytes copied to destination
