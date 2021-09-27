@@ -1,9 +1,13 @@
-#!/bin/bash
+#!/bin/sh
 
-if [[ "$OSTYPE" != "darwin"* ]]; then
+case $(uname -s) in
+"Darwin") ;;
+
+*)
     echo 'Requires macOS'
     exit 255
-fi
+    ;;
+esac
 
 # Build MacOS for arm64
 echo "Build MacOS for arm64"
