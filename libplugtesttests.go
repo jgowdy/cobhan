@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"strings"
 	"unsafe"
 )
@@ -80,6 +81,73 @@ func filterJsonTest() {
 }
 
 func testAllocation() {
-	buffer := allocateTestCharStar(1024)
-	defer freeTestCharStar(buffer)
+	buffer := allocateTestBuffer(1024)
+	defer freeTestBuffer(buffer)
+}
+
+func addInt32Test() {
+	result := addInt32(math.MaxInt32, 1)
+	if result != math.MaxInt32 {
+		panic(fmt.Sprintf("Unexpected result %d for overflow 1", result))
+	}
+
+	result = addInt32(math.MaxInt32, math.MaxInt32)
+	if result != math.MaxInt32 {
+		panic(fmt.Sprintf("Unexpected result %d for overflow 2", result))
+	}
+
+	result = addInt32(math.MinInt32, -1)
+	if result != math.MinInt32 {
+		panic(fmt.Sprintf("Unexpected result %d for underflow 1", result))
+	}
+
+	result = addInt32(math.MinInt32, math.MinInt32)
+	if result != math.MinInt32 {
+		panic(fmt.Sprintf("Unexpected result %d for underflow 2", result))
+	}
+}
+
+func addInt64Test() {
+	result := addInt64(math.MaxInt64, 1)
+	if result != math.MaxInt64 {
+		panic(fmt.Sprintf("Unexpected result %d for overflow 1", result))
+	}
+
+	result = addInt64(math.MaxInt64, math.MaxInt64)
+	if result != math.MaxInt64 {
+		panic(fmt.Sprintf("Unexpected result %d for overflow 2", result))
+	}
+
+	result = addInt64(math.MinInt64, -1)
+	if result != math.MinInt64 {
+		panic(fmt.Sprintf("Unexpected result %d for underflow 1", result))
+	}
+
+	result = addInt64(math.MinInt64, math.MinInt64)
+	if result != math.MinInt64 {
+		panic(fmt.Sprintf("Unexpected result %d for underflow 2", result))
+	}
+}
+
+func addDoubleTest() {
+	result := addDouble(math.MaxFloat64, 1)
+
+	if result != math.MaxFloat64 {
+		panic(fmt.Sprintf("Unexpected result %f for overflow 1", result))
+	}
+
+	result = addDouble(math.MaxFloat64, math.MaxFloat64)
+	if !math.IsInf(result, 1) {
+		panic(fmt.Sprintf("Unexpected result %f for overflow 2", result))
+	}
+
+	result = addDouble(-math.MaxFloat64, -1)
+	if result != -math.MaxFloat64 {
+		panic(fmt.Sprintf("Unexpected result %f for underflow 1", result))
+	}
+
+	result = addDouble(-math.MaxFloat64, -math.MaxFloat64)
+	if !math.IsInf(result, -1) {
+		panic(fmt.Sprintf("Unexpected result %f for underflow 2", result))
+	}
 }

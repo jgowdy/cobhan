@@ -11,10 +11,10 @@ import (
 	"C"
 )
 
-func allocateTestCharStar(size int32) *C.char {
-	return (*C.char)(C.malloc(C.ulong(size)))
+func allocateTestBuffer(size int32) buffer {
+	return (buffer)(C.malloc(C.ulong(size)))
 }
 
-func freeTestCharStar(ptr *C.char) {
+func freeTestBuffer(ptr buffer) {
 	C.free(unsafe.Pointer(ptr))
 }
