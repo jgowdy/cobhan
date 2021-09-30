@@ -1,0 +1,35 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: 7eb0512c687ed3502fea11bae9b5ad0f657eb8ef
+    hooks:
+    -   id: trailing-whitespace
+    -   id: end-of-file-fixer
+    -   id: check-yaml
+    -   id: check-added-large-files
+    -   id: check-case-conflict
+    -   id: check-json
+    -   id: check-merge-conflict
+    -   id: check-symlinks
+    -   id: check-xml
+    -   id: check-yaml
+    -   id: detect-private-key
+    -   id: end-of-file-fixer
+    -   id: fix-byte-order-marker
+    -   id: mixed-line-ending
+    -   id: trailing-whitespace
+-   repo: https://github.com/jumanjihouse/pre-commit-hooks
+    rev: 7cc5848088fd8412905ab79feea6c8edc3ac76c6
+    hooks:
+    -   id: shellcheck
+    -   id: shfmt
+-   repo: https://github.com/Bahjat/pre-commit-golang
+    rev: 85c26d4d1c8a086095a057bbdf8adf56af603ce4
+    hooks:
+    -   id: go-lint
+    -   id: go-vet
+    -   id: go-fmt-import
+    -   id: go-static-check
+-   repo: https://github.com/golangci/golangci-lint
+    rev: c6c55d2502b052e2e5925389ee40b6bde887e3db
+    hooks:
+    -   id: golangci-lint

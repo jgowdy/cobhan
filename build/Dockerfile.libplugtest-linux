@@ -1,4 +1,4 @@
-FROM cobhan-clone AS cobhan-clone
+FROM localhost/cobhan-clone AS cobhan-clone
 
 FROM docker.io/golang:1.16-stretch AS build-libplugtest-linux
 

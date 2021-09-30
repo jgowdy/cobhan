@@ -1,0 +1,34 @@
+plugins
+{
+    id 'java'
+    id 'application'
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+repositories {
+    mavenCentral()
+}
+
+mainClassName = 'com.godaddy.libplugtest.Main'
+
+jar {
+    archiveBaseName = 'libplugtest'
+    archiveVersion = '0.1.0'
+}
+
+application {
+    applicationDefaultJvmArgs = [ '--add-modules=jdk.incubator.foreign', '--enable-native-access=ALL-UNNAMED' ]
+}
+
+compileJava.configure {
+    options.compilerArgs += [ '--add-modules=jdk.incubator.foreign' ]
+}
+
+compileTestJava.configure {
+    options.compilerArgs += [ '--add-modules=jdk.incubator.foreign' ]
+}
+
+test.configure {
+    jvmArgs += [ '--add-modules=jdk.incubator.foreign', '--enable-native-access=ALL-UNNAMED' ]
+}

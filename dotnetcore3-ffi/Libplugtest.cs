@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-public class Libplugtest 
+public class Libplugtest
 {
     private delegate double AddDoubleDelegate(double x, double y);
     private delegate Int64 AddInt64Delegate(Int64 x, Int64 y);
@@ -14,7 +14,7 @@ public class Libplugtest
     private delegate int ToUpperDelegate(IntPtr input, Int32 inputLen, IntPtr output, Int32 outputCapacity);
 
     private static AddInt32Delegate addInt32Delegate;
-    private static AddInt64Delegate addInt64Delegate;   
+    private static AddInt64Delegate addInt64Delegate;
     private static AddDoubleDelegate addDoubleDelegate;
     private static SleepTestDelegate sleepTestDelegate;
     private static CalculatePiDelegate calculatePiDelegate;
@@ -72,7 +72,7 @@ public class Libplugtest
             oldDir = Directory.GetCurrentDirectory();
             Directory.SetCurrentDirectory(libraryPath);
         }
-        
+
         hLibrary = NativeLibrary.Load(Path.Join(libraryPath, $"libplugtest.{ext}"));
 
         if(needsChdir)
@@ -81,7 +81,7 @@ public class Libplugtest
         }
 
         IntPtr addr;
-        
+
         addr = NativeLibrary.GetExport(hLibrary, "toUpper");
         toUpperDelegate = Marshal.GetDelegateForFunctionPointer<ToUpperDelegate>(addr);
         addr = NativeLibrary.GetExport(hLibrary, "addDouble");
@@ -124,7 +124,7 @@ public class Libplugtest
 
     public long AddInt64(long x, long y)
     {
-        return addInt64Delegate(x, y); 
+        return addInt64Delegate(x, y);
     }
 
     public int AddInt32(int x, int y)
@@ -142,7 +142,7 @@ public class Libplugtest
         var outputBytes = new byte[digits+1];
         var handle = GCHandle.Alloc(outputBytes, GCHandleType.Pinned);
         var result = 0;
-        try 
+        try
         {
             result = calculatePiDelegate(digits, handle.AddrOfPinnedObject(), outputBytes.Length);
         }

@@ -16,3 +16,7 @@ obj/
 /java-ffi/target
 __pycache__
 *.pyc
+*.class
+target/
+.classpath
+.project
