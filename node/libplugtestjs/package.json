@@ -1,6 +1,6 @@
 {
   "name": "libplugtestjs",
-  "version": "1.0.0",
+  "version": "1.2.2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -17,14 +17,15 @@
     "url": "https://github.com/jgowdy/cobhan/issues"
   },
   "homepage": "https://github.com/jgowdy/cobhan#readme",
-  "dependencies": {
-    "ffi-napi": "^4.0.3"
-  },
   "files": [
-    "libplugtest-binaries/**/*.so"
+    "libplugtest-binaries/**/*.so",
+    "libplugtest-binaries/**/*.dylib"
   ],
   "devDependencies": {
     "eslint": "^7.32.0",
     "eslint-config-google": "^0.14.0"
+  },
+  "dependencies": {
+    "cobhanjs": "^1.0.1"
   }
 }

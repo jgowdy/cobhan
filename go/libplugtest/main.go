@@ -3,7 +3,7 @@ package main
 func main() {
 	toUpperTest()
 	filterJsonTest()
-	testAllocation()
+	allocationTest()
 	addInt32Test()
 	addInt64Test()
 	addDoubleTest()

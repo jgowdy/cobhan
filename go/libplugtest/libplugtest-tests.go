@@ -4,14 +4,8 @@ import (
 	"fmt"
 	"math"
 	"strings"
-	"unsafe"
-)
 
-/*
-#include <stdlib.h> //For C.free
-*/
-import (
-	"C"
+	"godaddy.com/cobhan"
 )
 
 // Test functions
@@ -19,30 +13,26 @@ const testStr = "Test String"
 
 func toUpperTest() {
 	// Simulate FFI Parameters
-	input := C.CString(testStr) // This is a copy
-	defer C.free(unsafe.Pointer(input))
 	inputLen := (int32)(len(testStr))
+    input := cobhan.TestAllocateStringBuffer(testStr)
+	defer cobhan.TestFreeBuffer(input)
+
 	outputCap := (int32)(inputLen * 2) // Make it extra large to ensure we trim it properly
-	bytes := make([]byte, outputCap)
-	output := (*C.char)(unsafe.Pointer(&bytes))
+    output := cobhan.TestAllocateBuffer(outputCap)
+    defer cobhan.TestFreeBuffer(output)
 
 	result := toUpper(input, inputLen, output, outputCap)
 	if result < 0 {
 		panic(fmt.Sprintf("toUpperTest failed: Result: %d", result))
 	}
 
-	outputStr := C.GoStringN(output, (C.int)(result))
-	expectedStr := strings.ToUpper(testStr)
-	if outputStr != expectedStr {
-		panic(fmt.Sprintf("toUpperTest failed: Output: %s Expected: %s", outputStr, expectedStr))
-	}
+    expectedStr := strings.ToUpper(testStr)
+    cobhan.TestStringAssertion("toUpperTest output mismatch", output, result, expectedStr)
 
-	inputStr := C.GoString(input)
-	if inputStr != testStr {
-		panic(fmt.Sprintf("toUpperTest failed: Input string was modified: Before: %s After: %s", testStr, inputStr))
-	}
+    // Assert that the input buffer wasn't modified
+    cobhan.TestStringAssertion("toUpperTest input buffer modified", input, inputLen, testStr)
 
-	fmt.Printf("toUpperTest success: %s became %s\n", testStr, outputStr)
+    fmt.Println("toUpperTest passed")
 }
 
 func filterJsonTest() {
@@ -53,36 +43,33 @@ func filterJsonTest() {
         "Movie": "Frozen 2"
     }`
 
-	inputJson := C.CString(inputJsonStr)
-	defer C.free(unsafe.Pointer(inputJson))
-	inputJsonLen := int32(len(inputJsonStr))
+    inputJsonLen := int32(len(inputJsonStr))
+    inputJson := cobhan.TestAllocateStringBuffer(inputJsonStr)
+    defer cobhan.TestFreeBuffer(inputJson)
 
 	disallowedValueStr := "Frozen"
-	disallowedValue := C.CString(disallowedValueStr)
-	defer C.free(unsafe.Pointer(disallowedValue))
 	disallowedValueLen := int32(len(disallowedValueStr))
+    disallowedValue := cobhan.TestAllocateStringBuffer(disallowedValueStr)
+    defer cobhan.TestFreeBuffer(disallowedValue)
+
 
 	outputJsonCap := int32(inputJsonLen * 2)
-	outputJsonBytes := make([]byte, outputJsonCap)
-	outputJson := (*C.char)(unsafe.Pointer(&outputJsonBytes))
+    outputJson := cobhan.TestAllocateBuffer(outputJsonCap)
+    defer cobhan.TestFreeBuffer(outputJson)
 
 	result := filterJson(inputJson, inputJsonLen, disallowedValue, disallowedValueLen, outputJson, outputJsonCap)
 	if result < 0 {
-		panic("Failed to filter JSON")
+		panic(fmt.Sprintf("filterJson failed: Result: %d", result))
 	}
 
-	outputStr := C.GoStringN(outputJson, C.int(result))
-
-	fmt.Printf("Filtered JSON: %s\n", outputStr)
-
-	if strings.Contains(outputStr, "Frozen") {
-		panic("Failed to filter disallowed value out of JSON!")
-	}
+    cobhan.TestStringNotAssertion("disallowed value filtered", outputJson, result, disallowedValueStr)
+    fmt.Println("filterJsonTest passed")
 }
 
-func testAllocation() {
-	buffer := allocateTestBuffer(1024)
-	defer freeTestBuffer(buffer)
+func allocationTest() {
+	buffer := cobhan.TestAllocateBuffer(1024)
+	defer cobhan.TestFreeBuffer(buffer)
+    fmt.Println("allocationTest passed")
 }
 
 func addInt32Test() {
@@ -105,6 +92,8 @@ func addInt32Test() {
 	if result != math.MinInt32 {
 		panic(fmt.Sprintf("Unexpected result %d for underflow 2", result))
 	}
+
+    fmt.Println("addInt32Test passed")
 }
 
 func addInt64Test() {
@@ -127,6 +116,8 @@ func addInt64Test() {
 	if result != math.MinInt64 {
 		panic(fmt.Sprintf("Unexpected result %d for underflow 2", result))
 	}
+
+    fmt.Println("addInt64Test passed")
 }
 
 func addDoubleTest() {
@@ -150,4 +141,6 @@ func addDoubleTest() {
 	if !math.IsInf(result, -1) {
 		panic(fmt.Sprintf("Unexpected result %f for underflow 2", result))
 	}
+
+    fmt.Println("addDoubleTest passed")
 }

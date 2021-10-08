@@ -28,6 +28,9 @@ Build a gem and run a smoke test
 
 ### Starting shell
 
+## Links
+
+https://github.com/ffi/ffi
 
 ## Contributing
 

@@ -1,4 +1,4 @@
-FROM localhost/cobhan-clone AS cobhan-clone
+FROM cobhan-clone AS cobhan-clone
 
 #FROM libplugtest-binaries-clone AS libplugtest-binaries-clone
 

@@ -1,6 +1,6 @@
-FROM localhost/cobhan-clone AS cobhan-clone
+FROM cobhan-clone AS cobhan-clone
 
-FROM localhost/libplugtest-binaries-clone AS libplugtest-binaries-clone
+FROM libplugtest-binaries-clone AS libplugtest-binaries-clone
 
 FROM docker.io/ruby:3-alpine
 
