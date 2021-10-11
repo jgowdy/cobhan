@@ -1,8 +1,6 @@
 
 const ffi = require('ffi-napi');
 
-// This code is reused between wrappers
-
 /**
 * @param {string} libraryRootPath
 * @param {string} libraryName
@@ -15,12 +13,12 @@ function load_platform_library(libraryRootPath, libraryName, functions) {
         throw new Error('Unsupported operating system');
     }
 
-    let needChdir = 0;
+    let needChdir = false;
     if (osPath == 'linux') {
         const files = fs.readdirSync('/lib').filter((fn) => fn.startsWith('libc.musl'));
         if (files.length > 0) {
             osPath = 'linux-musl';
-            needChdir = 1;
+            needChdir = true;
         }
     }
 
@@ -29,10 +27,10 @@ function load_platform_library(libraryRootPath, libraryName, functions) {
         throw new Error('Unsupported architecture');
     }
 
-    libpath = path.resolve(path.join(libraryRootPath, osPath, archPath));
+    let libpath = path.resolve(path.join(libraryRootPath, osPath, archPath));
 
     let oldCwd;
-    if (needChdir == 1) {
+    if (needChdir) {
         oldCwd = process.cwd();
         process.chdir(libpath);
     }
@@ -41,8 +39,8 @@ function load_platform_library(libraryRootPath, libraryName, functions) {
 
     let library = new ffi.Library(libfile, functions);
 
-    if (needChdir == 1) {
-    process.chdir(oldCwd);
+    if (needChdir) {
+        process.chdir(oldCwd);
     }
 
     return library
