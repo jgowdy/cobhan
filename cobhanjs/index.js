@@ -1,5 +1,6 @@
 
 const ffi = require('ffi-napi');
+const path = require('path');
 
 /**
 * @param {string} libraryRootPath
@@ -35,7 +36,7 @@ function load_platform_library(libraryRootPath, libraryName, functions) {
         process.chdir(libpath);
     }
 
-    libfile = path.join(libpath, libraryName);
+    let libfile = path.join(libpath, libraryName);
 
     let library = new ffi.Library(libfile, functions);
 
