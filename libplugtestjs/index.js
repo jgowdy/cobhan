@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 const path = require('path');
-const library_loader = require('load-platform-library');
+const library_loader = require('library-loader');
 
 let libplugtest;
 

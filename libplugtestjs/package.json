@@ -1,6 +1,6 @@
 {
   "name": "libplugtestjs",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -21,6 +21,7 @@
     "ffi-napi": "^4.0.3"
   },
   "files": [
+    "library-loader.js",
     "libplugtest-binaries/**/*.so",
     "libplugtest-binaries/**/*.dylib"
   ],
