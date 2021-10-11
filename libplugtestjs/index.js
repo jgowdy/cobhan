@@ -4,7 +4,30 @@ const library_loader = require('load-platform-library');
 
 let libplugtest;
 
-function filterJsonInGo(inputJson, disallowedValue) {
+/**
+* @param {object} input
+* @param {string} disallowedValue
+* @return {object}
+*/
+function filterJsonObjectInGo(input, disallowedValue) {
+    // Create output buffer
+    const out = Buffer.allocUnsafe(str.length);
+    let inputJson = JSON.stringify(input)
+
+    const result = libplugtest.filterJson(inputJson, inputJson.length, disallowedValue, disallowedValue.length, out, out.length);
+    if (result < 0) {
+        throw new Error('filterJson failed: ' + result);
+    }
+
+    return JSON.parse(out.toString('utf8', 0, result));
+}
+
+/**
+* @param {string} inputJson
+* @param {string} disallowedValue
+* @return {string}
+*/
+function filterJsonStringInGo(inputJson, disallowedValue) {
     // Create output buffer
     const out = Buffer.allocUnsafe(str.length);
 
