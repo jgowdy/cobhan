@@ -1,6 +1,6 @@
 
-const ffi = require('ffi-napi');
-const path = require('path');
+import { Library } from 'ffi-napi';
+import { resolve, join } from 'path';
 
 /**
 * @param {string} libraryRootPath
@@ -28,7 +28,7 @@ function load_platform_library(libraryRootPath, libraryName, functions) {
         throw new Error('Unsupported architecture');
     }
 
-    let libpath = path.resolve(path.join(libraryRootPath, osPath, archPath));
+    let libpath = resolve(join(libraryRootPath, osPath, archPath));
 
     let oldCwd;
     if (needChdir) {
@@ -36,9 +36,9 @@ function load_platform_library(libraryRootPath, libraryName, functions) {
         process.chdir(libpath);
     }
 
-    let libfile = path.join(libpath, libraryName);
+    let libfile = join(libpath, libraryName);
 
-    let library = new ffi.Library(libfile, functions);
+    let library = new Library(libfile, functions);
 
     if (needChdir) {
         process.chdir(oldCwd);
@@ -47,6 +47,6 @@ function load_platform_library(libraryRootPath, libraryName, functions) {
     return library
   }
 
-  module.exports = {
+  export default {
     load_platform_library,
 };

@@ -1,10 +1,8 @@
-/* eslint-disable max-len */
-
 const libplugtest = require('libplugtestjs');
 
 console.log(libplugtest.toUpperInGo('Initial value'));
 
-let output = libplugtest.filterJsonInGo({ test: 'foo', test2: 'kittens' } , 'foo');
+let output = libplugtest.filterJsonObjectInGo({ test: 'foo', test2: 'kittens' } , 'foo');
 console.log(output);
 
 console.log(libplugtest.addInt32InGo(2.9, 2.0));

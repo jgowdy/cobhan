@@ -1,6 +1,5 @@
-/* eslint-disable max-len */
-const path = require('path');
-const library_loader = require('cobhanjs');
+import { join } from 'path';
+import { load_platform_library } from 'cobhanjs';
 
 /**
 * @param {object} input
@@ -90,10 +89,10 @@ function sleepInGo(seconds) {
 }
 
 // Provide the base path of the library binaries
-const libraryRootPath = path.join(__dirname, 'libplugtest-binaries');
+const libraryRootPath = join(__dirname, 'libplugtest-binaries');
 
 // Provide the function declarations we are importing
-const libplugtest = library_loader.load_platform_library(libraryRootPath, 'libplugtest', {
+const libplugtest = load_platform_library(libraryRootPath, 'libplugtest', {
     'sleepTest': ['void', ['int32']],
     'addInt32': ['int32', ['int32', 'int32']],
     'addInt64': ['int64', ['int64', 'int64']],
@@ -102,4 +101,4 @@ const libplugtest = library_loader.load_platform_library(libraryRootPath, 'libpl
     'filterJson': ['int32', ['string', 'int32', 'string', 'int32', 'char *', 'int32']]
     });
 
-module.exports = { filterJsonObjectInGo, filterJsonStringInGo, toUpperInGo, sleepInGo, addInt32InGo, addInt64InGo, addDoubleInGo };
+export default { filterJsonObjectInGo, filterJsonStringInGo, toUpperInGo, sleepInGo, addInt32InGo, addInt64InGo, addDoubleInGo };
