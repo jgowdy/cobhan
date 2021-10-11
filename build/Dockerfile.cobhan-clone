@@ -1,2 +1,2 @@
-FROM localhost/alpine-git
+FROM alpine-git
 RUN git clone --depth 1 --branch main --single-branch https://github.com/jgowdy/cobhan

@@ -1,4 +1,4 @@
-FROM localhost/cobhan-clone AS cobhan-clone
+FROM cobhan-clone AS cobhan-clone
 
 FROM docker.io/alpine AS libgo-linux-musl
 
