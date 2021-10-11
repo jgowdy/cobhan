@@ -1,5 +1,5 @@
 {
-  "name": "ffi-napi",
+  "name": "node-ffi-demo",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,10 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ffi-napi": "^4.0.3",
-    "fs": "^0.0.1-security",
-    "libplugtestjs": "^1.0.1",
-    "process": "^0.11.10"
+    "libplugtestjs": "^1.1.1"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
