@@ -1,16 +1,16 @@
-const libplugtest = require('libplugtestjs');
+import { toUpperInGo, filterJsonObjectInGo, addInt32InGo, addInt64InGo, addDoubleInGo, sleepInGo } from 'libplugtestjs';
 
-console.log(libplugtest.toUpperInGo('Initial value'));
+console.log(toUpperInGo('Initial value'));
 
-let output = libplugtest.filterJsonObjectInGo({ test: 'foo', test2: 'kittens' } , 'foo');
+let output = filterJsonObjectInGo({ test: 'foo', test2: 'kittens' } , 'foo');
 console.log(output);
 
-console.log(libplugtest.addInt32InGo(2.9, 2.0));
-console.log(libplugtest.addInt64InGo(2.9, 2.0));
+console.log(addInt32InGo(2.9, 2.0));
+console.log(addInt64InGo(2.9, 2.0));
 
-console.log(libplugtest.addDoubleInGo(2.9, 2.0));
+console.log(addDoubleInGo(2.9, 2.0));
 
 console.log('Start sleeping');
-libplugtest.sleepInGo(2).then(function(result) {
+sleepInGo(2).then(function(result) {
   console.log('Finished sleeping');
 })
