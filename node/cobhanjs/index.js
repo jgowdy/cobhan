@@ -1,4 +1,3 @@
-
 import { Library } from 'ffi-napi';
 import { resolve, join } from 'path';
 
