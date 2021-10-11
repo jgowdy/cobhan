@@ -8,16 +8,15 @@ const library_loader = require('cobhanjs');
 * @return {object}
 */
 function filterJsonObjectInGo(input, disallowedValue) {
-    // Create output buffer
-    const out = Buffer.allocUnsafe(str.length);
     let inputJson = JSON.stringify(input)
+    const outputBuffer = Buffer.allocUnsafe(inputJson.length);
 
-    const result = libplugtest.filterJson(inputJson, inputJson.length, disallowedValue, disallowedValue.length, out, out.length);
+    const result = libplugtest.filterJson(inputJson, inputJson.length, disallowedValue, disallowedValue.length, outputBuffer, outputBuffer.length);
     if (result < 0) {
         throw new Error('filterJson failed: ' + result);
     }
 
-    return JSON.parse(out.toString('utf8', 0, result));
+    return JSON.parse(outputBuffer.toString('utf8', 0, result));
 }
 
 /**
@@ -26,31 +25,29 @@ function filterJsonObjectInGo(input, disallowedValue) {
 * @return {string}
 */
 function filterJsonStringInGo(inputJson, disallowedValue) {
-    // Create output buffer
-    const out = Buffer.allocUnsafe(str.length);
+    const outputBuffer = Buffer.allocUnsafe(inputJson.length);
 
-    const result = libplugtest.filterJson(inputJson, inputJson.length, disallowedValue, disallowedValue.length, out, out.length);
+    const result = libplugtest.filterJson(inputJson, inputJson.length, disallowedValue, disallowedValue.length, outputBuffer, outputBuffer.length);
     if (result < 0) {
         throw new Error('filterJson failed: ' + result);
     }
 
-    return out.toString('utf8', 0, result);
+    return outputBuffer.toString('utf8', 0, result);
 }
 
 /**
-* @param {string} str
+* @param {string} input
 * @return {string}
 */
-function toUpperInGo(str) {
-  // Create output buffer
-  const out = Buffer.allocUnsafe(str.length);
+function toUpperInGo(input) {
+  const outputBuffer = Buffer.allocUnsafe(input.length);
 
-  const result = libplugtest.toUpper(str, str.length, out, out.length);
+  const result = libplugtest.toUpper(input, input.length, outputBuffer, outputBuffer.length);
   if (result < 0) {
     throw new Error('toUpper failed: ' + result);
   }
 
-  return out.toString('utf8', 0, result);
+  return outputBuffer.toString('utf8', 0, result);
 }
 
 /**
