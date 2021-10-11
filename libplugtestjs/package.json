@@ -21,7 +21,8 @@
     "ffi-napi": "^4.0.3"
   },
   "files": [
-    "libplugtest-binaries/**/*.so"
+    "libplugtest-binaries/**/*.so",
+    "libplugtest-binaries/**/*.dylib"
   ],
   "devDependencies": {
     "eslint": "^7.32.0",
