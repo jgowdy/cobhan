@@ -1,6 +1,6 @@
 {
   "name": "libplugtestjs",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -17,11 +17,7 @@
     "url": "https://github.com/jgowdy/cobhan/issues"
   },
   "homepage": "https://github.com/jgowdy/cobhan#readme",
-  "dependencies": {
-    "ffi-napi": "^4.0.3"
-  },
   "files": [
-    "library-loader.js",
     "libplugtest-binaries/**/*.so",
     "libplugtest-binaries/**/*.dylib"
   ],
