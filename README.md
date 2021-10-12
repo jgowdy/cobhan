@@ -45,3 +45,4 @@ Return values
 * Add last error functionality
 * Add example of get output buffer size for Base64
 * Add example of binary buffer (e.g. encrypt)
+* Add PHP extension support
