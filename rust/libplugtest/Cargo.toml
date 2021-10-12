@@ -1,0 +1,14 @@
+[package]
+name = "libplugtest"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+base64 = "0.13.0"
+cobhan = { path = "../cobhan" }
+
+[lib]
+name = "libplugtest"
+crate-type = ["rlib", "cdylib"]
+
+[features]
