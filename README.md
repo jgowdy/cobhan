@@ -48,3 +48,4 @@ Cobhan FFI is a proof of concept system for enabling shared code to be written i
 * Add example of binary buffer (e.g. encrypt)
 * Add PHP extension support
 * Add InputBufferToTmp (zero copy) and OutputBufferToTmp
+* Add Swift/iOS and test with Android/NDK
