@@ -29,7 +29,7 @@ Cobhan FFI is a proof of concept system for enabling shared code to be written i
        buffer size that covers most rational cases
   * When functions return insufficient buffer errors (should be rare) caller can allocate increasing buffer
        sizes up to a maximum size, retrying until the operation is successful
-  * Functions can also return dynamically sized buffers as temp files (modern tmpfs is memory backed)
+  * Functions can also return dynamically sized buffers as temp files (**modern [tmpfs](https://en.wikipedia.org/wiki/Tmpfs) is entirely memory backed**)
 * Return values
    * Functions that return scalar values can return the value directly
        * Functions *can* use special case and return maximum positive or maximum negative or zero values to
