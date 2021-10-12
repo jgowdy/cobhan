@@ -14,6 +14,6 @@ console.log(addDoubleInGo(2.9, 2.0));
 
 // Test using a Promise to call a blocking function
 console.log('Start sleeping');
-sleepInGo(2).then(function(result) {
-  console.log('Finished sleeping');
-})
+sleepInGo(2).then(() => {
+        console.log('Finished sleeping');
+    })
