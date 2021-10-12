@@ -4,22 +4,22 @@ Cobhan FFI is a proof of concept system for enabling shared code to be written i
 
 ## Types
 
-Supported scalar types
+* Supported scalar types
    * int32 - 32 bit signed integer
    * int64 - 64 bit signed integer
    * float64 - double precision 64 bit IEEE 754 floating point
-Supported buffer types
+* Supported buffer types
    * string - utf-8 encoded length delimited string
    * JSON - utf-8 encoded length delimited string containing valid JSON
    * []byte - 8 bit raw binary buffer
-Buffer passing requirements
+* Buffer passing requirements
    * All buffers are passed as pointers + signed int32 lengths (length delimited)
    * Callers may optionally append null to strings or JSON but must not include the null in the length
    * No guarantee of null termination on returned output buffers
    * Callers provide the output buffer allocation and capacity
    * Callers can re-use the input buffer as the output buffer (memmove/copy semantics)
    * Insufficient capacity in output buffer causes functions to fail by returning less than zero
-Output buffer sizing
+* Output buffer sizing
    * Callers may know the appropriate output buffer size
        * If it is a fixed / constant documented size
        * If it matches the input buffer size
@@ -29,7 +29,8 @@ Output buffer sizing
        buffer size that covers most rational cases
   * When functions return insufficient buffer errors (should be rare) caller can allocate increasing buffer
        sizes up to a maximum size, retrying until the operation is successful
-Return values
+  * Functions can also return dynamically sized buffers as temp files (modern tmpfs is memory backed)
+* Return values
    * Functions that return scalar values can return the value directly
        * Functions *can* use special case and return maximum positive or maximum negative or zero values to
            represent error or overflow conditions
@@ -46,3 +47,4 @@ Return values
 * Add example of get output buffer size for Base64
 * Add example of binary buffer (e.g. encrypt)
 * Add PHP extension support
+* Add InputBufferToTmp (zero copy) and OutputBufferToTmp
