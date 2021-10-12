@@ -1,0 +1,1 @@
+Cobhan FFI is a proof of concept system for enabling shared code to be written in Go and consumed from all major languages/platforms in a safe and effective way, using easy helper functions to manage any unsafe data marshaling.
