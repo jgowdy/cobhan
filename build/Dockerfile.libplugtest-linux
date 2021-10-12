@@ -10,6 +10,6 @@ WORKDIR /cobhan
 
 # Build libplugtest for linux-musl-amd64 using stock gcc-go
 # Set LD_RUN_PATH so the linker puts an rpath of . into the ELF for patched libgo.so
-RUN CGO_ENABLED=1 GOOS=linux go build -buildmode=c-shared -o /output/libplugtest.so
+RUN CGO_ENABLED=1 GOOS=linux go build -buildmode=c-shared -compiler=gccgo -o /output/libplugtest.so
 
 # Output files are in /output/
