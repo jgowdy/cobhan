@@ -1,6 +1,5 @@
 use std::os::raw::c_char;
 use std::{thread, time};
-use cobhan::{input_string, input_hashmap_json, output_string, output_hashmap_json, input_bytes};
 
 const DEFAULT_INPUT_MAXIMUM: i32 = 4096;
 
@@ -27,29 +26,34 @@ pub unsafe extern "C" fn addDouble(x: f64, y: f64) -> f64 {
 #[no_mangle]
 pub unsafe extern "C" fn toUpper(input: *const c_char, input_len: i32, output: *mut c_char, output_cap: i32) -> i32 {
     let input_str;
-    match input_string(input, input_len, DEFAULT_INPUT_MAXIMUM) {
+    match cobhan::input_string(input, input_len, DEFAULT_INPUT_MAXIMUM) {
         Ok(str) => input_str = str,
         Err(e) => return e
     }
 
+    println!("Rust: input_str: {}", input_str);
+
     let output_str = input_str.to_uppercase();
 
-    return output_string(&output_str, output, output_cap);
+    println!("Rust: output_str: {}", output_str);
+
+    return cobhan::output_string(&output_str, output, output_cap);
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn filterJson(input: *const c_char, input_len: i32, disallowed_value: *const c_char, disallowed_value_len: i32, output: *mut c_char, output_cap: i32) -> i32 {
     let mut json;
-    match input_hashmap_json(input, input_len, DEFAULT_INPUT_MAXIMUM) {
+    match cobhan::input_hashmap_json(input, input_len, DEFAULT_INPUT_MAXIMUM) {
         Ok(input_json) => json = input_json,
         Err(e) => return e
     }
 
     let disallowed_value_str;
-    match input_string(disallowed_value, disallowed_value_len, DEFAULT_INPUT_MAXIMUM) {
-        Ok(str) => disallowed_value_str = str,
+    match cobhan::input_string(disallowed_value, disallowed_value_len, DEFAULT_INPUT_MAXIMUM) {
+        Ok(disallow) => disallowed_value_str = disallow,
         Err(e) => return e
     }
+    println!("Rust: Disallowed: {}", disallowed_value_str);
 
     json.retain(|_key, value| {
         match value.as_str() {
@@ -58,19 +62,19 @@ pub unsafe extern "C" fn filterJson(input: *const c_char, input_len: i32, disall
         }
     });
 
-    return output_hashmap_json(&json, output, output_cap);
+    return cobhan::output_hashmap_json(&json, output, output_cap);
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn base64Encode(input: *const c_char, input_len: i32, output: *mut c_char, output_cap: i32) -> i32 {
     let bytes;
-    match input_bytes(input, input_len, DEFAULT_INPUT_MAXIMUM) {
+    match cobhan::input_bytes(input, input_len, DEFAULT_INPUT_MAXIMUM) {
         Ok(b) => bytes = b,
         Err(e) => return e
     }
 
     let b64str = base64::encode(bytes);
 
-    return output_string(&b64str, output, output_cap);
+    return cobhan::output_string(&b64str, output, output_cap);
 }
 
