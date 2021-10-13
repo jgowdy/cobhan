@@ -1,5 +1,7 @@
 use std::os::raw::c_char;
 use std::{thread, time};
+use serde_json::{Value};
+use std::collections::HashMap;
 
 const DEFAULT_INPUT_MAXIMUM: i32 = 4096;
 
@@ -31,11 +33,7 @@ pub unsafe extern "C" fn toUpper(input: *const c_char, input_len: i32, output: *
         Err(e) => return e
     }
 
-    println!("Rust: input_str: {}", input_str);
-
     let output_str = input_str.to_uppercase();
-
-    println!("Rust: output_str: {}", output_str);
 
     return cobhan::output_string(&output_str, output, output_cap);
 }
@@ -53,16 +51,20 @@ pub unsafe extern "C" fn filterJson(input: *const c_char, input_len: i32, disall
         Ok(disallow) => disallowed_value_str = disallow,
         Err(e) => return e
     }
-    println!("Rust: Disallowed: {}", disallowed_value_str);
 
+    filter_json(&mut json, &disallowed_value_str);
+
+    return cobhan::output_hashmap_json(&json, output, output_cap);
+}
+
+// Example of a safe function
+pub fn filter_json(json: &mut HashMap<String, Value>, disallowed: &str) {
     json.retain(|_key, value| {
         match value.as_str() {
             None => return true,
-            v => return v.unwrap().contains(&disallowed_value_str)
+            v => return v.unwrap().contains(&disallowed)
         }
     });
-
-    return cobhan::output_hashmap_json(&json, output, output_cap);
 }
 
 #[no_mangle]

@@ -35,11 +35,9 @@ pub unsafe fn input_bytes(input: *const c_char, input_len: i32, input_max: i32) 
 
 pub unsafe fn input_string(input: *const c_char, input_len: i32, input_max: i32) -> Result<String, i32> {
     if input.is_null() {
-        println!("Rust: input was null pointer");
         return Err(ERR_NULL_PTR);
     }
     if input_len > input_max {
-        println!("Rust: input buffer was too large");
         return Err(ERR_INPUT_BUFFER_TOO_LARGE);
     }
     let result: Result<String, FromUtf8Error> = String::from_utf8(from_raw_parts(input as *const u8, input_len as usize).to_vec());
@@ -56,8 +54,6 @@ pub unsafe fn input_hashmap_json(input: *const c_char, input_len: i32, input_max
         Err(e) => return Err(e)
     }
 
-    println!("Rust: input_hashmap_json got input_str: {}", input_str);
-
     match serde_json::from_str(&input_str) {
         Ok(json) => return Ok(json),
         Err(..) => return Err(ERR_JSON_INPUT_DECODE_FAILED)
@@ -73,7 +69,6 @@ pub unsafe fn output_hashmap_json(json: &HashMap<String,Value>, output: *mut c_c
 
 pub unsafe fn output_string(output_str: &str, output: *mut c_char, output_cap: i32) -> i32 {
     if output_str.len() > output_cap as usize {
-        println!("Rust: output_str was too large for {} with output: {}", output_cap, output_str);
         return ERR_OUTPUT_BUFFER_TOO_SMALL;
     }
     copy_nonoverlapping(output_str.as_ptr(), output as *mut u8, output_str.len());
