@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include "cJSON.h"
 
+#define ERR_NONE 0
+
 //One of the provided input pointers is NULL / nil / 0
 #define ERR_NULL_PTR -1
 

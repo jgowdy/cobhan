@@ -1,13 +1,12 @@
-#include <stdint.h>
-#include <stdlib.h>
+#include <stdint.h> // Needed for uintX_t
+#include <stdlib.h> // Needed for free
 
 //ICU requires round trip to UTF-16
 //GNU libunistring doesn't
-#include <unistr.h>
-#include <unicase.h>
+#include <unistr.h> // Needed for u8_check
+#include <unicase.h> // Needed for u8_toupper
 
 #include <string.h>
-#include <stdio.h>
 
 #include "cobhan.h"
 #include "cJSON.h"
@@ -19,12 +18,12 @@ static int32_t validate_utf8(const char *input, int32_t input_len) {
     if (invalid) {
         return ERR_INPUT_INVALID_UTF8;
     }
-    return 0;
+    return ERR_NONE;
 }
 
 int32_t cobhan_input_string(const char *input, int32_t input_len, struct cobhan_str *str) {
     int result = validate_utf8(input, input_len);
-    if (result != 0) {
+    if (result != ERR_NONE) {
         return result;
     }
 

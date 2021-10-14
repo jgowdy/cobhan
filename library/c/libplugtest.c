@@ -1,6 +1,6 @@
-#include <stdint.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include <stdint.h> // Needed for int32_t
+#include <stdlib.h> // Needed for atexit, abort, exit
+#include <unistd.h> // Needed for sleep
 
 /*
 Technically we don't need to pull in APR just for base64.
@@ -8,15 +8,15 @@ However, having APR gives us memory pools and other facilities
 for any future examples.
 */
 #include <apr.h>
-#include <apr_general.h>
-#include <apr_pools.h>
-#include <apr_base64.h>
+#include <apr_general.h> // Needed for apr_initialize
+#include <apr_pools.h> // Needed for apr_pool_create
+#include <apr_base64.h> // Base64
 
 #include "cobhan.h"
 #include "libplugtest.h"
 
 //APR's JSON support never got released as it's part of APR2
-#include "cJSON.h"
+#include "cJSON.h" // JSON
 
 apr_pool_t *pool;
 
@@ -48,18 +48,18 @@ double addDouble(double x, double y) {
 int32_t toUpper(const char *input, int32_t input_len, char *output, int32_t output_cap) {
     struct cobhan_str str, output_str;
     int32_t result = cobhan_input_string(input, input_len, &str);
-    if (result != 0) {
+    if (result != ERR_NONE) {
         return result;
     }
 
     struct cobhan_buf output_buf;
     result = cobhan_output_buffer(output, output_cap, &output_buf);
-    if (result != 0) {
+    if (result != ERR_NONE) {
         return result;
     }
 
     result = cobhan_to_upper(&str, &output_buf, &output_str);
-    if (result < 0) {
+    if (result < ERR_NONE) {
         return result;
     }
     return (int32_t)output_str.length;
@@ -68,19 +68,19 @@ int32_t toUpper(const char *input, int32_t input_len, char *output, int32_t outp
 int32_t filterJson(const char *input, int32_t input_len, const char *disallowed_value, int32_t disallowed_value_len, char *output, int32_t output_cap) {
     struct cobhan_json json;
     int32_t result = cobhan_input_json(input, input_len, &json);
-    if (result != 0) {
+    if (result != ERR_NONE) {
         return result;
     }
 
     struct cobhan_str disallowed;
     result = cobhan_input_string(disallowed_value, disallowed_value_len, &disallowed);
-    if (result != 0) {
+    if (result != ERR_NONE) {
         return result;
     }
 
     struct cobhan_buf output_buf;
     result = cobhan_output_buffer(output, output_cap, &output_buf);
-    if (result != 0) {
+    if (result != ERR_NONE) {
         return result;
     }
 
