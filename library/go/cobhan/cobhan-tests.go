@@ -10,7 +10,7 @@ import (
 #include <stdlib.h> //For C.free
 */
 import (
-	"C"
+    "C"
 )
 
 func TestAllocateStringBuffer(str string) Buffer {
@@ -18,25 +18,25 @@ func TestAllocateStringBuffer(str string) Buffer {
 }
 
 func TestAllocateBuffer(size int32) Buffer {
-	return (Buffer)(C.malloc(C.ulong(size)))
+    return (Buffer)(C.malloc(C.ulong(size)))
 }
 
 func TestFreeBuffer(ptr Buffer) {
-	C.free(unsafe.Pointer(ptr))
+    C.free(unsafe.Pointer(ptr))
 }
 
 func TestStringAssertion(desc string, buf Buffer, bufLen int32, expected string) {
     str := C.GoStringN(buf, (C.int)(bufLen))
-	if str != expected {
-		panic(fmt.Sprintf("Assert %s failed: Value: %s Expected: %s", desc, str, expected))
-	}
+    if str != expected {
+        panic(fmt.Sprintf("Assert %s failed: Value: %s Expected: %s", desc, str, expected))
+    }
 }
 
 func TestStringNotAssertion(desc string, buf Buffer, bufLen int32, disallowed string) {
     str := C.GoStringN(buf, C.int(bufLen))
-	if strings.Contains(str, disallowed) {
-		panic("Assert %s failed: Found %s in value: %s")
-	}
+    if strings.Contains(str, disallowed) {
+        panic("Assert %s failed: Found %s in value: %s")
+    }
 }
 
 func TestToGoStringN(buf Buffer, bufLen int32) string {
