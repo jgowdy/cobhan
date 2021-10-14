@@ -113,4 +113,3 @@ int32_t base64Encode(const char *input, int32_t input_len, char *output, int32_t
 
     return (int32_t)result;
 }
-
