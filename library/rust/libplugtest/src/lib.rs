@@ -2,6 +2,8 @@ use std::os::raw::c_char;
 use std::{thread, time};
 use serde_json::{Value};
 use std::collections::HashMap;
+use rand::Rng;
+use rand::RngCore;
 
 const DEFAULT_INPUT_MAXIMUM: i32 = 4096;
 
@@ -80,3 +82,20 @@ pub unsafe extern "C" fn base64Encode(input: *const c_char, input_len: i32, outp
     return cobhan::output_string(&b64str, output, output_cap);
 }
 
+#[no_mangle]
+pub unsafe extern "C" fn generateRandom(output: *mut c_char, output_cap: i32) -> i32 {
+    let mut rng = rand::thread_rng();
+    let size = rng.gen_range(0..134217728);
+    let mut bytes: Vec<u8> = vec![0; size];
+    rng.fill_bytes(&mut bytes);
+    return cobhan::output_bytes(bytes, output, output_cap);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn generateRandomTmp(output: *mut c_char, output_cap: i32) -> i32 {
+    let mut rng = rand::thread_rng();
+    let size = rng.gen_range(0..134217728);
+    let mut bytes: Vec<u8> = vec![0; size];
+    rng.fill_bytes(&mut bytes);
+    return cobhan::output_bytes_tmp(bytes, output, output_cap);
+}
