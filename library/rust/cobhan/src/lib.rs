@@ -29,8 +29,8 @@ const ERR_INPUT_INVALID_UTF8: i32 = -7;
 
 pub unsafe fn input_bytes(input: *const c_char, input_len: i32, input_max: i32) -> Result<Vec<u8>, i32> {
     if input_len > input_max {
-		return Err(ERR_INPUT_BUFFER_TOO_LARGE)
-	}
+        return Err(ERR_INPUT_BUFFER_TOO_LARGE)
+    }
 
     return Ok(from_raw_parts(input as *const u8, input_len as usize).to_vec());
 }
