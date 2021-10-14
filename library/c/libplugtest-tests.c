@@ -36,7 +36,7 @@ void filterJsonTest() {
     int input_len = sizeof(input) - 1;
     char disallowed[] = "foo";
     int disallowed_len = sizeof(disallowed) - 1;
-    char output[input_len];
+    char output[input_len + 16];
 
     int32_t result = filterJson(input, input_len, disallowed, disallowed_len, output, sizeof(output));
     if (result < 0) {

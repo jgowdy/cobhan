@@ -105,7 +105,7 @@ int32_t filterJson(const char *input, int32_t input_len, const char *disallowed_
 int32_t base64Encode(const char *input, int32_t input_len, char *output, int32_t output_cap) {
     int output_len = apr_base64_encode_len(input_len);
     if (output_len > output_cap) {
-        return -1;
+        return ERR_OUTPUT_BUFFER_TOO_SMALL;
     }
 
     int result = apr_base64_encode(output, input, input_len);
