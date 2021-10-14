@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/base64"
 	"math"
+    "math/rand"
 	"strings"
 	"time"
 
@@ -10,6 +11,9 @@ import (
 )
 
 // Sample library exports for client testing
+func init() {
+    rand.Seed(time.Now().UnixNano())
+}
 
 //export sleepTest
 func sleepTest(seconds int32) {
@@ -105,4 +109,32 @@ func base64Encode(input cobhan.Buffer, inputLen int32, output cobhan.Buffer, out
 	base64.StdEncoding.Encode(outputBytes, inputBytes)
 
 	return cobhan.OutputBytes(outputBytes, output, outputCap)
+}
+
+//export generateRandom
+func generateRandom(output cobhan.Buffer, outputCap int32) int32 {
+    int32 randomSize = rand.Intn(134217728)
+    if outputCap < randomSize {
+        return ERR_OUTPUT_BUFFER_TOO_SMALL;
+    }
+    outputBytes := make([]byte, randomSize)
+    n, err := rand.Read(outputBytes)
+    if err != nil {
+        return ERR_COPY_FAILED
+    }
+    return cobhan.OutputBytes(outputBytes, output, outputCap)
+}
+
+//export generateRandomTmp
+func generateRandomTmp(output cobhan.Buffer, outputCap int32) int32 {
+    int32 randomSize = rand.Intn(134217728)
+    if outputCap < randomSize {
+        return ERR_OUTPUT_BUFFER_TOO_SMALL;
+    }
+    outputBytes := make([]byte, randomSize)
+    n, err := rand.Read(outputBytes)
+    if err != nil {
+        return ERR_COPY_FAILED
+    }
+    return cobhan.OutputBytesTmp(outputBytes, output, outputCap)
 }
