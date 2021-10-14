@@ -12,17 +12,18 @@ for any future examples.
 #include <apr_pools.h>
 #include <apr_base64.h>
 
-#include <unistr.h>
-#include <unicase.h>
-#include <string.h>
-
+#include "cobhan.h"
 #include "libplugtest.h"
+//APR's JSON support never got released as it's part of APR2
 #include "cJSON.h"
 
 apr_pool_t *pool;
 
 void init() {
-    int result = apr_initialize();
+    apr_status_t result = apr_initialize();
+    if (result != APR_SUCCESS) {
+        abort();
+    }
     atexit(apr_terminate);
     apr_pool_create(&pool, NULL);
 }
@@ -44,63 +45,61 @@ double addDouble(double x, double y) {
 }
 
 int32_t toUpper(const char *input, int32_t input_len, char *output, int32_t output_cap) {
-    const uint8_t *invalid = u8_check((const uint8_t *)input, (size_t) input_len);
-    if (invalid) {
-        return ERR_INPUT_INVALID_UTF8;
+    struct cobhan_str str, output_str;
+    int32_t result = input_string(input, input_len, &str);
+    if (result != 0) {
+        return result;
     }
 
-    size_t result_length = (size_t)output_cap;
-    unistring_uint8_t *result = u8_ct_toupper((const uint8_t *)input, input_len,
-        u8_casing_prefix_context((const uint8_t *)input, 0),
-        u8_casing_suffix_context((const uint8_t *)input + input_len, 0),
-        "en", NULL, (uint8_t *)output, &result_length);
-
-    if (result != (uint8_t *)output) {
-        // If result_length isn't large enough, u8_ct_toupper will allocate
-        free(result);
-        return ERR_OUTPUT_BUFFER_TOO_SMALL;
+    struct cobhan_buf output_buf;
+    result = output_buffer(output, output_cap, &output_buf);
+    if (result != 0) {
+        return result;
     }
-    return (int32_t)result_length;
+
+    result = to_upper(&str, &output_buf, &output_str);
+    if (result < 0) {
+        return result;
+    }
+    return (int32_t)output_str.length;
 }
 
 int32_t filterJson(const char *input, int32_t input_len, const char *disallowed_value, int32_t disallowed_value_len, char *output, int32_t output_cap) {
-    const uint8_t *invalid =  u8_check((const uint8_t *)input, (size_t) input_len);
-    if (invalid != NULL) {
-        return ERR_INPUT_INVALID_UTF8;
+    struct cobhan_json json;
+    int32_t result = input_json(input, input_len, &json);
+    if (result != 0) {
+        return result;
     }
 
-    cJSON *json = cJSON_ParseWithLength((const char *)input, input_len);
-    if (json == NULL) {
-        return ERR_JSON_INPUT_DECODE_FAILED;
+    struct cobhan_str disallowed;
+    result = input_string(disallowed_value, disallowed_value_len, &disallowed);
+    if (result != 0) {
+        return result;
+    }
+
+    struct cobhan_buf output_buf;
+    result = output_buffer(output, output_cap, &output_buf);
+    if (result != 0) {
+        return result;
     }
 
     const cJSON *item;
-    char *delete_list[cJSON_GetArraySize(json)];
+    char *delete_list[cJSON_GetArraySize(json.cjson)];
     int delete_index = 0;
-    cJSON_ArrayForEach(item, json)
+    cJSON_ArrayForEach(item, json.cjson)
     {
         int value_len = strlen(item->valuestring);
-        if (memmem(item->valuestring, value_len, disallowed_value, disallowed_value_len)) {
+        if (memmem(item->valuestring, value_len, disallowed.data, disallowed.length)) {
             delete_list[delete_index++] = item->string;
         }
     }
 
     while (delete_index) {
-        cJSON_DeleteItemFromObjectCaseSensitive(json, delete_list[delete_index - 1]);
+        cJSON_DeleteItemFromObjectCaseSensitive(json.cjson, delete_list[delete_index - 1]);
         delete_index--;
     }
 
-    int result = cJSON_PrintPreallocated(json, (char *)output, output_cap, 0);
-
-    cJSON_Delete(json);
-
-    if (result != 1) {
-        return ERR_OUTPUT_BUFFER_TOO_SMALL;
-    }
-
-    int length = strlen(output);
-
-    return length;
+    return output_free_json(&json, &output_buf);
 }
 
 int32_t base64Encode(const char *input, int32_t input_len, char *output, int32_t output_cap) {
