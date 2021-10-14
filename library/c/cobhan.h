@@ -39,12 +39,14 @@ struct cobhan_json {
     cJSON *cjson;
 };
 
-int32_t input_string(const char *input, int32_t input_len, struct cobhan_str *str);
-int32_t input_json(const char *input, int32_t input_len, struct cobhan_json *json);
-void free_json(struct cobhan_json *json);
-int32_t output_buffer(char *output, int32_t output_cap, struct cobhan_buf *buf);
-int32_t output_free_json(struct cobhan_json *json, struct cobhan_buf *buf);
+int32_t cobhan_input_string(const char *input, int32_t input_len, struct cobhan_str *str);
+int32_t cobhan_input_json(const char *input, int32_t input_len, struct cobhan_json *json);
+void cobhan_free_json(struct cobhan_json *json);
+int32_t cobhan_output_buffer(char *output, int32_t output_cap, struct cobhan_buf *buf);
+int32_t cobhan_output_free_json(struct cobhan_json *json, struct cobhan_buf *buf);
 
-int32_t to_upper(struct cobhan_str *input, struct cobhan_buf *buffer, struct cobhan_str *output);
+int32_t cobhan_to_upper(struct cobhan_str *input, struct cobhan_buf *buffer, struct cobhan_str *output);
+char* cobhan_cstr_contains(const char *haystack, struct cobhan_str *needle);
+char* cobhan_str_contains(struct cobhan_str *haystack, struct cobhan_str *needle);
 
 #endif

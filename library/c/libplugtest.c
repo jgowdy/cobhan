@@ -47,18 +47,18 @@ double addDouble(double x, double y) {
 
 int32_t toUpper(const char *input, int32_t input_len, char *output, int32_t output_cap) {
     struct cobhan_str str, output_str;
-    int32_t result = input_string(input, input_len, &str);
+    int32_t result = cobhan_input_string(input, input_len, &str);
     if (result != 0) {
         return result;
     }
 
     struct cobhan_buf output_buf;
-    result = output_buffer(output, output_cap, &output_buf);
+    result = cobhan_output_buffer(output, output_cap, &output_buf);
     if (result != 0) {
         return result;
     }
 
-    result = to_upper(&str, &output_buf, &output_str);
+    result = cobhan_to_upper(&str, &output_buf, &output_str);
     if (result < 0) {
         return result;
     }
@@ -67,19 +67,19 @@ int32_t toUpper(const char *input, int32_t input_len, char *output, int32_t outp
 
 int32_t filterJson(const char *input, int32_t input_len, const char *disallowed_value, int32_t disallowed_value_len, char *output, int32_t output_cap) {
     struct cobhan_json json;
-    int32_t result = input_json(input, input_len, &json);
+    int32_t result = cobhan_input_json(input, input_len, &json);
     if (result != 0) {
         return result;
     }
 
     struct cobhan_str disallowed;
-    result = input_string(disallowed_value, disallowed_value_len, &disallowed);
+    result = cobhan_input_string(disallowed_value, disallowed_value_len, &disallowed);
     if (result != 0) {
         return result;
     }
 
     struct cobhan_buf output_buf;
-    result = output_buffer(output, output_cap, &output_buf);
+    result = cobhan_output_buffer(output, output_cap, &output_buf);
     if (result != 0) {
         return result;
     }
@@ -89,9 +89,10 @@ int32_t filterJson(const char *input, int32_t input_len, const char *disallowed_
     int delete_index = 0;
     cJSON_ArrayForEach(item, json.cjson)
     {
-        int value_len = strlen(item->valuestring);
-        if (memmem(item->valuestring, value_len, disallowed.data, disallowed.length)) {
-            delete_list[delete_index++] = item->string;
+        if (item->type == cJSON_String) {
+            if (cobhan_cstr_contains(item->valuestring, &disallowed)) {
+                delete_list[delete_index++] = item->string;
+            }
         }
     }
 
@@ -100,7 +101,7 @@ int32_t filterJson(const char *input, int32_t input_len, const char *disallowed_
         delete_index--;
     }
 
-    return output_free_json(&json, &output_buf);
+    return cobhan_output_free_json(&json, &output_buf);
 }
 
 int32_t base64Encode(const char *input, int32_t input_len, char *output, int32_t output_cap) {
