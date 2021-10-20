@@ -5,8 +5,6 @@ use std::collections::HashMap;
 use rand::Rng;
 use rand::RngCore;
 
-const DEFAULT_INPUT_MAXIMUM: i32 = 4096;
-
 #[no_mangle]
 pub unsafe extern "C" fn sleepTest(seconds: i32) {
     thread::sleep(time::Duration::from_secs(seconds as u64));
@@ -28,35 +26,35 @@ pub unsafe extern "C" fn addDouble(x: f64, y: f64) -> f64 {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn toUpper(input: *const c_char, input_len: i32, output: *mut c_char, output_cap: i32) -> i32 {
+pub unsafe extern "C" fn toUpper(input: *const c_char, output: *mut c_char) -> i32 {
     let input_str;
-    match cobhan::input_string(input, input_len, DEFAULT_INPUT_MAXIMUM) {
+    match cobhan::buffer_to_string(input) {
         Ok(str) => input_str = str,
         Err(e) => return e
     }
 
     let output_str = input_str.to_uppercase();
 
-    return cobhan::output_string(&output_str, output, output_cap);
+    return cobhan::string_to_buffer(&output_str, output);
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn filterJson(input: *const c_char, input_len: i32, disallowed_value: *const c_char, disallowed_value_len: i32, output: *mut c_char, output_cap: i32) -> i32 {
+pub unsafe extern "C" fn filterJson(input: *const c_char, disallowed_value: *const c_char, output: *mut c_char) -> i32 {
     let mut json;
-    match cobhan::input_hashmap_json(input, input_len, DEFAULT_INPUT_MAXIMUM) {
+    match cobhan::buffer_to_hashmap_json(input) {
         Ok(input_json) => json = input_json,
         Err(e) => return e
     }
 
     let disallowed_value_str;
-    match cobhan::input_string(disallowed_value, disallowed_value_len, DEFAULT_INPUT_MAXIMUM) {
+    match cobhan::buffer_to_string(disallowed_value) {
         Ok(disallow) => disallowed_value_str = disallow,
         Err(e) => return e
     }
 
     filter_json(&mut json, &disallowed_value_str);
 
-    return cobhan::output_hashmap_json(&json, output, output_cap);
+    return cobhan::hashmap_json_to_buffer(&json, output);
 }
 
 // Example of a safe function
@@ -70,32 +68,23 @@ pub fn filter_json(json: &mut HashMap<String, Value>, disallowed: &str) {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn base64Encode(input: *const c_char, input_len: i32, output: *mut c_char, output_cap: i32) -> i32 {
+pub unsafe extern "C" fn base64Encode(input: *const c_char, output: *mut c_char) -> i32 {
     let bytes;
-    match cobhan::input_bytes(input, input_len, DEFAULT_INPUT_MAXIMUM) {
+    match cobhan::buffer_to_vector(input) {
         Ok(b) => bytes = b,
         Err(e) => return e
     }
 
     let b64str = base64::encode(bytes);
 
-    return cobhan::output_string(&b64str, output, output_cap);
+    return cobhan::string_to_buffer(&b64str, output);
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn generateRandom(output: *mut c_char, output_cap: i32) -> i32 {
+pub unsafe extern "C" fn generateRandom(output: *mut c_char) -> i32 {
     let mut rng = rand::thread_rng();
     let size = rng.gen_range(0..134217728);
     let mut bytes: Vec<u8> = vec![0; size];
     rng.fill_bytes(&mut bytes);
-    return cobhan::output_bytes(bytes, output, output_cap);
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn generateRandomTmp(output: *mut c_char, output_cap: i32) -> i32 {
-    let mut rng = rand::thread_rng();
-    let size = rng.gen_range(0..134217728);
-    let mut bytes: Vec<u8> = vec![0; size];
-    rng.fill_bytes(&mut bytes);
-    return cobhan::output_bytes_tmp(bytes, output, output_cap);
+    return cobhan::bytes_to_buffer(&bytes, output);
 }
