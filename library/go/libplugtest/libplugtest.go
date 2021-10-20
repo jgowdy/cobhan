@@ -63,24 +63,24 @@ const DefaultInputMaximum = 4096
 
 //export toUpper
 func toUpper(input cobhan.Buffer, output cobhan.Buffer) int32 {
-	str, result := cobhan.InputBufferToString(input)
+	str, result := cobhan.BufferToString(input)
 	if result != 0 {
 		return result
 	}
 
 	str = strings.ToUpper(str)
 
-	return cobhan.OutputStringToBuffer(str, output)
+	return cobhan.StringToBuffer(str, output)
 }
 
 //export filterJson
 func filterJson(input cobhan.Buffer, disallowedValue cobhan.Buffer, output cobhan.Buffer) int32 {
-	jsonList, result := cobhan.InputBufferToJson(input)
+	jsonList, result := cobhan.BufferToJson(input)
 	if result != 0 {
 		return result
 	}
 
-	disallowedValueStr, result := cobhan.InputBufferToString(disallowedValue)
+	disallowed, result := cobhan.BufferToString(disallowedValue)
 	if result != 0 {
 		return result
 	}
@@ -88,18 +88,18 @@ func filterJson(input cobhan.Buffer, disallowedValue cobhan.Buffer, output cobha
 	for key := range jsonList {
 		switch val := jsonList[key].(type) {
 		case string:
-			if strings.Contains(val, disallowedValueStr) {
+			if strings.Contains(val, disallowed) {
 				delete(jsonList, key)
 			}
 		}
 	}
 
-	return cobhan.OutputJsonToBuffer(jsonList, output)
+	return cobhan.JsonToBuffer(jsonList, output)
 }
 
 //export base64Encode
 func base64Encode(input cobhan.Buffer, output cobhan.Buffer) int32 {
-	inputBytes, result := cobhan.InputBufferToBytes(input)
+	inputBytes, result := cobhan.BufferToBytes(input)
 	if result != 0 {
 		return result
 	}
@@ -108,7 +108,7 @@ func base64Encode(input cobhan.Buffer, output cobhan.Buffer) int32 {
 	outputBytes := make([]byte, outputLen)
 	base64.StdEncoding.Encode(outputBytes, inputBytes)
 
-	return cobhan.OutputBytesToBuffer(outputBytes, output)
+	return cobhan.BytesToBuffer(outputBytes, output)
 }
 
 //export generateRandom
@@ -119,5 +119,5 @@ func generateRandom(output cobhan.Buffer) int32 {
 	if err != nil {
 		return cobhan.ERR_COPY_FAILED
 	}
-	return cobhan.OutputBytesToBuffer(outputBytes, output)
+	return cobhan.BytesToBuffer(outputBytes, output)
 }

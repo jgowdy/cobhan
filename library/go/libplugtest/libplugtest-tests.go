@@ -9,18 +9,18 @@ import (
 )
 
 // Test functions
-const testStr = "Test String"
+const testStr = "TestStringTestStringTestStringTestStringTestStringTestStringTestStringTestStringTestStringTestString"
 
 func toUpperTest() {
 	// Simulate FFI Parameters
 	input := cobhan.TestAllocateStringBuffer(testStr)
 	defer cobhan.TestFreeBuffer(input)
 
-	output := cobhan.TestAllocateOutputBuffer(len(testStr) * 2) // Make it extra large to ensure we trim it properly
+	output := cobhan.TestAllocateBuffer(len(testStr) * 2) // Make it extra large to ensure we trim it properly
 	defer cobhan.TestFreeBuffer(output)
 
 	result := toUpper(input, output)
-	if result < 0 {
+	if result < cobhan.ERR_NONE {
 		panic(fmt.Sprintf("toUpperTest failed: Result: %d", result))
 	}
 
@@ -31,6 +31,28 @@ func toUpperTest() {
 	cobhan.TestStringAssertion("toUpperTest input buffer modified", input, testStr)
 
 	fmt.Println("toUpperTest passed")
+}
+
+func toUpperTempTest() {
+	// Simulate FFI Parameters
+	input := cobhan.TestAllocateStringBuffer(testStr)
+	defer cobhan.TestFreeBuffer(input)
+
+	output := cobhan.TestAllocateBuffer(len(testStr) - 1) // Make it too small so a temp file is used
+	defer cobhan.TestFreeBuffer(output)
+
+	result := toUpper(input, output)
+	if result < cobhan.ERR_NONE {
+		panic(fmt.Sprintf("toUpperTest failed: Result: %d", result))
+	}
+
+	expectedStr := strings.ToUpper(testStr)
+	cobhan.TestStringAssertion("toUpperTest output mismatch", output, expectedStr)
+
+	// Assert that the input buffer wasn't modified
+	cobhan.TestStringAssertion("toUpperTest input buffer modified", input, testStr)
+
+	fmt.Println("toUpperTempTest passed")
 }
 
 func filterJsonTest() {
@@ -48,7 +70,7 @@ func filterJsonTest() {
 	disallowedValue := cobhan.TestAllocateStringBuffer(disallowedValueStr)
 	defer cobhan.TestFreeBuffer(disallowedValue)
 
-	outputJson := cobhan.TestAllocateOutputBuffer(len(inputJsonStr) * 2)
+	outputJson := cobhan.TestAllocateBuffer(len(inputJsonStr) * 2)
 	defer cobhan.TestFreeBuffer(outputJson)
 
 	result := filterJson(inputJson, disallowedValue, outputJson)
@@ -61,8 +83,8 @@ func filterJsonTest() {
 }
 
 func allocationTest() {
-	buffer := cobhan.TestAllocateOutputBuffer(1024)
-	defer cobhan.TestFreeBuffer(buffer)
+	buffer := cobhan.TestAllocateBuffer(1024)
+	cobhan.TestFreeBuffer(buffer)
 	fmt.Println("allocationTest passed")
 }
 

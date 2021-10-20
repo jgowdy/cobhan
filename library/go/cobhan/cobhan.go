@@ -3,11 +3,11 @@ package cobhan
 import (
 	"C"
 	"encoding/json"
+	"math"
 	"os"
 	"reflect"
 	"unsafe"
 )
-import "math"
 
 type Buffer *C.char
 
@@ -30,6 +30,10 @@ const ERR_JSON_INPUT_DECODE_FAILED = -5
 
 //Failed to encode to JSON output buffer
 const ERR_JSON_OUTPUT_ENCODE_FAILED = -6
+
+const ERR_INPUT_FROM_TEMP_FILE_FAILED = -7
+
+const ERR_OUTPUT_TO_TEMP_FILE_FAILED = -8
 
 // Reusable functions to facilitate FFI
 
@@ -63,7 +67,7 @@ func updateBufferPtrLength(bufferPtr unsafe.Pointer, length int) {
 	*(*int32)(bufferPtr) = int32(length)
 }
 
-func inputTempToBytes(ptr unsafe.Pointer, length C.int) ([]byte, int32) {
+func tempToBytes(ptr unsafe.Pointer, length C.int) ([]byte, int32) {
 	length = 0 - length
 
 	if DefaultInputMaximum < int(length) {
@@ -73,12 +77,12 @@ func inputTempToBytes(ptr unsafe.Pointer, length C.int) ([]byte, int32) {
 	fileName := bufferPtrToString(ptr, length)
 	fileData, err := os.ReadFile(fileName)
 	if err != nil {
-		return nil, ERR_NULL_PTR //TODO: Temp file read error
+		return nil, ERR_INPUT_FROM_TEMP_FILE_FAILED //TODO: Temp file read error
 	}
 	return fileData, ERR_NONE
 }
 
-func InputBufferToBytes(srcPtr Buffer) ([]byte, int32) {
+func BufferToBytes(srcPtr Buffer) ([]byte, int32) {
 	ptr := unsafe.Pointer(srcPtr)
 	length := bufferPtrToLength(ptr)
 
@@ -89,11 +93,11 @@ func InputBufferToBytes(srcPtr Buffer) ([]byte, int32) {
 	if length >= 0 {
 		return bufferPtrToBytes(ptr, length), ERR_NONE
 	} else {
-		return inputTempToBytes(ptr, length)
+		return tempToBytes(ptr, length)
 	}
 }
 
-func InputBufferToString(srcPtr Buffer) (string, int32) {
+func BufferToString(srcPtr Buffer) (string, int32) {
 	ptr := unsafe.Pointer(srcPtr)
 	length := bufferPtrToLength(ptr)
 
@@ -104,7 +108,7 @@ func InputBufferToString(srcPtr Buffer) (string, int32) {
 	if length >= 0 {
 		return bufferPtrToString(ptr, length), ERR_NONE
 	} else {
-		bytes, result := inputTempToBytes(ptr, length)
+		bytes, result := tempToBytes(ptr, length)
 		if result < 0 {
 			return "", result
 		}
@@ -112,8 +116,8 @@ func InputBufferToString(srcPtr Buffer) (string, int32) {
 	}
 }
 
-func InputBufferToJson(srcPtr Buffer) (map[string]interface{}, int32) {
-	bytes, result := InputBufferToBytes(srcPtr)
+func BufferToJson(srcPtr Buffer) (map[string]interface{}, int32) {
+	bytes, result := BufferToBytes(srcPtr)
 	if result < 0 {
 		return nil, result
 	}
@@ -126,19 +130,19 @@ func InputBufferToJson(srcPtr Buffer) (map[string]interface{}, int32) {
 	return loadedJson.(map[string]interface{}), ERR_NONE
 }
 
-func OutputStringToBuffer(str string, dstPtr Buffer) int32 {
-	return OutputBytesToBuffer([]byte(str), dstPtr)
+func StringToBuffer(str string, dstPtr Buffer) int32 {
+	return BytesToBuffer([]byte(str), dstPtr)
 }
 
-func OutputJsonToBuffer(v interface{}, dstPtr Buffer) int32 {
+func JsonToBuffer(v interface{}, dstPtr Buffer) int32 {
 	outputBytes, err := json.Marshal(v)
 	if err != nil {
 		return ERR_JSON_OUTPUT_ENCODE_FAILED
 	}
-	return OutputBytesToBuffer(outputBytes, dstPtr)
+	return BytesToBuffer(outputBytes, dstPtr)
 }
 
-func OutputBytesToBuffer(bytes []byte, dstPtr Buffer) int32 {
+func BytesToBuffer(bytes []byte, dstPtr Buffer) int32 {
 	ptr := unsafe.Pointer(dstPtr)
 	//Get the destination capacity from the Buffer
 	dstCap := bufferPtrToLength(ptr)
@@ -160,12 +164,15 @@ func OutputBytesToBuffer(bytes []byte, dstPtr Buffer) int32 {
 		// Write the data to a temp file and copy the temp file name into the buffer
 		file, err := os.CreateTemp("", "cobhan-*")
 		if err != nil {
-			return ERR_OUTPUT_BUFFER_TOO_SMALL //TODO: Temp file write error
+			//fmt.Errorf("Failed to create temp file")
+			return ERR_OUTPUT_TO_TEMP_FILE_FAILED
 		}
 
 		fileName := file.Name()
+
 		if len(fileName) > dstCapInt {
 			// Even the file path won't fit in the output buffer, we're completely out of luck now
+			//fmt.Errorf("Output buffer can't handle temp file name")
 			file.Close()
 			os.Remove(fileName)
 			return ERR_OUTPUT_BUFFER_TOO_SMALL
@@ -173,9 +180,10 @@ func OutputBytesToBuffer(bytes []byte, dstPtr Buffer) int32 {
 
 		_, err = file.Write(bytes)
 		if err != nil {
+			//fmt.Errorf("Temp file write failed")
 			file.Close()
 			os.Remove(fileName)
-			return ERR_OUTPUT_BUFFER_TOO_SMALL //TODO: Temp file write error
+			return ERR_OUTPUT_TO_TEMP_FILE_FAILED
 		}
 
 		// Explicit rather than defer
