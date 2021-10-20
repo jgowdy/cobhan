@@ -13,36 +13,38 @@ type Buffer *C.char
 
 const ERR_NONE = 0
 
-//One of the provided input pointers is NULL / nil / 0
+//One of the provided pointers is NULL / nil / 0
 const ERR_NULL_PTR = -1
 
-//One of the provided input buffer lengths is too large
-const ERR_INPUT_BUFFER_TOO_LARGE = -2
+//One of the provided buffer lengths is too large
+const ERR_BUFFER_TOO_LARGE = -2
 
-//One of the provided output buffers was too small to receive the output
-const ERR_OUTPUT_BUFFER_TOO_SMALL = -3
+//One of the provided buffers was too small
+const ERR_BUFFER_TOO_SMALL = -3
 
-//Failed to copy the output into the output buffer (copy length != expected length)
+//Failed to copy into the buffer (copy length != expected length)
 const ERR_COPY_FAILED = -4
 
-//Failed to decode a JSON input buffer
-const ERR_JSON_INPUT_DECODE_FAILED = -5
+//Failed to decode a JSON buffer
+const ERR_JSON_DECODE_FAILED = -5
 
-//Failed to encode to JSON output buffer
-const ERR_JSON_OUTPUT_ENCODE_FAILED = -6
+//Failed to encode to JSON buffer
+const ERR_JSON_ENCODE_FAILED = -6
 
-const ERR_INPUT_FROM_TEMP_FILE_FAILED = -7
+const ERR_INVALID_UTF8 = -7
 
-const ERR_OUTPUT_TO_TEMP_FILE_FAILED = -8
+const ERR_READ_TEMP_FILE_FAILED = -8
+
+const ERR_WRITE_TEMP_FILE_FAILED = -9
 
 // Reusable functions to facilitate FFI
 
 const BUFFER_HEADER_SIZE = (64 / 8) // 64 bit buffer header provides 8 byte alignment for data pointers
 
-var DefaultInputMaximum = math.MaxInt32
+var DefaultBufferMaximum = math.MaxInt32
 
-func SetDefaultInputBufferMaximum(max int) {
-	DefaultInputMaximum = max
+func SetDefaultBufferMaximum(max int) {
+	DefaultBufferMaximum = max
 }
 
 func bufferPtrToLength(bufferPtr unsafe.Pointer) C.int {
@@ -70,14 +72,14 @@ func updateBufferPtrLength(bufferPtr unsafe.Pointer, length int) {
 func tempToBytes(ptr unsafe.Pointer, length C.int) ([]byte, int32) {
 	length = 0 - length
 
-	if DefaultInputMaximum < int(length) {
-		return nil, ERR_INPUT_BUFFER_TOO_LARGE
+	if DefaultBufferMaximum < int(length) {
+		return nil, ERR_BUFFER_TOO_LARGE
 	}
 
 	fileName := bufferPtrToString(ptr, length)
 	fileData, err := os.ReadFile(fileName)
 	if err != nil {
-		return nil, ERR_INPUT_FROM_TEMP_FILE_FAILED //TODO: Temp file read error
+		return nil, ERR_READ_TEMP_FILE_FAILED //TODO: Temp file read error
 	}
 	return fileData, ERR_NONE
 }
@@ -86,8 +88,8 @@ func BufferToBytes(srcPtr Buffer) ([]byte, int32) {
 	ptr := unsafe.Pointer(srcPtr)
 	length := bufferPtrToLength(ptr)
 
-	if DefaultInputMaximum < int(length) {
-		return nil, ERR_INPUT_BUFFER_TOO_LARGE
+	if DefaultBufferMaximum < int(length) {
+		return nil, ERR_BUFFER_TOO_LARGE
 	}
 
 	if length >= 0 {
@@ -101,8 +103,8 @@ func BufferToString(srcPtr Buffer) (string, int32) {
 	ptr := unsafe.Pointer(srcPtr)
 	length := bufferPtrToLength(ptr)
 
-	if DefaultInputMaximum < int(length) {
-		return "", ERR_INPUT_BUFFER_TOO_LARGE
+	if DefaultBufferMaximum < int(length) {
+		return "", ERR_BUFFER_TOO_LARGE
 	}
 
 	if length >= 0 {
@@ -125,7 +127,7 @@ func BufferToJson(srcPtr Buffer) (map[string]interface{}, int32) {
 	var loadedJson interface{}
 	err := json.Unmarshal(bytes, &loadedJson)
 	if err != nil {
-		return nil, ERR_JSON_INPUT_DECODE_FAILED
+		return nil, ERR_JSON_DECODE_FAILED
 	}
 	return loadedJson.(map[string]interface{}), ERR_NONE
 }
@@ -137,7 +139,7 @@ func StringToBuffer(str string, dstPtr Buffer) int32 {
 func JsonToBuffer(v interface{}, dstPtr Buffer) int32 {
 	outputBytes, err := json.Marshal(v)
 	if err != nil {
-		return ERR_JSON_OUTPUT_ENCODE_FAILED
+		return ERR_JSON_ENCODE_FAILED
 	}
 	return BytesToBuffer(outputBytes, dstPtr)
 }
@@ -165,7 +167,7 @@ func BytesToBuffer(bytes []byte, dstPtr Buffer) int32 {
 		file, err := os.CreateTemp("", "cobhan-*")
 		if err != nil {
 			//fmt.Errorf("Failed to create temp file")
-			return ERR_OUTPUT_TO_TEMP_FILE_FAILED
+			return ERR_WRITE_TEMP_FILE_FAILED
 		}
 
 		fileName := file.Name()
@@ -175,7 +177,7 @@ func BytesToBuffer(bytes []byte, dstPtr Buffer) int32 {
 			//fmt.Errorf("Output buffer can't handle temp file name")
 			file.Close()
 			os.Remove(fileName)
-			return ERR_OUTPUT_BUFFER_TOO_SMALL
+			return ERR_BUFFER_TOO_SMALL
 		}
 
 		_, err = file.Write(bytes)
@@ -183,7 +185,7 @@ func BytesToBuffer(bytes []byte, dstPtr Buffer) int32 {
 			//fmt.Errorf("Temp file write failed")
 			file.Close()
 			os.Remove(fileName)
-			return ERR_OUTPUT_TO_TEMP_FILE_FAILED
+			return ERR_WRITE_TEMP_FILE_FAILED
 		}
 
 		// Explicit rather than defer
