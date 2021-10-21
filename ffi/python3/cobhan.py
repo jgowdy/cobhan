@@ -69,6 +69,14 @@ class Cobhan():
     def from_json_buf(self, buf):
         return json.loads(self.buf_to_str(buf))
 
+    def bytearray_to_buf(self, payload):
+        length = len(payload)
+        buf = self.allocate_buf(length)
+        self.__ffi.memmove(buf[0:self.__sizeof_int32],
+            length.to_bytes(self.__sizeof_int32, byteorder='little', signed=True), self.__sizeof_int32)
+        self.__ffi.memmove(buf[self.__sizeof_header:self.__sizeof_header + length], payload, length)
+        return buf
+
     def str_to_buf(self, string):
         encoded_bytes = string.encode("utf8")
         length = len(encoded_bytes)
@@ -86,6 +94,15 @@ class Cobhan():
         encoded_bytes = self.__ffi.unpack(buf[self.__sizeof_header:self.__sizeof_header + length], length)
         return encoded_bytes.decode("utf8")
 
+    def buf_to_bytearray(self, buf):
+        length_buf = self.__ffi.unpack(buf, self.__sizeof_int32)
+        length = int.from_bytes(length_buf, byteorder='little', signed=True)
+        if length < 0:
+            return self.temp_to_bytearray(buf, length)
+        payload = bytearray(length)
+        self.__ffi.memmove(payload, buf[self.__sizeof_header:self.__sizeof_header + length], length)
+        return payload
+
     def temp_to_str(self, buf, length):
         length = 0 - length
         encoded_bytes = self.__ffi.unpack(buf[self.__sizeof_header:self.__sizeof_header + length], length)
@@ -94,6 +111,15 @@ class Cobhan():
             encoded_bytes = bytearray(binaryfile.read())
         os.remove(file_name)
         return encoded_bytes.decode("utf8")
+
+    def temp_to_bytearray(self, buf, length):
+        length = 0 - length
+        encoded_bytes = self.__ffi.unpack(buf[self.__sizeof_header:self.__sizeof_header + length], length)
+        file_name = encoded_bytes.decode("utf8")
+        with open(file_name, "rb") as binaryfile:
+            payload = bytearray(binaryfile.read())
+        os.remove(file_name)
+        return payload
 
     def allocate_buf(self, len):
         length = int(len)
