@@ -60,7 +60,7 @@ pub unsafe fn buffer_to_vector(buffer: *const c_char) -> Result<Vec<u8>, i32> {
         }
     }
 
-    return Ok(from_raw_parts(data, length as usize).to_vec());
+    Ok(from_raw_parts(data, length as usize).to_vec())
 }
 
 pub unsafe fn buffer_to_string(buffer: *const c_char) -> Result<String, i32> {
@@ -113,7 +113,7 @@ pub unsafe fn hashmap_json_to_buffer(json: &HashMap<String,Value>, buffer: *mut 
 }
 
 pub unsafe fn string_to_buffer(string: &str, buffer: *mut c_char) -> i32 {
-    return bytes_to_buffer(string.as_bytes(), buffer);
+    bytes_to_buffer(string.as_bytes(), buffer)
 }
 
 pub unsafe fn bytes_to_buffer(bytes: &[u8], buffer: *mut c_char) -> i32 {
@@ -149,8 +149,6 @@ pub unsafe fn bytes_to_buffer(bytes: &[u8], buffer: *mut c_char) -> i32 {
         *length = 0 - (tmp_file_path_len as i32);
         return result;
     }
-
-    println!("bytes_to_buffer: Copying {} bytes into buffer with capacity {}", bytes_len, buffer_cap);
 
     copy_nonoverlapping(bytes.as_ptr(), data as *mut u8, bytes_len);
 

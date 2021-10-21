@@ -35,7 +35,7 @@ pub unsafe extern "C" fn toUpper(input: *const c_char, output: *mut c_char) -> i
 
     let output_str = input_str.to_uppercase();
 
-    return cobhan::string_to_buffer(&output_str, output);
+    cobhan::string_to_buffer(&output_str, output)
 }
 
 #[no_mangle]
@@ -54,7 +54,7 @@ pub unsafe extern "C" fn filterJson(input: *const c_char, disallowed_value: *con
 
     filter_json(&mut json, &disallowed_value_str);
 
-    return cobhan::hashmap_json_to_buffer(&json, output);
+    cobhan::hashmap_json_to_buffer(&json, output)
 }
 
 // Example of a safe function
@@ -77,7 +77,7 @@ pub unsafe extern "C" fn base64Encode(input: *const c_char, output: *mut c_char)
 
     let b64str = base64::encode(bytes);
 
-    return cobhan::string_to_buffer(&b64str, output);
+    cobhan::string_to_buffer(&b64str, output)
 }
 
 #[no_mangle]
@@ -86,5 +86,5 @@ pub unsafe extern "C" fn generateRandom(output: *mut c_char) -> i32 {
     let size = rng.gen_range(0..134217728);
     let mut bytes: Vec<u8> = vec![0; size];
     rng.fill_bytes(&mut bytes);
-    return cobhan::bytes_to_buffer(&bytes, output);
+    cobhan::bytes_to_buffer(&bytes, output)
 }
