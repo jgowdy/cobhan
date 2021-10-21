@@ -7,22 +7,22 @@ use rand::RngCore;
 
 #[no_mangle]
 pub unsafe extern "C" fn sleepTest(seconds: i32) {
-    thread::sleep(time::Duration::from_secs(seconds as u64));
+    thread::sleep(time::Duration::from_secs(seconds as u64))
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn addInt32(x: i32, y: i32) -> i32 {
-    return x.saturating_add(y);
+    x.saturating_add(y)
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn addInt64(x: i64, y: i64) -> i64 {
-    return x.saturating_add(y);
+    x.saturating_add(y)
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn addDouble(x: f64, y: f64) -> f64 {
-    return x + y;
+    x + y
 }
 
 #[no_mangle]
