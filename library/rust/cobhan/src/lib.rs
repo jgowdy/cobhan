@@ -127,8 +127,6 @@ pub unsafe fn bytes_to_buffer(bytes: &[u8], buffer: *mut c_char) -> i32 {
     let bytes_len = bytes.len();
 
     if buffer_cap < (bytes_len as i32) {
-        println!("bytes_to_buffer: Output buffer is insufficient have {} need {}", buffer_cap, bytes_len);
-
         let tmp_file_path;
         match write_file(bytes) {
             Ok(t) => tmp_file_path = t,
