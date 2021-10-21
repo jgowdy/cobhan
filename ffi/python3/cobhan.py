@@ -14,6 +14,7 @@ class Cobhan():
         self.__sizeof_int32 = self.__ffi.sizeof("int32_t")
         self.__sizeof_header = self.__sizeof_int32 * 2
         self.__minimum_allocation = 1024
+        self.__int32_zero_bytes = int(0).to_bytes(self.__sizeof_int32, byteorder='little', signed=True)
 
     def _load_library(self, library_root_path, library_name, cdefines):
         self.__ffi.cdef(cdefines)
@@ -69,21 +70,34 @@ class Cobhan():
     def from_json_buf(self, buf):
         return json.loads(self.buf_to_str(buf))
 
+    def set_header(self, buf, length):
+        self.__ffi.memmove(buf[0:self.__sizeof_int32],
+            length.to_bytes(self.__sizeof_int32, byteorder='little', signed=True), self.__sizeof_int32)
+        self.__ffi.memmove(buf[self.__sizeof_int32:self.__sizeof_int32 * 2],
+            self.__int32_zero_bytes, self.__sizeof_int32)
+
+    def set_payload(self, buf, payload, length):
+        self.set_header(buf, length)
+        self.__ffi.memmove(buf[self.__sizeof_header:self.__sizeof_header + length], payload, length)
+
     def bytearray_to_buf(self, payload):
         length = len(payload)
         buf = self.allocate_buf(length)
-        self.__ffi.memmove(buf[0:self.__sizeof_int32],
-            length.to_bytes(self.__sizeof_int32, byteorder='little', signed=True), self.__sizeof_int32)
-        self.__ffi.memmove(buf[self.__sizeof_header:self.__sizeof_header + length], payload, length)
+        self.set_payload(buf, payload, length)
         return buf
 
     def str_to_buf(self, string):
         encoded_bytes = string.encode("utf8")
         length = len(encoded_bytes)
         buf = self.allocate_buf(length)
-        self.__ffi.memmove(buf[0:self.__sizeof_int32],
-            length.to_bytes(self.__sizeof_int32, byteorder='little', signed=True), self.__sizeof_int32)
-        self.__ffi.memmove(buf[self.__sizeof_header:self.__sizeof_header + length], encoded_bytes, length)
+        self.set_payload(buf, encoded_bytes, length)
+        return buf
+
+    def allocate_buf(self, len):
+        length = int(len)
+        length = max(length, self.__minimum_allocation)
+        buf = self.__ffi.new(f'char[{self.__sizeof_header + length}]')
+        self.set_header(buf, length)
         return buf
 
     def buf_to_str(self, buf):
@@ -104,12 +118,7 @@ class Cobhan():
         return payload
 
     def temp_to_str(self, buf, length):
-        length = 0 - length
-        encoded_bytes = self.__ffi.unpack(buf[self.__sizeof_header:self.__sizeof_header + length], length)
-        file_name = encoded_bytes.decode("utf8")
-        with open(file_name, "rb") as binaryfile:
-            encoded_bytes = bytearray(binaryfile.read())
-        os.remove(file_name)
+        encoded_bytes = self.temp_to_bytearray(buf, length)
         return encoded_bytes.decode("utf8")
 
     def temp_to_bytearray(self, buf, length):
@@ -120,11 +129,3 @@ class Cobhan():
             payload = bytearray(binaryfile.read())
         os.remove(file_name)
         return payload
-
-    def allocate_buf(self, len):
-        length = int(len)
-        length = max(length, self.__minimum_allocation)
-        buf = self.__ffi.new(f'char[{self.__sizeof_header + length}]')
-        self.__ffi.memmove(buf[0:self.__sizeof_int32],
-            length.to_bytes(self.__sizeof_int32, byteorder='little', signed=True), self.__sizeof_int32)
-        return buf
