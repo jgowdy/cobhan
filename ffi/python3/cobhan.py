@@ -1,4 +1,5 @@
 
+from io import UnsupportedOperation
 import pathlib
 import platform
 import os
@@ -33,7 +34,7 @@ class Cobhan():
             os_path = "windows"
             ext = "dll"
         else:
-            raise Exception("Unsupported operating system")
+            raise UnsupportedOperation("Unsupported operating system")
 
         machine = platform.machine()
         if machine == "x86_64" or machine == "AMD64":
@@ -41,7 +42,7 @@ class Cobhan():
         elif machine == "arm64":
             cpu_arch = "arm64"
         else:
-            raise Exception("Unsupported CPU")
+            raise UnsupportedOperation("Unsupported CPU")
 
         # Get absolute library path
         library_path = pathlib.Path(os.path.join(library_root_path, os_path, cpu_arch)).resolve()
@@ -81,20 +82,18 @@ class Cobhan():
         length_buf = self.__ffi.unpack(buf, self.__sizeof_int32)
         length = int.from_bytes(length_buf, byteorder='little', signed=True)
         if length < 0:
-            # Temp file
-            length = 0 - length
-            temp = True
-        else:
-            temp = False
+            return self.temp_to_str(buf, length)
         encoded_bytes = self.__ffi.unpack(buf[self.__sizeof_header:self.__sizeof_header + length], length)
-        payload = encoded_bytes.decode("utf8")
-        if temp:
-            with open(payload, "rb") as binaryfile:
-                encoded_bytes = bytearray(binaryfile.read())
+        return encoded_bytes.decode("utf8")
 
-            os.remove(payload)
-            payload = encoded_bytes.decode("utf8")
-        return payload
+    def temp_to_str(self, buf, length):
+        length = 0 - length
+        encoded_bytes = self.__ffi.unpack(buf[self.__sizeof_header:self.__sizeof_header + length], length)
+        file_name = encoded_bytes.decode("utf8")
+        with open(file_name, "rb") as binaryfile:
+            encoded_bytes = bytearray(binaryfile.read())
+        os.remove(file_name)
+        return encoded_bytes.decode("utf8")
 
     def allocate_buf(self, len):
         length = int(len)
