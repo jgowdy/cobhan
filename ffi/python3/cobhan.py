@@ -64,7 +64,7 @@ class Cobhan():
     def to_json_buf(self, obj):
         return self.str_to_buf(json.dumps(obj))
 
-    def from_json_buf(self, buf, length):
+    def from_json_buf(self, buf):
         return json.loads(self.buf_to_str(buf))
 
     def str_to_buf(self, string):

@@ -57,7 +57,7 @@ class Libplugtest(Cobhan):
         if result < 0:
             raise Exception(f"filterJson failed {result}")
 
-        return self.from_json_buf(output_buf, result)
+        return self.from_json_buf(output_buf)
 
     def base64Encode(self, input):
         input_buf = self.str_to_buf(input)
