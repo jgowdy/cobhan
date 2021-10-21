@@ -62,7 +62,7 @@ pub fn filter_json(json: &mut HashMap<String, Value>, disallowed: &str) {
     json.retain(|_key, value| {
         match value.as_str() {
             None => return true,
-            v => return v.unwrap().contains(&disallowed)
+            v => return !v.unwrap().contains(&disallowed)
         }
     });
 }
