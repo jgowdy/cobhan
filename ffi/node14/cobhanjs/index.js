@@ -4,7 +4,7 @@ import { resolve, join } from 'path';
 //TODO: Create Cobhan buffer class / function that is initialized with strings and returns strings
 
 const header_size = 64 / 8
-
+const sizeof_int32 = 32 / 8
 /**
 * @param {string} str
 * @return {Buffer}
@@ -12,6 +12,7 @@ const header_size = 64 / 8
 function string_to_cbuffer(str) {
     let buffer = Buffer.allocUnsafe(header_size + str.length)
     buffer.writeInt32LE(str.length, 0)
+    buffer.writeInt32LE(0, sizeof_int32) // Reserved - must be zero
     buffer.write(str, header_size, 'utf8')
     return buffer
 }
@@ -40,6 +41,7 @@ function cbuffer_to_buffer(buf) {
 function buffer_to_cbuffer(buf) {
     let buffer = Buffer.allocUnsafe(header_size + buf.byteLength)
     buffer.writeInt32LE(buf.byteLength, 0)
+    buffer.writeInt32LE(0, sizeof_int32) // Reserved - must be zero
     buffer.fill(buf, header_size)
     return buffer
 }
@@ -51,6 +53,7 @@ function buffer_to_cbuffer(buf) {
 function allocate_cbuffer(size) {
     let buffer = Buffer.allocUnsafe(header_size + size)
     buffer.writeInt32LE(size, 0)
+    buffer.writeInt32LE(0, sizeof_int32) // Reserved - must be zero
     return buffer
 }
 
