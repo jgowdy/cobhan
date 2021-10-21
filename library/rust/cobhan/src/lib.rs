@@ -126,14 +126,17 @@ pub unsafe fn bytes_to_buffer(bytes: &[u8], buffer: *mut c_char) -> i32 {
     let data = (buffer.offset(BUFFER_HEADER_SIZE)) as *const u8;
     let bytes_len = bytes.len();
 
-    if (buffer_cap as usize) < bytes_len {
+    if buffer_cap < (bytes_len as i32) {
+        println!("bytes_to_buffer: Output buffer is insufficient have {} need {}", buffer_cap, bytes_len);
+
         let tmp_file_path;
         match write_file(bytes) {
             Ok(t) => tmp_file_path = t,
             Err(r) => return r
         }
 
-        if buffer_cap < tmp_file_path.len() as i32 {
+        let tmp_file_path_len = tmp_file_path.len() as i32;
+        if buffer_cap < tmp_file_path_len {
             //Temp file path won't fit in output buffer, we're out of luck
             let _ = fs::remove_file(tmp_file_path);
             return ERR_BUFFER_TOO_SMALL;
@@ -144,8 +147,12 @@ pub unsafe fn bytes_to_buffer(bytes: &[u8], buffer: *mut c_char) -> i32 {
         if result != ERR_NONE {
             let _ = fs::remove_file(tmp_file_path);
         }
+
+        *length = 0 - (tmp_file_path_len as i32);
         return result;
     }
+
+    println!("bytes_to_buffer: Copying {} bytes into buffer with capacity {}", bytes_len, buffer_cap);
 
     copy_nonoverlapping(bytes.as_ptr(), data as *mut u8, bytes_len);
 
