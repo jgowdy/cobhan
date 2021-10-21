@@ -12,6 +12,7 @@ class Cobhan():
         self.__ffi = FFI()
         self.__sizeof_int32 = self.__ffi.sizeof("int32_t")
         self.__sizeof_header = self.__sizeof_int32 * 2
+        self.__minimum_allocation = 1024
 
     def _load_library(self, library_root_path, library_name, cdefines):
         self.__ffi.cdef(cdefines)
@@ -70,7 +71,7 @@ class Cobhan():
     def str_to_buf(self, string):
         encoded_bytes = string.encode("utf8")
         length = len(encoded_bytes)
-        buf = self.allocate_buf(self.__sizeof_header + length)
+        buf = self.allocate_buf(length)
         self.__ffi.memmove(buf[0:self.__sizeof_int32],
             length.to_bytes(self.__sizeof_int32, byteorder='little', signed=True), self.__sizeof_int32)
         self.__ffi.memmove(buf[self.__sizeof_header:self.__sizeof_header + length], encoded_bytes, length)
@@ -79,11 +80,26 @@ class Cobhan():
     def buf_to_str(self, buf):
         length_buf = self.__ffi.unpack(buf, self.__sizeof_int32)
         length = int.from_bytes(length_buf, byteorder='little', signed=True)
+        if length < 0:
+            # Temp file
+            length = 0 - length
+            temp = True
+        else:
+            temp = False
         encoded_bytes = self.__ffi.unpack(buf[self.__sizeof_header:self.__sizeof_header + length], length)
-        return encoded_bytes.decode("utf8")
+        payload = encoded_bytes.decode("utf8")
+        if temp:
+            with open(payload, "rb") as binaryfile:
+                encoded_bytes = bytearray(binaryfile.read())
+
+            os.remove(payload)
+            payload = encoded_bytes.decode("utf8")
+        return payload
 
     def allocate_buf(self, len):
-        buf = self.__ffi.new(f'char[{len}]')
+        length = int(len)
+        length = max(length, self.__minimum_allocation)
+        buf = self.__ffi.new(f'char[{self.__sizeof_header + length}]')
         self.__ffi.memmove(buf[0:self.__sizeof_int32],
-            len.to_bytes(self.__sizeof_int32, byteorder='little', signed=True), self.__sizeof_int32)
+            length.to_bytes(self.__sizeof_int32, byteorder='little', signed=True), self.__sizeof_int32)
         return buf
