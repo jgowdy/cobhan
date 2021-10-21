@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { load_platform_library } from 'cobhanjs';
+import { load_platform_library, string_to_cbuffer, cbuffer_to_string, cbuffer_to_buffer, buffer_to_cbuffer, allocate_cbuffer } from 'cobhanjs';
 
 /**
 * @param {object} input
@@ -7,15 +7,16 @@ import { load_platform_library } from 'cobhanjs';
 * @return {object}
 */
 function filterJsonObjectInGo(input, disallowedValue) {
-    let inputJson = JSON.stringify(input)
-    const outputBuffer = Buffer.allocUnsafe(inputJson.length);
+    const inputBuffer = string_to_cbuffer(JSON.stringify(input));
+    const disallowedBuffer = string_to_cbuffer(disallowedValue);
+    const outputBuffer = allocate_cbuffer(input.length);
 
-    const result = libplugtest.filterJson(inputJson, inputJson.length, disallowedValue, disallowedValue.length, outputBuffer, outputBuffer.length);
+    const result = libplugtest.filterJson(inputBuffer, disallowedBuffer, outputBuffer);
     if (result < 0) {
         throw new Error('filterJson failed: ' + result);
     }
 
-    return JSON.parse(outputBuffer.toString('utf8', 0, result));
+    return JSON.parse(cbuffer_to_string(outputBuffer));
 }
 
 /**
@@ -24,14 +25,16 @@ function filterJsonObjectInGo(input, disallowedValue) {
 * @return {string}
 */
 function filterJsonStringInGo(inputJson, disallowedValue) {
-    const outputBuffer = Buffer.allocUnsafe(inputJson.length);
+    const inputBuffer = string_to_cbuffer(inputJson);
+    const disallowedBuffer = string_to_cbuffer(disallowedValue);
+    const outputBuffer = allocate_cbuffer(inputJson.length);
 
-    const result = libplugtest.filterJson(inputJson, inputJson.length, disallowedValue, disallowedValue.length, outputBuffer, outputBuffer.length);
+    const result = libplugtest.filterJson(inputBuffer, disallowedBuffer, outputBuffer);
     if (result < 0) {
         throw new Error('filterJson failed: ' + result);
     }
 
-    return outputBuffer.toString('utf8', 0, result);
+    return cbuffer_to_string(outputBuffer);
 }
 
 /**
@@ -39,14 +42,15 @@ function filterJsonStringInGo(inputJson, disallowedValue) {
 * @return {string}
 */
 function toUpperInGo(input) {
-  const outputBuffer = Buffer.allocUnsafe(input.length);
+    const inputBuffer = string_to_cbuffer(input);
+    const outputBuffer = allocate_cbuffer(input.length);
 
-  const result = libplugtest.toUpper(input, input.length, outputBuffer, outputBuffer.length);
+  const result = libplugtest.toUpper(inputBuffer, outputBuffer);
   if (result < 0) {
     throw new Error('toUpper failed: ' + result);
   }
 
-  return outputBuffer.toString('utf8', 0, result);
+  return cbuffer_to_string(outputBuffer);
 }
 
 /**
@@ -97,8 +101,8 @@ const libplugtest = load_platform_library(libraryRootPath, 'libplugtest', {
     'addInt32': ['int32', ['int32', 'int32']],
     'addInt64': ['int64', ['int64', 'int64']],
     'addDouble': ['double', ['double', 'double']],
-    'toUpper': ['int32', ['string', 'int32', 'char *', 'int32']],
-    'filterJson': ['int32', ['string', 'int32', 'string', 'int32', 'char *', 'int32']]
+    'toUpper': ['int32', ['pointer', 'pointer']],
+    'filterJson': ['int32', ['pointer', 'pointer', 'pointer']]
     });
 
 export default { filterJsonObjectInGo, filterJsonStringInGo, toUpperInGo, sleepInGo, addInt32InGo, addInt64InGo, addDoubleInGo };
