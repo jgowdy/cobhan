@@ -6,9 +6,9 @@ class Libplugtest(Cobhan):
         int32_t addInt32(int32_t x, int32_t y);
         int64_t addInt64(int64_t x, int64_t y);
         double addDouble(double x, double y);
-        int32_t toUpper(const char *input, int32_t inputLength, char *output, int32_t outputCapacity);
-        int32_t filterJson(const char *input, int32_t inputLength, const char *disallowedValue, int32_t disallowedValueLen, char *output, int32_t outputCap);
-        int32_t base64Encode(const char *input, int32_t inputLength, char *output, int32_t outputCap);
+        int32_t toUpper(void *input, void *output);
+        int32_t filterJson(void *input, void *disallowedValue, void *output);
+        int32_t base64Encode(void *input, void *output);
     """
 
     @classmethod
@@ -24,13 +24,14 @@ class Libplugtest(Cobhan):
         return instance
 
     def to_upper(self, input):
-        buf = self.str_to_buf(input)
+        in_buf = self.str_to_buf(input)
+        out_buf = self.allocate_buf(len(in_buf))
 
-        result = self._lib.toUpper(buf, len(buf), buf, len(buf))
+        result = self._lib.toUpper(in_buf, out_buf)
         if result < 0:
-            raise Exception("toUpper failed")
+            raise Exception(f"toUpper failed {result}")
 
-        return self.buf_to_str(buf, result)
+        return self.buf_to_str(out_buf)
 
     def sleep_test(self, seconds):
         self._lib.sleepTest(seconds)
@@ -52,9 +53,9 @@ class Libplugtest(Cobhan):
         output_len = int(len(input_buf) * 1.5) # Allow extra space for reformatting
         output_buf = self.allocate_buf(output_len)
 
-        result = self._lib.filterJson(input_buf, len(input_buf), disallowed_buf, len(disallowed_buf), output_buf, output_len)
+        result = self._lib.filterJson(input_buf, disallowed_buf, output_buf)
         if result < 0:
-            raise Exception("filterJson failed")
+            raise Exception(f"filterJson failed {result}")
 
         return self.from_json_buf(output_buf, result)
 
@@ -63,8 +64,8 @@ class Libplugtest(Cobhan):
         output_len = int((4 * len(input_buf) / 3) + 3) & ~3
         output_buf = self.allocate_buf(output_len)
 
-        result = self._lib.base64Encode(input_buf, len(input_buf), output_buf, output_len)
+        result = self._lib.base64Encode(input_buf, output_buf)
         if result < 0:
-            raise Exception("base64Encode failed")
+            raise Exception(f"base64Encode failed {result}")
 
-        return self.buf_to_str(output_buf, result)
+        return self.buf_to_str(output_buf)

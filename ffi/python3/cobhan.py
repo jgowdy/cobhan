@@ -7,8 +7,11 @@ import json
 from cffi import FFI
 
 class Cobhan():
+
     def __init__(self):
         self.__ffi = FFI()
+        self.__sizeof_int32 = self.__ffi.sizeof("int32_t")
+        self.__sizeof_header = self.__sizeof_int32 * 2
 
     def _load_library(self, library_root_path, library_name, cdefines):
         self.__ffi.cdef(cdefines)
@@ -62,13 +65,25 @@ class Cobhan():
         return self.str_to_buf(json.dumps(obj))
 
     def from_json_buf(self, buf, length):
-        return json.loads(self.buf_to_str(buf, length))
+        return json.loads(self.buf_to_str(buf))
 
     def str_to_buf(self, string):
-        return self.__ffi.from_buffer(string.encode("utf8"))
+        encoded_bytes = string.encode("utf8")
+        length = len(encoded_bytes)
+        buf = self.allocate_buf(self.__sizeof_header + length)
+        self.__ffi.memmove(buf[0:self.__sizeof_int32],
+            length.to_bytes(self.__sizeof_int32, byteorder='little', signed=True), self.__sizeof_int32)
+        self.__ffi.memmove(buf[self.__sizeof_header:self.__sizeof_header + length], encoded_bytes, length)
+        return buf
 
-    def buf_to_str(self, buf, len):
-        return self.__ffi.unpack(buf, len).decode("utf8")
+    def buf_to_str(self, buf):
+        length_buf = self.__ffi.unpack(buf, self.__sizeof_int32)
+        length = int.from_bytes(length_buf, byteorder='little', signed=True)
+        encoded_bytes = self.__ffi.unpack(buf[self.__sizeof_header:self.__sizeof_header + length], length)
+        return encoded_bytes.decode("utf8")
 
     def allocate_buf(self, len):
-        return self.__ffi.new(f'char[{len}]')
+        buf = self.__ffi.new(f'char[{len}]')
+        self.__ffi.memmove(buf[0:self.__sizeof_int32],
+            len.to_bytes(self.__sizeof_int32, byteorder='little', signed=True), self.__sizeof_int32)
+        return buf
