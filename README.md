@@ -5,9 +5,9 @@ Cobhan FFI is a proof of concept system for enabling shared code to be written i
 ## Types
 
 * Supported types
-   * int32 - 32 bit signed integer
-   * int64 - 64 bit signed integer
-   * float64 - double precision 64 bit IEEE 754 floating point
+   * int32 - 32bit signed integer
+   * int64 - 64bit signed integer
+   * float64 - double precision 64bit IEEE 754 floating point
    * Cobhan buffer - length delimited 8bit buffer (no null delimiters)
         * utf-8 encoded string
         * JSON
