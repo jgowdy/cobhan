@@ -3,6 +3,7 @@ package cobhan
 import (
 	"C"
 	"encoding/json"
+	"io/ioutil"
 	"math"
 	"os"
 	"reflect"
@@ -77,7 +78,7 @@ func tempToBytes(ptr unsafe.Pointer, length C.int) ([]byte, int32) {
 	}
 
 	fileName := bufferPtrToString(ptr, length)
-	fileData, err := os.ReadFile(fileName)
+	fileData, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		return nil, ERR_READ_TEMP_FILE_FAILED //TODO: Temp file read error
 	}
