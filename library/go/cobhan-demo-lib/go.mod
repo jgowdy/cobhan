@@ -1,4 +1,4 @@
-module godaddy.com/libplugtest
+module godaddy.com/cobhan-demo-lib
 
 go 1.16
 

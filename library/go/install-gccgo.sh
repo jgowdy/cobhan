@@ -2,6 +2,7 @@
 
 case $(uname -s) in
 "Darwin")
+    # gccgo does not support macOS
     echo "Skipping gccgo install due to Darwin/macOS"
     ;;
 *)
