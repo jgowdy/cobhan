@@ -9,6 +9,11 @@ on:
 env:
   CARGO_TERM_COLOR: always
 
+defaults:
+  run:
+    shell: bash
+    working-directory: library/rust/libplugtest
+    
 jobs:
   build:
 
@@ -18,4 +23,3 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build
       run: build-debug.sh
-      working-directory: library/rust/libbplugtest
