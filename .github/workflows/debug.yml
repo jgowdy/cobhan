@@ -17,6 +17,8 @@ jobs:
       matrix:
         os: [ubuntu-latest, macOS-latest]
     steps:
+    - name: Install xmllint
+      run: sudo apt-get install -y gcc-go
     - uses: actions/checkout@v2
     - name: Build Rust
       run: ./build-debug.sh
