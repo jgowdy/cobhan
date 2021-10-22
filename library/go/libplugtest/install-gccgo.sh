@@ -6,6 +6,7 @@ case $(uname -s) in
     ;;
 *)
     sudo apt-get install -y gccgo-10
+    sudo ln -s /usr/bin/gccgo-10 /usr/bin/gccgo
     ;;
 esac
 
