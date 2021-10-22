@@ -1,6 +1,6 @@
 module godaddy.com/libplugtest
 
-go 1.16
+go 1.17
 
 replace godaddy.com/cobhan => ../cobhan
 
