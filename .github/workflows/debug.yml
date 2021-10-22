@@ -18,11 +18,12 @@ jobs:
         os: [ubuntu-latest, macOS-latest]
     steps:
     - name: Install gcc-go
-      run: sudo apt-get install -y gccgo
-    - uses: actions/checkout@v2
-    - name: Build Rust
-      run: ./build-debug.sh
-      working-directory: library/rust/libplugtest
+      run: ./install-gccgo.sh
+      working-directory: library/go/libplugtest
+    - uses: actions/checkout@v2      
     - name: Build Go
       run: ./build-debug.sh
       working-directory: library/go/libplugtest
+    - name: Build Rust
+      run: ./build-debug.sh
+      working-directory: library/rust/libplugtest
