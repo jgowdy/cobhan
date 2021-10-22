@@ -1,5 +1,6 @@
 #!/bin/sh
 
+alias gccgo=gccgo-10
 
 case $(uname -s) in
 "Darwin")
@@ -7,6 +8,6 @@ case $(uname -s) in
     ;;
 
 *)
-    LD_RUN_PATH=\$ORIGIN CGO_ENABLED=1 go build -compiler=gccgo-10 -buildmode=c-shared -o /output/libplugtest.so
+    LD_RUN_PATH=\$ORIGIN CGO_ENABLED=1 go build -compiler=gccgo -buildmode=c-shared -o /output/libplugtest.so
     ;;
 esac
