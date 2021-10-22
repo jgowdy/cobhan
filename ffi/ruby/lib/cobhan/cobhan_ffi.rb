@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'ffi'
+require 'IO'
 
 module Cobhan
   UnsupportedPlatformError = Class.new(StandardError)
@@ -11,6 +12,9 @@ module Cobhan
     OS_PATHS   = { 'linux' => 'linux', 'darwin' => 'macos', 'windows' => 'windows' }.freeze
     EXTS = { 'linux' => 'so', 'darwin' => 'dylib', 'windows' => 'dll' }.freeze
     CPU_ARCHS = { 'x86_64' => 'amd64', 'aarch64' => 'arm64' }.freeze
+    SIZEOF_INT32 = 32 / 8
+    BUFFER_HEADER_SIZE = SIZEOF_INT32 * 2
+    MINIMUM_ALLOCATION = 1024
 
     os_path =
       if FFI::Platform::OS == 'linux' && RbConfig::CONFIG['arch'].include?('musl')
@@ -38,39 +42,38 @@ module Cobhan
     attach_function :addInt64, %i[int64 int64], :int64
     attach_function :addDouble, %i[double double], :double
 
-    def to_upper(input)
-      in_ptr = FFI::MemoryPointer.from_string(input)
-      out_ptr = FFI::MemoryPointer.new(1, in_ptr.size + 1, false)
-
-      result = CobhanFFI.toUpper(input, input.length, out_ptr, out_ptr.size)
-      raise 'Failed to convert toUpper' if result.negative?
-
-      out_ptr.get_string(0, result)
+    def string_to_cbuffer(input)
+      buffer_ptr = FFI::MemoryPointer.new(1, BUFFER_HEADER_SIZE + input.length, false)
+      buffer_ptr.put_int32(0, input.length)
+      buffer_ptr.put_int32(SIZEOF_INT32, 0) # Reserved - must be zero
+      buffer_ptr.put_string(BUFFER_HEADER_SIZE, input)
+      buffer_ptr
     end
 
-    def calculate_pi(digits)
-      pi_buffer = FFI::MemoryPointer.new(1, digits + 1, false)
-
-      result = CobhanFFI.calculatePi(digits, pi_buffer, pi_buffer.size)
-      raise 'Failed to calculate pi' if result.negative?
-
-      pi_buffer.get_string(0, result)
+    def cbuffer_to_string(buffer)
+      length = buffer.get_int32(0)
+      if length >= 0
+        buffer_ptr.get_string(BUFFER_HEADER_SIZE, length)
+      else
+        temp_to_string(buffer, length)
+      end
     end
 
-    def sleep_test(seconds)
-      CobhanFFI.sleepTest(seconds)
+    def temp_to_string(buffer, length)
+      length = 0 - length
+      filename = buffer_ptr.get_string(BUFFER_HEADER_SIZE, length)
+      # Read file with name in payload, and replace payload
+      bytes = IO.binread(filename)
+      File.delete(filename)
+      bytes
     end
 
-    def add_int32(x, y)
-      CobhanFFI.addInt32(x, y)
-    end
-
-    def add_int64(x, y)
-      CobhanFFI.addInt64(x, y)
-    end
-
-    def add_double(x, y)
-      CobhanFFI.addDouble(x, y)
+    def allocate_cbuffer(size)
+      size = [size, MINIMUM_ALLOCATION].max
+      buffer_ptr = FFI::MemoryPointer.new(1, BUFFER_HEADER_SIZE + size, false)
+      buffer_ptr.put_int32(0, size)
+      buffer_ptr.put_int32(SIZEOF_INT32, 0) # Reserved - must be zero
+      buffer_ptr
     end
   end
 end
