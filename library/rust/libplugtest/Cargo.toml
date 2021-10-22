@@ -14,3 +14,4 @@ name = "plugtest"
 crate-type = ["rlib", "cdylib"]
 
 [features]
+cobhan_debug = []

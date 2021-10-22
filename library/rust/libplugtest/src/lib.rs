@@ -28,33 +28,33 @@ pub unsafe extern "C" fn addDouble(x: f64, y: f64) -> f64 {
 #[no_mangle]
 pub unsafe extern "C" fn toUpper(input: *const c_char, output: *mut c_char) -> i32 {
     let input_str;
-    match cobhan::buffer_to_string(input) {
+    match cobhan::cbuffer_to_string(input) {
         Ok(str) => input_str = str,
         Err(e) => return e
     }
 
     let output_str = input_str.to_uppercase();
 
-    cobhan::string_to_buffer(&output_str, output)
+    cobhan::string_to_cbuffer(&output_str, output)
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn filterJson(input: *const c_char, disallowed_value: *const c_char, output: *mut c_char) -> i32 {
     let mut json;
-    match cobhan::buffer_to_hashmap_json(input) {
+    match cobhan::cbuffer_to_hashmap_json(input) {
         Ok(input_json) => json = input_json,
         Err(e) => return e
     }
 
     let disallowed_value_str;
-    match cobhan::buffer_to_string(disallowed_value) {
+    match cobhan::cbuffer_to_string(disallowed_value) {
         Ok(disallow) => disallowed_value_str = disallow,
         Err(e) => return e
     }
 
     filter_json(&mut json, &disallowed_value_str);
 
-    cobhan::hashmap_json_to_buffer(&json, output)
+    cobhan::hashmap_json_to_cbuffer(&json, output)
 }
 
 // Example of a safe function
@@ -70,14 +70,14 @@ pub fn filter_json(json: &mut HashMap<String, Value>, disallowed: &str) {
 #[no_mangle]
 pub unsafe extern "C" fn base64Encode(input: *const c_char, output: *mut c_char) -> i32 {
     let bytes;
-    match cobhan::buffer_to_vector(input) {
+    match cobhan::cbuffer_to_vector(input) {
         Ok(b) => bytes = b,
         Err(e) => return e
     }
 
     let b64str = base64::encode(bytes);
 
-    cobhan::string_to_buffer(&b64str, output)
+    cobhan::string_to_cbuffer(&b64str, output)
 }
 
 #[no_mangle]
@@ -86,5 +86,5 @@ pub unsafe extern "C" fn generateRandom(output: *mut c_char) -> i32 {
     let size = rng.gen_range(0..134217728);
     let mut bytes: Vec<u8> = vec![0; size];
     rng.fill_bytes(&mut bytes);
-    cobhan::bytes_to_buffer(&bytes, output)
+    cobhan::bytes_to_cbuffer(&bytes, output)
 }
