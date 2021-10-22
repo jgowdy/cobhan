@@ -27,15 +27,15 @@ jobs:
     - name: Build Go-Cobhan
       run: ./build-debug.sh
       working-directory: library/go/cobhan
-    - name: Build Go-Libplugtest
+    - name: Build Go-Cobhan-demo-lib
       run: ./build-debug.sh
-      working-directory: library/go/libplugtest
+      working-directory: library/go/cobhan-demo-lib
     - name: Build Rust-Cobhan
       run: ./build-debug.sh
       working-directory: library/rust/cobhan      
-    - name: Build Rust-Libplugtest
+    - name: Build Rust-Cobhan-demo-lib
       run: ./build-debug.sh
-      working-directory: library/rust/libplugtest
+      working-directory: library/rust/cobhan-demo-lib
     - name: Build Go-Cobhan-Alpine
       run: ./alpine.sh
       working-directory: library/go/cobhan
