@@ -39,6 +39,6 @@ jobs:
     - name: Build Go-Cobhan-Alpine
       run: ./alpine.sh
       working-directory: library/go/cobhan
-    - name: Build Go-Libplugtest-Alpine
-      run: libplugtest/alpine.sh
+    - name: Build Go-Cobhan-demo-lib-Alpine
+      run: cobhan-demo-lib/alpine.sh
       working-directory: library/go
