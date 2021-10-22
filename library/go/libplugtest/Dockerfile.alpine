@@ -10,4 +10,4 @@ WORKDIR /libplugtest
 
 RUN mkdir -p /output
 
-RUN LD_RUN_PATH=\$ORIGIN CGO_ENABLED=1 GOOS=linux go build -v -compiler=gccgo -buildmode=archive -o /output/libplugtest.so
+RUN LD_RUN_PATH=\$ORIGIN CGO_ENABLED=1 GOOS=linux go build -v -compiler=gccgo -buildmode=c-shared -o /output/libplugtest.so
