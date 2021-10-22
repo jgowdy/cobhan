@@ -5,7 +5,7 @@ case $(uname -s) in
     echo "Skipping gccgo install due to Darwin/macOS"
     ;;
 *)
-    sudo apt install -y gccgo
+    sudo apt-get install -y gccgo-10
     ;;
 esac
 
