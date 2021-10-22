@@ -1,3 +1,3 @@
 #!/bin/sh
 
-cargo build --features cobhan/cobhan_debug --verbose
+cargo build --features cobhan_debug --verbose
