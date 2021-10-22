@@ -18,3 +18,4 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build
       run: library/rust/libplugtest/build-debug.sh
+      working-directory: library/rust/libbplugtest/build-debug.sh
