@@ -1,4 +1,4 @@
-name: Rust
+name: Debug
 
 on:
   push:
@@ -8,14 +8,6 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
-
-  build:
-
-
-defaults:
-  run:
-    shell: bash
-    working-directory: library/rust/libplugtest
     
 jobs:
   build:
@@ -26,5 +18,9 @@ jobs:
         os: [ubuntu-latest, macOS-latest, windows-latest]
     steps:
     - uses: actions/checkout@v2
-    - name: Build
+    - name: Build Rust
       run: ./build-debug.sh
+      working-directory: library/rust/libplugtest
+    - name: Build Go
+      run: ./build-debug.sh
+      working-directory: library/go/libplugtest
