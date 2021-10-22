@@ -18,7 +18,7 @@ jobs:
         os: [ubuntu-latest, macOS-latest]
     steps:
     - name: Install gcc-go
-      run: sudo apt-get install -y gcc-go
+      run: sudo apt-get install -y gccgo
     - uses: actions/checkout@v2
     - name: Build Rust
       run: ./build-debug.sh
