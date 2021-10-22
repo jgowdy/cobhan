@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative "cobhan/version"
-require_relative "cobhan/cobhan_ffi"
+puts 'Hello from Cobhan'
 
-module Cobhan
-end
+require_relative "cobhan/version"
+require_relative "cobhan/functions"
+

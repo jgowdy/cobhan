@@ -1,0 +1,4 @@
+example_id                          | status | run_time        |
+----------------------------------- | ------ | --------------- |
+./spec/cobhan-demo-lib_spec.rb[1:1] | passed | 0.00109 seconds |
+./spec/cobhan-demo-lib_spec.rb[1:2] | failed | 0.00762 seconds |
