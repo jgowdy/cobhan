@@ -31,7 +31,8 @@ function cbuffer_to_string(buf) {
 * @return {Buffer}
 */
 function cbuffer_to_buffer(buf) {
-    return buf.slice(header_size)
+    let length = buf.readInt32LE(0)
+    return buf.slice(header_size, header_size + length)
 }
 
 /**
