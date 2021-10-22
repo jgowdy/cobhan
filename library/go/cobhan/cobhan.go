@@ -165,7 +165,7 @@ func BytesToBuffer(bytes []byte, dstPtr Buffer) int32 {
 		// Output will not fit in supplied buffer
 
 		// Write the data to a temp file and copy the temp file name into the buffer
-		file, err := os.CreateTemp("", "cobhan-*")
+		file, err := ioutil.TempFile("", "cobhan-*")
 		if err != nil {
 			//fmt.Errorf("Failed to create temp file")
 			return ERR_WRITE_TEMP_FILE_FAILED
