@@ -20,14 +20,20 @@ jobs:
     - uses: actions/setup-go@v2
       with:
         go-version: '^1.16'    
-    - uses: actions/checkout@v2    
+    - uses: actions/checkout@v2
     - name: Install gcc-go
       run: ./install-gccgo.sh
-      working-directory: library/go/libplugtest
-    - name: Build Go
+      working-directory: library/go    
+    - name: Build Go-Cobhan
+      run: ./build-debug.sh
+      working-directory: library/go/cobhan
+    - name: Build Go-Libplugtest
       run: ./build-debug.sh
       working-directory: library/go/libplugtest
-    - name: Build Rust
+    - name: Build Rust-Cobhan
+      run: ./build-debug.sh
+      working-directory: library/rust/cobhan      
+    - name: Build Rust-Libplugtest
       run: ./build-debug.sh
       working-directory: library/rust/libplugtest
     - name: Build Go-Cobhan-Alpine
