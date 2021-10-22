@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"math"
 	"os"
+	"reflect"
 	"unsafe"
 )
 
@@ -153,15 +154,16 @@ func BytesToBuffer(bytes []byte, dstPtr Buffer) int32 {
 	bytesLen := len(bytes)
 
 	// Construct a byte slice out of the unsafe pointers
-	var dst []byte = unsafe.Slice((*byte)(unsafe.Pointer(dstPtr)), dstCapInt)
-
 	/*
-		var dst []byte
-		sh := (*reflect.SliceHeader)(unsafe.Pointer(&dst))
-		sh.Data = (uintptr)(bufferPtrToDataPtr(ptr))
-		sh.Len = dstCapInt
-		sh.Cap = dstCapInt
+		    // When gccgo supports Go 1.17 we can switch to this:
+			var dst []byte = unsafe.Slice((*byte)(unsafe.Pointer(dstPtr)), dstCapInt)
 	*/
+
+	var dst []byte
+	sh := (*reflect.SliceHeader)(unsafe.Pointer(&dst))
+	sh.Data = (uintptr)(bufferPtrToDataPtr(ptr))
+	sh.Len = dstCapInt
+	sh.Cap = dstCapInt
 
 	var result int
 	if dstCapInt < bytesLen {
