@@ -9,6 +9,9 @@ on:
 env:
   CARGO_TERM_COLOR: always
 
+  build:
+
+
 defaults:
   run:
     shell: bash
@@ -16,9 +19,11 @@ defaults:
     
 jobs:
   build:
-
-    runs-on: [ubuntu-latest, macos-latest]
-
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ubuntu-latest, macOS-latest, windows-latest]
     steps:
     - uses: actions/checkout@v2
     - name: Build
