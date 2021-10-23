@@ -8,7 +8,7 @@ namespace dotnetcore3
 
         static async Task<int> Main(string[] args)
         {
-            var libplugtest = new Libplugtest();
+            var libplugtest = new CobhanDemoLib();
             Console.WriteLine(libplugtest.toUpper("Initial value"));
             Console.WriteLine(libplugtest.AddDouble(1.1,1.2));
 

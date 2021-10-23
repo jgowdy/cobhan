@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-public class Libplugtest
+public class CobhanDemoLib
 {
     private delegate double AddDoubleDelegate(double x, double y);
     private delegate Int64 AddInt64Delegate(Int64 x, Int64 y);
@@ -21,7 +21,7 @@ public class Libplugtest
     private static ToUpperDelegate toUpperDelegate;
     private static IntPtr hLibrary = IntPtr.Zero;
 
-    static Libplugtest()
+    static CobhanDemoLib()
     {
         string os,ext;
         bool needsChdir = false;
@@ -73,7 +73,7 @@ public class Libplugtest
             Directory.SetCurrentDirectory(libraryPath);
         }
 
-        hLibrary = NativeLibrary.Load(Path.Join(libraryPath, $"libplugtest.{ext}"));
+        hLibrary = NativeLibrary.Load(Path.Join(libraryPath, $"cobhan-demo-lib.{ext}"));
 
         if(needsChdir)
         {
