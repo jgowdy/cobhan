@@ -1,5 +1,5 @@
 {
-  "name": "cobhanjs",
+  "name": "cobhan",
   "version": "1.0.4",
   "description": "Functions to enable cobhan wrapper libraries",
   "main": "index.js",

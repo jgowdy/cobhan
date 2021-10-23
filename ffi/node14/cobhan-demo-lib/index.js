@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { load_platform_library, string_to_cbuffer, cbuffer_to_string, cbuffer_to_buffer, buffer_to_cbuffer, allocate_cbuffer } from 'cobhanjs';
+import { load_platform_library, string_to_cbuffer, cbuffer_to_string, cbuffer_to_buffer, buffer_to_cbuffer, allocate_cbuffer } from 'cobhan';
 
 /**
 * @param {object} input

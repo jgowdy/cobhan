@@ -1,5 +1,5 @@
 {
-  "name": "libplugtestjs",
+  "name": "cobhan-demo-lib",
   "version": "1.2.2",
   "description": "",
   "main": "index.js",
@@ -18,8 +18,8 @@
   },
   "homepage": "https://github.com/jgowdy/cobhan#readme",
   "files": [
-    "libplugtest-binaries/**/*.so",
-    "libplugtest-binaries/**/*.dylib"
+    "binaries/**/*.so",
+    "binaries/**/*.dylib"
   ],
   "devDependencies": {
     "eslint": "^7.32.0",

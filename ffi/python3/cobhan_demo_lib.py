@@ -1,6 +1,6 @@
 from cobhan import Cobhan
 
-class Libplugtest(Cobhan):
+class CobhanDemoLib(Cobhan):
     CDEFINES = """
         void sleepTest(int32_t seconds);
         int32_t addInt32(int32_t x, int32_t y);
@@ -14,13 +14,13 @@ class Libplugtest(Cobhan):
     @classmethod
     def from_library_path(cls, library_root_path):
         instance = cls()
-        instance._load_library(library_root_path, 'libplugtest', Libplugtest.CDEFINES)
+        instance._load_library(library_root_path, 'cobhan-demo-lib', CobhanDemoLib.CDEFINES)
         return instance
 
     @classmethod
     def from_library_file(cls, library_file_path):
         instance = cls()
-        instance._load_library_direct(library_file_path, Libplugtest.CDEFINES)
+        instance._load_library_direct(library_file_path, CobhanDemoLib.CDEFINES)
         return instance
 
     def to_upper(self, input):
