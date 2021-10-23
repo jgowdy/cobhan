@@ -8,11 +8,11 @@ namespace dotnetcore3
 
         static async Task<int> Main(string[] args)
         {
-            var libplugtest = new CobhanDemoLib();
-            Console.WriteLine(libplugtest.toUpper("Initial value"));
-            Console.WriteLine(libplugtest.AddDouble(1.1,1.2));
+            var cobhandemolib = new CobhanDemoLib();
+            Console.WriteLine(cobhandemolib.toUpper("Initial value"));
+            Console.WriteLine(cobhandemolib.AddDouble(1.1,1.2));
 
-            await libplugtest.SleepTest(3);
+            await cobhandemolib.SleepTest(3);
             Console.WriteLine("Done sleeping");
 
             return 0;

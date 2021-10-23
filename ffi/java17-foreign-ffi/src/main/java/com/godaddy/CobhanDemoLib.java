@@ -1,4 +1,4 @@
-package com.godaddy.libplugtest;
+package com.godaddy;
 
 import static jdk.incubator.foreign.CLinker.C_INT;
 import static jdk.incubator.foreign.CLinker.C_POINTER;
@@ -16,11 +16,11 @@ import jdk.incubator.foreign.SymbolLookup;
 import jdk.incubator.foreign.MemorySegment;
 import jdk.incubator.foreign.ResourceScope;
 
-public class Libplugtest {
+public class CobhanDemoLib {
 
     private final MethodHandle toUpperMethod;
 
-    public Libplugtest() {
+    public CobhanDemoLib() {
         String os_path, ext, os_name = System.getProperty("os.name").toLowerCase();
         if(os_name.contains("linux")) {
             os_path = "linux";
@@ -46,7 +46,7 @@ public class Libplugtest {
 
         Path cwd = FileSystems.getDefault().getPath("").toAbsolutePath();
         Path libraryPath = cwd.getParent().resolve("output").resolve(os_path).resolve(arch_path);
-        Path libraryFile = libraryPath.resolve("libplugtest." + ext);
+        Path libraryFile = libraryPath.resolve("cobhan-demo-lib." + ext);
 
         System.load(libraryFile.toString());
 

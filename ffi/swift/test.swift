@@ -1,6 +1,6 @@
 //
 //  main.swift
-//  libplugtest-console
+//  cobhan-demo-console
 //
 //  Created by Jeremiah Gowdy on 10/13/21.
 //
@@ -10,7 +10,7 @@
 //NOTE: Requires Disable library validation in XCode projects for dlopen of unsigned dylib
 
 import Darwin
-let handle = dlopen("/Users/jgowdy/projects/cobhan/library/rust/libplugtest/target/debug/libplugtest.dylib", RTLD_NOW)
+let handle = dlopen("/Users/jgowdy/projects/cobhan/library/rust/cobhan-demo-lib/target/debug/cobhan-demo-lib.dylib", RTLD_NOW)
 
 let alignment = MemoryLayout<CChar>.alignment
 

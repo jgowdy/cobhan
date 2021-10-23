@@ -11,7 +11,7 @@ function filterJsonObjectInGo(input, disallowedValue) {
     const disallowedBuffer = string_to_cbuffer(disallowedValue);
     const outputBuffer = allocate_cbuffer(input.length);
 
-    const result = libplugtest.filterJson(inputBuffer, disallowedBuffer, outputBuffer);
+    const result = cobhanDemoLib.filterJson(inputBuffer, disallowedBuffer, outputBuffer);
     if (result < 0) {
         throw new Error('filterJson failed: ' + result);
     }
@@ -29,7 +29,7 @@ function filterJsonStringInGo(inputJson, disallowedValue) {
     const disallowedBuffer = string_to_cbuffer(disallowedValue);
     const outputBuffer = allocate_cbuffer(inputJson.length);
 
-    const result = libplugtest.filterJson(inputBuffer, disallowedBuffer, outputBuffer);
+    const result = cobhanDemoLib.filterJson(inputBuffer, disallowedBuffer, outputBuffer);
     if (result < 0) {
         throw new Error('filterJson failed: ' + result);
     }
@@ -45,7 +45,7 @@ function toUpperInGo(input) {
     const inputBuffer = string_to_cbuffer(input);
     const outputBuffer = allocate_cbuffer(input.length);
 
-  const result = libplugtest.toUpper(inputBuffer, outputBuffer);
+  const result = cobhanDemoLib.toUpper(inputBuffer, outputBuffer);
   if (result < 0) {
     throw new Error('toUpper failed: ' + result);
   }
@@ -59,7 +59,7 @@ function toUpperInGo(input) {
 * @return {number}
 */
 function addInt32InGo(x, y) {
-  return libplugtest.addInt32(x, y);
+  return cobhanDemoLib.addInt32(x, y);
 }
 
 /**
@@ -68,7 +68,7 @@ function addInt32InGo(x, y) {
 * @return {number}
 */
 function addInt64InGo(x, y) {
-  return libplugtest.addInt64(x, y);
+  return cobhanDemoLib.addInt64(x, y);
 }
 
 /**
@@ -77,7 +77,7 @@ function addInt64InGo(x, y) {
 * @return {number}
 */
 function addDoubleInGo(x, y) {
-  return libplugtest.addDouble(x, y);
+  return cobhanDemoLib.addDouble(x, y);
 }
 
 /**
@@ -86,17 +86,17 @@ function addDoubleInGo(x, y) {
 */
 function sleepInGo(seconds) {
   return new Promise((resolve) => {
-    libplugtest.sleepTest.async(seconds, () => {
+    cobhanDemoLib.sleepTest.async(seconds, () => {
       resolve();
     });
   });
 }
 
 // Provide the base path of the library binaries
-const libraryRootPath = join(__dirname, 'libplugtest-binaries');
+const libraryRootPath = join(__dirname, 'binaries');
 
 // Provide the function declarations we are importing
-const libplugtest = load_platform_library(libraryRootPath, 'libplugtest', {
+const cobhanDemoLib = load_platform_library(libraryRootPath, 'cobhanDemoLib', {
     'sleepTest': ['void', ['int32']],
     'addInt32': ['int32', ['int32', 'int32']],
     'addInt64': ['int64', ['int64', 'int64']],

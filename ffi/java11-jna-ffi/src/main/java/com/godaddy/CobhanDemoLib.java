@@ -8,14 +8,14 @@ import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.Platform;
 
-public class Libplugtest {
-    private interface LibplugtestLibrary extends Library {
+public class CobhanDemoLib {
+    private interface CobhanDemoLibLibrary extends Library {
         int toUpper(byte[] input, int inputLen, byte[] output, int outputLen);
     }
 
-    private LibplugtestLibrary libplugtest;
+    private CobhanDemoLibLibrary cobhandemolib;
 
-    public Libplugtest() {
+    public CobhanDemoLib() {
         String os_path, ext;
         if(Platform.isLinux()) {
             os_path = "linux";
@@ -46,15 +46,15 @@ public class Libplugtest {
         Path libraryPath = cwd.getParent().resolve("output").resolve(os_path).resolve(arch_path);
         System.out.println("Library directory: " + libraryPath);
 
-        Path libraryFile = libraryPath.resolve("libplugtest." + ext);
+        Path libraryFile = libraryPath.resolve("cobhan-demo-lib." + ext);
 
         System.out.println("Library: " + libraryFile);
-        libplugtest = (LibplugtestLibrary)Native.load(libraryFile.toString(), LibplugtestLibrary.class);
+        cobhandemolib = Native.load(libraryFile.toString(), CobhanDemoLibLibrary.class);
     }
 
     public String toUpper(String input) {
         var bytes = input.getBytes(StandardCharsets.UTF_8);
-        var result = libplugtest.toUpper(bytes, bytes.length, bytes, bytes.length);
+        var result = cobhandemolib.toUpper(bytes, bytes.length, bytes, bytes.length);
         return new String(bytes, 0, result, StandardCharsets.UTF_8);
     }
 }
