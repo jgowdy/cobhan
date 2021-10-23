@@ -155,8 +155,8 @@ func BytesToBuffer(bytes []byte, dstPtr Buffer) int32 {
 
 	// Construct a byte slice out of the unsafe pointers
 	/*
-		    // When gccgo supports Go 1.17 we can switch to this:
-			var dst []byte = unsafe.Slice((*byte)(unsafe.Pointer(dstPtr)), dstCapInt)
+	   // When gccgo supports Go 1.17 we can switch to this:
+	   var dst []byte = unsafe.Slice((*byte)(unsafe.Pointer(dstPtr)), dstCapInt)
 	*/
 
 	var dst []byte

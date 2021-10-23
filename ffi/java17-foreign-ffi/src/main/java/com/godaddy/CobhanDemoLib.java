@@ -51,13 +51,13 @@ public class CobhanDemoLib {
         System.load(libraryFile.toString());
 
         final var loader = SymbolLookup.loaderLookup();
-    	final var linker = CLinker.getInstance();
+        final var linker = CLinker.getInstance();
 
-		toUpperMethod = linker.downcallHandle(
-			loader.lookup("toUpper").get(),
-			MethodType.methodType(int.class, MemoryAddress.class, int.class, MemoryAddress.class, int.class),
-			FunctionDescriptor.of(C_INT, C_POINTER, C_INT, C_POINTER, C_INT)
-		);
+        toUpperMethod = linker.downcallHandle(
+            loader.lookup("toUpper").get(),
+            MethodType.methodType(int.class, MemoryAddress.class, int.class, MemoryAddress.class, int.class),
+            FunctionDescriptor.of(C_INT, C_POINTER, C_INT, C_POINTER, C_INT)
+        );
     }
 
     public String toUpper(String input) throws Exception {

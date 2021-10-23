@@ -10,5 +10,3 @@ case $(uname -s) in
     sudo ln -s /usr/bin/gccgo-10 /usr/bin/gccgo
     ;;
 esac
-
-

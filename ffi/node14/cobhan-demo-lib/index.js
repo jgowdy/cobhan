@@ -87,7 +87,7 @@ function addDoubleInGo(x, y) {
 function sleepInGo(seconds) {
   return new Promise((resolve) => {
     cobhanDemoLib.sleepTest.async(seconds, () => {
-      resolve();
+    resolve();
     });
   });
 }
