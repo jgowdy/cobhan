@@ -10,7 +10,7 @@ case $(uname -s) in
     docker build -f Dockerfile.alpine -t libcobhandemo-go-alpine .. && CID=$(docker create libcobhandemo-go-alpine) && docker cp "${CID}":/output ./output/ && docker rm "${CID}"
     ;;
 *)
-    echo "Unknown system!"
+    echo "Unknown system $(uname -s)!"
     exit 255
     ;;
 esac

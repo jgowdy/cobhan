@@ -1,6 +1,6 @@
 FROM docker.io/rust:alpine
 
-RUN apk add rust
+#RUN apk add rust
 
 COPY cobhan/* /cobhan/
 

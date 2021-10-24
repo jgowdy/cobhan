@@ -1,11 +1,9 @@
 FROM docker.io/rust:alpine
 
-RUN apk add rust
-
 COPY * /cobhan/
 
 WORKDIR /cobhan
 
 RUN mkdir -p /output
 
-RUN build-release.sh
+RUN /cobhan/build.sh
