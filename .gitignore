@@ -5,7 +5,7 @@ obj/
 .idea
 .vscode
 /cobhan
-/output
+output
 /java-ffi/target
 __pycache__
 *.pyc
