@@ -2,4 +2,5 @@
 
 source 'https://rubygems.org'
 
+gem 'cobhan', path: '../cobhan/'
 gem 'cobhan-demo-lib', path: '../cobhan-demo-lib/'
