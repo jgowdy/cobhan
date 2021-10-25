@@ -6,7 +6,7 @@ module CobhanDemoLib
 
     load_library File.join(__dir__, '..', 'binaries'), 'cobhan-demo-lib'
 
-    attach_function :toUpper, %i[int32 pointer pointer], :int32
+    attach_function :toUpper, %i[pointer pointer], :int32
     attach_function :calculatePi, %i[int32 pointer int32], :int32
     attach_function :sleepTest, [:int32], :void, blocking: true
     attach_function :addInt32, %i[int32 int32], :int32
@@ -20,7 +20,7 @@ module CobhanDemoLib
     in_buffer = FFI.string_to_cbuffer(input)
     out_buffer = FFI.allocate_cbuffer(input.size)
 
-    result, str = FFI.toUpper(input, input.length, out_ptr, out_ptr.size)
+    result, str = FFI.toUpper(in_buffer, out_buffer)
     raise 'Failed to convert toUpper' if result.negative?
 
     FFI.cbuffer_to_string(str)

@@ -37,7 +37,9 @@ module Cobhan
   end
 
   def string_to_cbuffer(input)
-    buffer_ptr = FFI::MemoryPointer.new(1, BUFFER_HEADER_SIZE + input.length, false)
+    puts BUFFER_HEADER_SIZE + input.bytesize
+    puts input.bytesize
+    buffer_ptr = FFI::MemoryPointer.new(1, BUFFER_HEADER_SIZE + input.bytesize + 1, false)
     buffer_ptr.put_int32(0, input.length)
     buffer_ptr.put_int32(SIZEOF_INT32, 0) # Reserved - must be zero
     buffer_ptr.put_string(BUFFER_HEADER_SIZE, input)
