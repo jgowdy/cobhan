@@ -4,10 +4,10 @@ ENV ALPINE=1
 
 RUN apk add gcc-go build-base git
 
-COPY * /cobhan/
+COPY . /cobhan/
 
 WORKDIR /cobhan
 
-RUN mkdir -p /output
+RUN /cobhan/build.sh
 
-RUN LD_RUN_PATH=\$ORIGIN CGO_ENABLED=1 GOOS=linux go build -v -compiler=gccgo -buildmode=archive -o /output/cobhan.a
+#RUN LD_RUN_PATH=\$ORIGIN CGO_ENABLED=1 GOOS=linux go build -v -compiler=gccgo -buildmode=archive -o output/cobhan.a
