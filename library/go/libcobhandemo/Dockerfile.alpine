@@ -11,5 +11,3 @@ COPY libcobhandemo /libcobhandemo/
 WORKDIR /libcobhandemo
 
 RUN /libcobhandemo/build.sh
-
-#RUN LD_RUN_PATH=\$ORIGIN CGO_ENABLED=1 GOOS=linux go build -v -compiler=gccgo -buildmode=c-shared -o /output/libcobhandemo.so

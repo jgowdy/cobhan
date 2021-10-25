@@ -4,6 +4,7 @@ set -e
 . .build-shared.sh
 
 TAG="libcobhandemo-go-buster"
+CONTEXT_DIR=".."
 
 case $(uname -s) in
 "Darwin")
@@ -21,7 +22,7 @@ case $(uname -s) in
     ;;
 esac
 
-"${DOCKER_BIN}" build -f Dockerfile.buster -t ${TAG} .
+"${DOCKER_BIN}" build -f Dockerfile.buster -t ${TAG} ${CONTEXT_DIR}
 CID="$( ${DOCKER_BIN} create ${TAG} )"
 docker cp ${CID}:/cobhan/output .
 docker rm ${CID}

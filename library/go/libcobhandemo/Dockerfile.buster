@@ -1,6 +1,6 @@
-FROM docker.io/buster
+FROM docker.io/golang:buster
 
-#RUN apk add gcc-go build-base git
+RUN apt-get update && apt-get install gccgo -y
 
 COPY cobhan /cobhan/
 
@@ -9,5 +9,3 @@ COPY libcobhandemo /libcobhandemo/
 WORKDIR /libcobhandemo
 
 RUN /libcobhandemo/build.sh
-
-#RUN LD_RUN_PATH=\$ORIGIN CGO_ENABLED=1 GOOS=linux go build -v -compiler=gccgo -buildmode=c-shared -o /output/libcobhandemo.so
