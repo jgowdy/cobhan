@@ -1,11 +1,12 @@
 import os
-from libplugtest import Libplugtest
+from cobhan_demo_lib import CobhanDemoLib
 
-library_root_path = str(os.path.abspath(os.path.join(os.path.dirname(__file__),"../output")))
-lib = Libplugtest.from_library_path(library_root_path)
-
-#library_file_name = 'target/debug/libplugtest.dylib'
-#lib = Libplugtest.from_library_file(str(os.path.abspath(library_file_name)))
+if os.path.isfile('target/debug/cobhan-demo-lib.dylib'):
+    library_file_name = 'target/debug/cobhan-demo-lib.dylib'
+    lib = CobhanDemoLib.from_library_file(str(os.path.abspath(library_file_name)))
+else:
+    library_root_path = str(os.path.abspath(os.path.join(os.path.dirname(__file__),"../output")))
+    lib = CobhanDemoLib.from_library_path(library_root_path)
 
 print(lib.to_upper('Initial value'))
 

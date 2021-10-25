@@ -3,6 +3,7 @@ package cobhan
 import (
 	"C"
 	"encoding/json"
+	"io/ioutil"
 	"math"
 	"os"
 	"reflect"
@@ -77,7 +78,7 @@ func tempToBytes(ptr unsafe.Pointer, length C.int) ([]byte, int32) {
 	}
 
 	fileName := bufferPtrToString(ptr, length)
-	fileData, err := os.ReadFile(fileName)
+	fileData, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		return nil, ERR_READ_TEMP_FILE_FAILED //TODO: Temp file read error
 	}
@@ -153,6 +154,11 @@ func BytesToBuffer(bytes []byte, dstPtr Buffer) int32 {
 	bytesLen := len(bytes)
 
 	// Construct a byte slice out of the unsafe pointers
+	/*
+	   // When gccgo supports Go 1.17 we can switch to this:
+	   var dst []byte = unsafe.Slice((*byte)(unsafe.Pointer(dstPtr)), dstCapInt)
+	*/
+
 	var dst []byte
 	sh := (*reflect.SliceHeader)(unsafe.Pointer(&dst))
 	sh.Data = (uintptr)(bufferPtrToDataPtr(ptr))
@@ -164,7 +170,7 @@ func BytesToBuffer(bytes []byte, dstPtr Buffer) int32 {
 		// Output will not fit in supplied buffer
 
 		// Write the data to a temp file and copy the temp file name into the buffer
-		file, err := os.CreateTemp("", "cobhan-*")
+		file, err := ioutil.TempFile("", "cobhan-*")
 		if err != nil {
 			//fmt.Errorf("Failed to create temp file")
 			return ERR_WRITE_TEMP_FILE_FAILED

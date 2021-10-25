@@ -1,0 +1,17 @@
+[package]
+name = "cobhandemo"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+base64 = "0.13.0"
+cobhan = { path = "../cobhan" }
+rand = "0.8.4"
+serde_json = "1.0.68"
+
+[lib]
+name = "cobhandemo"
+crate-type = ["rlib", "cdylib"]
+
+[features]
+cobhan_debug = []

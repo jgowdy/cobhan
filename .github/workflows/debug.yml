@@ -1,0 +1,44 @@
+name: Debug
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CARGO_TERM_COLOR: always
+    
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ubuntu-latest, macOS-latest]
+    steps:
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '^1.16'    
+    - uses: actions/checkout@v2
+    - name: Install gcc-go
+      run: ./install-gccgo.sh
+      working-directory: library/go    
+    - name: Build Go-Cobhan
+      run: ./build-debug.sh
+      working-directory: library/go/cobhan
+    - name: Build Go-Cobhan-demo-lib
+      run: ./build-debug.sh
+      working-directory: library/go/cobhan-demo-lib
+    - name: Build Rust-Cobhan
+      run: ./build-debug.sh
+      working-directory: library/rust/cobhan      
+    - name: Build Rust-Cobhan-demo-lib
+      run: ./build-debug.sh
+      working-directory: library/rust/cobhan-demo-lib
+    - name: Build Go-Cobhan-Alpine
+      run: ./alpine.sh
+      working-directory: library/go/cobhan
+    - name: Build Go-Cobhan-demo-lib-Alpine
+      run: cobhan-demo-lib/alpine.sh
+      working-directory: library/go

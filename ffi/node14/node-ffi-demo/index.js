@@ -1,4 +1,4 @@
-import { toUpperInGo, filterJsonObjectInGo, addInt32InGo, addInt64InGo, addDoubleInGo, sleepInGo } from 'libplugtestjs';
+import { toUpperInGo, filterJsonObjectInGo, addInt32InGo, addInt64InGo, addDoubleInGo, sleepInGo } from 'cobhan-demo-lib';
 
 console.log(toUpperInGo('Initial value'));
 

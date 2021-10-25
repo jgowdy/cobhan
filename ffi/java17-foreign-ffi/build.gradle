@@ -10,10 +10,10 @@ repositories {
     mavenCentral()
 }
 
-mainClassName = 'com.godaddy.libplugtest.Main'
+mainClassName = 'com.godaddy.Main'
 
 jar {
-    archiveBaseName = 'libplugtest'
+    archiveBaseName = 'cobhandemolib'
     archiveVersion = '0.1.0'
 }
 

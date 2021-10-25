@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "libplugtestjs": "^1.2.2"
+    "cobhan-demo-lib": "^1.2.2"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
