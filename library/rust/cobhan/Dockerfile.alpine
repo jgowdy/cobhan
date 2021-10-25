@@ -2,9 +2,7 @@ FROM docker.io/rust:alpine
 
 ENV ALPINE=1
 
-COPY .build-shared.sh /cobhan/
-
-COPY . /cobhan
+COPY . /cobhan/
 
 WORKDIR /cobhan
 

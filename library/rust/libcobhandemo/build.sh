@@ -1,6 +1,5 @@
 #!/bin/sh
 set -e
-set -x
 [ -e ../../build-shared.sh ] && cp ../../build-shared.sh .build-shared.sh
 . ./.build-shared.sh
 

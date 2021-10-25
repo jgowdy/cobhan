@@ -2,11 +2,7 @@ FROM docker.io/rust:alpine
 
 ENV ALPINE=1
 
-COPY cobhan/.build-shared.sh /cobhan/
-
 COPY cobhan /cobhan/
-
-COPY libcobhandemo/.build-shared.sh /libcobhandemo/
 
 COPY libcobhandemo /libcobhandemo/
 

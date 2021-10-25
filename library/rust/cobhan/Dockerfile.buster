@@ -1,8 +1,6 @@
 FROM docker.io/rust:buster
 
-COPY .build-shared.sh /cobhan/
-
-COPY . /cobhan
+COPY . /cobhan/
 
 WORKDIR /cobhan
 

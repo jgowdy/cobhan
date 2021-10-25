@@ -1,13 +1,9 @@
 FROM docker.io/rust:buster
 
-#COPY cobhan/.build-shared.sh /cobhan/
-
 COPY cobhan /cobhan/
-
-#COPY libcobhandemo/.build-shared.sh /libcobhandemo/.build-shared.sh
 
 COPY libcobhandemo /libcobhandemo/
 
 WORKDIR /libcobhandemo
 
-#RUN /libcobhandemo/build.sh
+RUN /libcobhandemo/build.sh
