@@ -1,0 +1,7 @@
+FROM docker.io/rust:bullseye
+
+COPY . /cobhan/
+
+WORKDIR /cobhan
+
+RUN /cobhan/build.sh

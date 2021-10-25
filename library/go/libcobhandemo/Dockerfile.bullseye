@@ -1,0 +1,11 @@
+FROM docker.io/golang:bullseye
+
+RUN apt-get update && apt-get install gccgo-10 -y
+
+COPY cobhan /cobhan/
+
+COPY libcobhandemo /libcobhandemo/
+
+WORKDIR /libcobhandemo
+
+RUN /libcobhandemo/build.sh
