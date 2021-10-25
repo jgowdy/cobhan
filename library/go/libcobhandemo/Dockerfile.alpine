@@ -2,7 +2,7 @@ FROM docker.io/golang:alpine
 
 ENV ALPINE=1
 
-RUN apk add gcc-go
+RUN apk add gcc-go build-base
 
 COPY cobhan /cobhan/
 
