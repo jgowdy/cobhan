@@ -1,5 +1,7 @@
 #!/bin/sh
 
+DOCKER_BIN="${DOCKER_BIN:-docker}"
+
 if [ "${DEBUG:-0}" -eq "1" ]; then
     DEBUG_FN_PART="debug-"
 else
@@ -23,6 +25,10 @@ case $(uname -m) in
     exit 255
     ;;
 esac
+
+if [ "${ALPINE:-0}" -eq "1" ]; then
+    SYS_FN_PART="musl-${SYS_FN_PART}"
+fi
 
 case $(uname -s) in
 "Darwin")

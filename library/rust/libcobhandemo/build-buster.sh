@@ -3,8 +3,8 @@ set -e
 [ -e ../../build-shared.sh ] && cp ../../build-shared.sh .build-shared.sh
 . .build-shared.sh
 
-TAG="cobhan-rust-alpine"
-CONTEXT_DIR="."
+TAG="libcobhandemo-rust-buster"
+CONTEXT_DIR=".."
 
 case $(uname -s) in
 "Darwin")
@@ -22,7 +22,7 @@ case $(uname -s) in
     ;;
 esac
 
-"${DOCKER_BIN}" build -f Dockerfile.alpine -t ${TAG} ${CONTEXT_DIR}
+"${DOCKER_BIN}" build -f Dockerfile.buster -t ${TAG} ${CONTEXT_DIR}
 CID="$( ${DOCKER_BIN} create ${TAG} )"
 docker cp ${CID}:/cobhan/output .
 docker rm ${CID}

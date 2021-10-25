@@ -1,13 +1,15 @@
 FROM docker.io/rust:alpine
 
-#RUN apk add rust
+ENV ALPINE=1
 
-COPY cobhan/* /cobhan/
+COPY cobhan/.build-shared.sh /cobhan/
 
-COPY libcobhandemo/* /libcobhandemo/
+COPY cobhan /cobhan/
+
+COPY libcobhandemo/.build-shared.sh /libcobhandemo/
+
+COPY libcobhandemo /libcobhandemo/
 
 WORKDIR /libcobhandemo
 
-RUN mkdir -p /output
-
-RUN build-release.sh
+RUN /libcobhandemo/build.sh

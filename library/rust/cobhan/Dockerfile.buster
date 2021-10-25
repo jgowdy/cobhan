@@ -1,6 +1,4 @@
-FROM docker.io/rust:alpine
-
-ENV ALPINE=1
+FROM docker.io/rust:buster
 
 COPY .build-shared.sh /cobhan/
 

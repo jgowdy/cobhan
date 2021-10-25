@@ -1,6 +1,8 @@
 #!/bin/sh
-. "../../build-functions.sh"
-mkdir -p output
+set -e
+set -x
+[ -e ../../build-shared.sh ] && cp ../../build-shared.sh .build-shared.sh
+. ./.build-shared.sh
 
 if [ "${DEBUG:-0}" -eq "1" ]; then
     BUILD_FLAGS="--features cobhan_debug"

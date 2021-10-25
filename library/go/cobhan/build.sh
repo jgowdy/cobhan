@@ -1,6 +1,7 @@
 #!/bin/sh
-. "../../build-functions.sh"
-mkdir -p output
+set -e
+[ -e ../../build-shared.sh ] && cp ../../build-shared.sh .build-shared.sh
+. .build-shared.sh
 
 case $(uname -s) in
 "Darwin")

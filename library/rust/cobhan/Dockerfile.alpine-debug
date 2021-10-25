@@ -1,9 +1,0 @@
-FROM docker.io/rust:alpine
-
-COPY * /cobhan/
-
-WORKDIR /cobhan
-
-RUN mkdir -p /output
-
-RUN /cobhan/build.sh
