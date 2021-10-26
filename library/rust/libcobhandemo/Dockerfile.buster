@@ -1,5 +1,7 @@
 FROM docker.io/rust:slim-buster
 
+RUN apt-get update && apt-get install python3-cffi -y
+
 COPY cobhan /cobhan/
 
 COPY libcobhandemo /libcobhandemo/

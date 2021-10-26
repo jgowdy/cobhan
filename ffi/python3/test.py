@@ -11,11 +11,22 @@ else:
 
 print(f"Testing: {lib_file}")
 
-print(lib.to_upper('Initial value'))
+result = lib.to_upper('Initial value')
+if result != "INITIAL VALUE":
+    print("to_upper test failed")
+    sys.exit(255)
 
-print(lib.add_int32(1, 1))
+result2 = lib.add_int32(1, 1)
+if result2 != 2:
+    print("add_int32 test failed")
+    sys.exit(255)
 
-print(lib.base64Encode("Test"))
+result3 = lib.base64Encode("Test")
+if result3 != "VGVzdA==":
+    print("base64Encode test failed")
+    sys.exit(255)
 
-output = lib.filterJson({'test': 'foo', 'test2': 'kittens'}, 'foo')
-print(output)
+result4 = lib.filterJson({'test': 'foo', 'test2': 'kittens'}, 'foo')
+if result4["test2"] != "kittens":
+    print("filterJson test failed")
+    sys.exit(255)

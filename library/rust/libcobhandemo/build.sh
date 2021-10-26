@@ -21,9 +21,10 @@ cargo build --verbose ${BUILD_FLAGS} --target-dir target/
 
 # Test Rust dynamic library file
 python3 test/test.py "target/${BUILD_DIR}/libcobhandemo${DYN_EXT}"
+if [ "$?" -eq "0" ]; then
+    # Copy Rust dynamic library file
+    cp "target/${BUILD_DIR}/libcobhandemo${DYN_EXT}" "output/libcobhandemo-${DYN_SUFFIX}"
 
-# Copy Rust dynamic library file
-cp "target/${BUILD_DIR}/libcobhandemo${DYN_EXT}" "output/libcobhandemo-${DYN_SUFFIX}"
-
-# Copy Rust static library file
-cp "target/${BUILD_DIR}/libcobhandemo.rlib" "output/libcobhandemo-${RLIB_SUFFIX}"
+    # Copy Rust static library file
+    cp "target/${BUILD_DIR}/libcobhandemo.rlib" "output/libcobhandemo-${RLIB_SUFFIX}"
+fi
