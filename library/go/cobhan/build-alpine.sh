@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 [ -e ../../build-shared.sh ] && cp ../../build-shared.sh .build-shared.sh
-. .build-shared.sh
+. ./.build-shared.sh
 
 TAG="cobhan-go-alpine"
 CONTEXT_DIR="."
