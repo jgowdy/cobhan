@@ -1,5 +1,5 @@
 output/
 .build-shared.sh
 cobhan.py
-cobhan_demo_lib.py
+libcobhandemo.py
 test.py

@@ -1,6 +1,6 @@
 #!/bin/bash
-
-[ -e ../../../ffi/python3/cobhan.py ] && cp ../../../ffi/python3/*.py .
+mkdir -p ./test/
+[ -e ../../../ffi/python3/cobhan.py ] && cp ../../../ffi/python3/*.py ./test/
 
 DOCKER_BIN="${DOCKER_BIN:-docker}"
 
