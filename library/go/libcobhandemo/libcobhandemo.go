@@ -1,6 +1,7 @@
 package main
 
 import (
+	"C"
 	"encoding/base64"
 	"math"
 	"math/rand"
@@ -9,10 +10,6 @@ import (
 	"unsafe"
 
 	"godaddy.com/cobhan"
-)
-
-import (
-	"C"
 )
 
 func main() {
