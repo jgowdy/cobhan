@@ -70,25 +70,25 @@ func addDouble(x float64, y float64) float64 {
 const DefaultInputMaximum = 4096
 
 //export toUpper
-func toUpper(input *C.char, output *C.char) int32 {
-	str, result := cobhan.BufferToString(unsafe.Pointer(input))
+func toUpper(input unsafe.Pointer, output unsafe.Pointer) int32 {
+	str, result := cobhan.BufferToString(input)
 	if result != 0 {
 		return result
 	}
 
 	str = strings.ToUpper(str)
 
-	return cobhan.StringToBuffer(str, unsafe.Pointer(output))
+	return cobhan.StringToBuffer(str, output)
 }
 
 //export filterJson
-func filterJson(input *C.char, disallowedValue *C.char, output *C.char) int32 {
-	jsonList, result := cobhan.BufferToJson(unsafe.Pointer(input))
+func filterJson(input unsafe.Pointer, disallowedValue unsafe.Pointer, output unsafe.Pointer) int32 {
+	jsonList, result := cobhan.BufferToJson(input)
 	if result != 0 {
 		return result
 	}
 
-	disallowed, result := cobhan.BufferToString(unsafe.Pointer(disallowedValue))
+	disallowedVal, result := cobhan.BufferToString(disallowedValue)
 	if result != 0 {
 		return result
 	}
@@ -96,18 +96,18 @@ func filterJson(input *C.char, disallowedValue *C.char, output *C.char) int32 {
 	for key := range jsonList {
 		switch val := jsonList[key].(type) {
 		case string:
-			if strings.Contains(val, disallowed) {
+			if strings.Contains(val, disallowedVal) {
 				delete(jsonList, key)
 			}
 		}
 	}
 
-	return cobhan.JsonToBuffer(jsonList, unsafe.Pointer(output))
+	return cobhan.JsonToBuffer(jsonList, output)
 }
 
 //export base64Encode
-func base64Encode(input *C.char, output *C.char) int32 {
-	inputBytes, result := cobhan.BufferToBytes(unsafe.Pointer(input))
+func base64Encode(input unsafe.Pointer, output unsafe.Pointer) int32 {
+	inputBytes, result := cobhan.BufferToBytes(input)
 	if result != 0 {
 		return result
 	}
@@ -116,16 +116,16 @@ func base64Encode(input *C.char, output *C.char) int32 {
 	outputBytes := make([]byte, outputLen)
 	base64.StdEncoding.Encode(outputBytes, inputBytes)
 
-	return cobhan.BytesToBuffer(outputBytes, unsafe.Pointer(output))
+	return cobhan.BytesToBuffer(outputBytes, output)
 }
 
 //export generateRandom
-func generateRandom(output *C.char) int32 {
+func generateRandom(output unsafe.Pointer) int32 {
 	randomSize := int32(rand.Intn(134217728))
 	outputBytes := make([]byte, randomSize)
 	_, err := rand.Read(outputBytes)
 	if err != nil {
 		return cobhan.ERR_COPY_FAILED
 	}
-	return cobhan.BytesToBuffer(outputBytes, unsafe.Pointer(output))
+	return cobhan.BytesToBuffer(outputBytes, output)
 }
