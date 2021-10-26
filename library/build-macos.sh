@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 OUTPUT_DIR="$(pwd)/output"
-. build-shared.sh
+. ./build-shared.sh
 
 if [ "${IS_MACOS:-0}" -eq "1" ]; then
     pushd go/cobhan

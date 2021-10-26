@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 OUTPUT_DIR="$(pwd)/output"
-. build-shared.sh
+. ./build-shared.sh
 
 rm -rf "${OUTPUT_DIR:-.}/go/bullseye" "${OUTPUT_DIR:-.}/rust/bullseye"
 
