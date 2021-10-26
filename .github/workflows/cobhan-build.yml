@@ -11,7 +11,7 @@ env:
 
 jobs:
   build-bullseye-rust:
-    timeout-minutes: 3
+    timeout-minutes: 5
     runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v2
@@ -19,7 +19,7 @@ jobs:
       run: ./build-bullseye-rust.sh
       working-directory: library
   build-alpine-rust:
-    timeout-minutes: 3
+    timeout-minutes: 5
     runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v2
@@ -27,7 +27,7 @@ jobs:
       run: ./build-alpine-rust.sh
       working-directory: library
   build-macos-rust:
-    timeout-minutes: 3
+    timeout-minutes: 5
     runs-on: 'macos-latest'
     steps:
     - uses: actions/checkout@v2
@@ -35,7 +35,7 @@ jobs:
       run: ./build-macos-rust.sh
       working-directory: library
   build-bullseye-go:
-    timeout-minutes: 3
+    timeout-minutes: 5
     runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v2
@@ -43,7 +43,7 @@ jobs:
       run: ./build-bullseye-go.sh
       working-directory: library
   build-alpine-go:
-    timeout-minutes: 3
+    timeout-minutes: 5
     runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v2
@@ -51,7 +51,7 @@ jobs:
       run: ./build-alpine-go.sh
       working-directory: library
   build-macos-go:
-    timeout-minutes: 3
+    timeout-minutes: 5
     runs-on: 'macos-latest'
     steps:
     - uses: actions/checkout@v2
