@@ -8,8 +8,8 @@ CONTEXT_DIR="."
 
 case $(uname -s) in
 "Darwin")
-    if [ "${SKIP_MAC:-0}" -ne "0" ]; then
-        echo "Skipping build-buster.sh due to SKIP_MAC=1 on Darwin/macOS"
+    if [ "${SKIP_LINUX_ON_MAC:-0}" -ne "0" ]; then
+        echo "Skipping build-buster.sh due to SKIP_LINUX_ON_MAC on Darwin/macOS"
         exit 255
     fi
     ;;
