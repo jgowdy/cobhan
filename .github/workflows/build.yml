@@ -10,32 +10,59 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build-buster:
+  build-buster-rust:
     runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v2
     - name: Build Buster
-      run: ./build-buster.sh
+      run: ./build-buster-rust.sh
       working-directory: library
-  build-bullseye:
+  build-bullseye-rust:
     runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v2
     - name: Build Bullseye
-      run: ./build-bullseye.sh
+      run: ./build-bullseye-rust.sh
       working-directory: library
-  build-alpine:
+  build-alpine-rust:
     runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v2
     - name: Build Alpine
-      run: ./build-alpine.sh
+      run: ./build-alpine-rust.sh
       working-directory: library
-  build-macos:
+  build-macos-rust:
     runs-on: 'macos-latest'
     steps:
     - uses: actions/checkout@v2
     - name: Build MacOS
-      run: ./build-macos.sh
+      run: ./build-macos-rust.sh
       working-directory: library
-
+  build-buster-go:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build Buster
+      run: ./build-buster-go.sh
+      working-directory: library
+  build-bullseye-go:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build Bullseye
+      run: ./build-bullseye-go.sh
+      working-directory: library
+  build-alpine-go:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build Alpine
+      run: ./build-alpine-go.sh
+      working-directory: library
+  build-macos-go:
+    runs-on: 'macos-latest'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build MacOS
+      run: ./build-macos-go.sh
+      working-directory: library
