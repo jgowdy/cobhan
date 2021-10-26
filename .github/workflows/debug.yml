@@ -10,29 +10,23 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-latest, macOS-latest]
+  build-linux:
+    runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v2
     - name: Build Buster
       run: ./build-buster.sh
-      env:
-        SKIP_LINUX_ON_MAC: 1
       working-directory: library
     - name: Build Bullseye
       run: ./build-bullseye.sh
       working-directory: library
-      env:
-        SKIP_LINUX_ON_MAC: 1
     - name: Build Alpine
       run: ./build-alpine.sh
       working-directory: library
-      env:
-        SKIP_LINUX_ON_MAC: 1
+  build-macos:
+    runs-on: 'macos-latest'
+    steps:
+    - uses: actions/checkout@v2
     - name: Build MacOS
       run: ./build-macos.sh
       working-directory: library
