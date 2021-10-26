@@ -1,6 +1,6 @@
 FROM docker.io/golang:bullseye
 
-RUN apt-get update && apt-get install gccgo -y
+#RUN apt-get update && apt-get install gccgo -y
 
 COPY . /cobhan/
 

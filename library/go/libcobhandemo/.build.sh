@@ -7,18 +7,23 @@ else
     exit 255
 fi
 
+if [ "${DEBUG:-0}" -eq "1" ]; then
+    GO_BUILD_ARGS="-tags=debugoutput"
+else
+    GO_BUILD_ARGS=""
+fi
+
 case $(uname -s) in
 "Darwin")
     # gccgo does not support macOS
     echo "Compiling (Go) libcobhandemo-${DYN_SUFFIX} on macOS"
     CC=gcc CGO_ENABLED=1 go build -v -buildmode=c-shared \
-        -o "target/libcobhandemo-${DYN_SUFFIX}" libcobhandemo.go
+        ${GO_BUILD_ARGS} -o "target/libcobhandemo-${DYN_SUFFIX}"
     ;;
 "Linux")
     echo "Compiling (Go) libcobhandemo-${DYN_SUFFIX} on Linux"
-    alias gccgo=gccgo-10
-    LD_RUN_PATH=\$ORIGIN CGO_ENABLED=1 go build -v -compiler=gccgo -buildmode=c-shared \
-        -o "target/libcobhandemo-${DYN_SUFFIX}" libcobhandemo.go
+    LD_RUN_PATH=\$ORIGIN CGO_ENABLED=1 go build -v -buildmode=c-shared \
+        ${GO_BUILD_ARGS} -o "target/libcobhandemo-${DYN_SUFFIX}"
     ;;
 *)
     echo "Unknown system $(uname -s)!"

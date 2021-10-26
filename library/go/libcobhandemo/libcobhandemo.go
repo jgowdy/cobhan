@@ -17,7 +17,7 @@ func main() {
 
 // Sample library exports for client testing
 func init() {
-	rand.Seed(time.Now().UnixNano())
+	//rand.Seed(time.Now().UnixNano())
 }
 
 //export sleepTest
@@ -31,11 +31,13 @@ func addInt32(x int32, y int32) int32 {
 
 	//Integers wrap in go, let's use MaxInt32 as a special case value to indicate overflow
 	if x >= 0 && sum < y {
+		DebugOutput("Returning saturated MaxInt32 for addInt32")
 		return math.MaxInt32
 	}
 
 	//Integers wrap in go, let's use MinInt32 as a special case value to indicate underflow
 	if x < 0 && sum > y {
+		DebugOutput("Returning saturated MinInt32 for addInt32")
 		return math.MinInt32
 	}
 
