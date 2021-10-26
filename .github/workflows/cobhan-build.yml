@@ -10,14 +10,6 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build-buster-rust:
-    timeout-minutes: 3
-    runs-on: 'ubuntu-latest'
-    steps:
-    - uses: actions/checkout@v2
-    - name: Build Buster
-      run: ./build-buster-rust.sh
-      working-directory: library
   build-bullseye-rust:
     timeout-minutes: 3
     runs-on: 'ubuntu-latest'
@@ -41,14 +33,6 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build MacOS
       run: ./build-macos-rust.sh
-      working-directory: library
-  build-buster-go:
-    timeout-minutes: 3
-    runs-on: 'ubuntu-latest'
-    steps:
-    - uses: actions/checkout@v2
-    - name: Build Buster
-      run: ./build-buster-go.sh
       working-directory: library
   build-bullseye-go:
     timeout-minutes: 3
