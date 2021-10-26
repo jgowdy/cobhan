@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 OUTPUT_DIR="$(pwd)/output"
 . ./build-shared.sh
