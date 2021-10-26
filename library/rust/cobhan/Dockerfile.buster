@@ -1,7 +1,0 @@
-FROM docker.io/rust:slim-buster
-
-COPY . /cobhan/
-
-WORKDIR /cobhan
-
-RUN /cobhan/.build.sh

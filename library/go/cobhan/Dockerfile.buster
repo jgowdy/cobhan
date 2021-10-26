@@ -1,9 +1,0 @@
-FROM docker.io/golang:buster
-
-RUN apt-get update && apt-get install gccgo -y
-
-COPY . /cobhan/
-
-WORKDIR /cobhan
-
-RUN /cobhan/.build.sh
