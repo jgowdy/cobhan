@@ -8,4 +8,4 @@ COPY libcobhandemo /libcobhandemo/
 
 WORKDIR /libcobhandemo
 
-RUN /libcobhandemo/build.sh
+RUN /libcobhandemo/.build.sh

@@ -1,26 +1,16 @@
 #!/bin/sh
 set -e
-[ -e ../../build-shared.sh ] && cp ../../build-shared.sh .build-shared.sh
-. ./.build-shared.sh
 
+# Prepare the build directory
+. ../../.build-prepare.sh
+
+DOCKER_BIN="${DOCKER_BIN:-docker}"
 TAG="cobhan-go-buster"
 CONTEXT_DIR="."
 
-case $(uname -s) in
-"Darwin")
-    if [ "${SKIP_LINUX_ON_MAC:-0}" -ne "0" ]; then
-        echo "Skipping build-buster.sh due to SKIP_LINUX_ON_MAC on Darwin/macOS"
-        exit 255
-    fi
-    ;;
-"Linux")
-    true
-    ;;
-*)
-    echo "Unknown system $(uname -s)!"
-    exit 255
-    ;;
-esac
+if [ "${DEBUG:-0}" -eq "1" ]; then
+    export DOCKER_BUILDKIT=0
+fi
 
 "${DOCKER_BIN}" build -f Dockerfile.buster -t ${TAG} ${CONTEXT_DIR}
 CID="$( ${DOCKER_BIN} create ${TAG} )"

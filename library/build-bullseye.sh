@@ -1,22 +1,15 @@
-#!/bin/bash
+#!/bin/sh
 set -e
-OUTPUT_DIR="$(pwd)/output"
-. ./build-shared.sh
+OUTPUT_BASE_DIR="$(pwd)/output/"
+. ./.build-all-shared.sh
 
-rm -rf "${OUTPUT_DIR:-.}/go/bullseye" "${OUTPUT_DIR:-.}/rust/bullseye"
+rm -rf "${OUTPUT_BASE_DIR:-.}/go/bullseye" "${OUTPUT_BASE_DIR:-.}rust/bullseye"
 
-pushd go/cobhan
-./clean.sh && ./build-bullseye.sh && mkdir -p "${OUTPUT_DIR}/go/bullseye/" && cp -f output/* "${OUTPUT_DIR}/go/bullseye"
-popd
+build "build-bullseye.sh" "rust/cobhan" "${OUTPUT_BASE_DIR}rust/bullseye"
 
-pushd go/libcobhandemo
-./clean.sh && ./build-bullseye.sh && mkdir -p "${OUTPUT_DIR}/go/bullseye/" && cp -f output/* "${OUTPUT_DIR}/go/bullseye"
-popd
+build "build-bullseye.sh" "rust/libcobhandemo" "${OUTPUT_BASE_DIR}rust/bullseye"
 
-pushd rust/cobhan
-./clean.sh && ./build-bullseye.sh && mkdir -p "${OUTPUT_DIR}/rust/bullseye/" && cp -f output/* "${OUTPUT_DIR}/rust/bullseye"
-popd
+build "build-bullseye.sh" "go/cobhan" "${OUTPUT_BASE_DIR}go/bullseye"
 
-pushd rust/libcobhandemo
-./clean.sh && ./build-bullseye.sh && mkdir -p "${OUTPUT_DIR}/rust/bullseye/" && cp -f output/* "${OUTPUT_DIR}/rust/bullseye"
-popd
+build "build-bullseye.sh" "go/libcobhandemo" "${OUTPUT_BASE_DIR}go/bullseye"
+

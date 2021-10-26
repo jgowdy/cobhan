@@ -1,22 +1,18 @@
 #!/bin/bash
 set -e
-OUTPUT_DIR="$(pwd)/output"
-. ./build-shared.sh
+OUTPUT_BASE_DIR="$(pwd)/output/"
+. ./.build-all-shared.sh
 
 if [ "${IS_MACOS:-0}" -eq "1" ]; then
-    pushd go/cobhan
-    ./clean.sh && ./build.sh && mkdir -p "${OUTPUT_DIR}/go/macos/" && cp output/* "${OUTPUT_DIR}/go/macos/"
-    popd
 
-    pushd go/libcobhandemo
-    ./clean.sh && ./build.sh && mkdir -p "${OUTPUT_DIR}/go/macos/" && cp output/* "${OUTPUT_DIR}/go/macos/"
-    popd
+    rm -rf "${OUTPUT_BASE_DIR:-.}/go/macos" "${OUTPUT_BASE_DIR:-.}rust/macos"
 
-    pushd rust/cobhan
-    ./clean.sh && ./build.sh && mkdir -p "${OUTPUT_DIR}/rust/macos/" && cp output/* "${OUTPUT_DIR}/rust/macos/"
-    popd
+    build "build.sh" "go/cobhan" "${OUTPUT_BASE_DIR}go/macos"
 
-    pushd rust/libcobhandemo
-    ./clean.sh && ./build.sh && mkdir -p "${OUTPUT_DIR}/rust/macos/" && cp output/* "${OUTPUT_DIR}/rust/macos/"
-    popd
+    build "build.sh" "go/libcobhandemo" "${OUTPUT_BASE_DIR}go/macos"
+
+    build "build.sh" "rust/cobhan" "${OUTPUT_BASE_DIR}rust/macos"
+
+    build "build.sh" "rust/libcobhandemo" "${OUTPUT_BASE_DIR}rust/macos"
+
 fi

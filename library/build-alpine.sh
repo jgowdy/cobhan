@@ -1,22 +1,14 @@
 #!/bin/bash
 set -e
-OUTPUT_DIR="$(pwd)/output"
-. ./build-shared.sh
+OUTPUT_BASE_DIR="$(pwd)/output/"
+. ./.build-all-shared.sh
 
-rm -rf "${OUTPUT_DIR:-.}/go/alpine" "${OUTPUT_DIR:-.}/rust/alpine"
+rm -rf "${OUTPUT_BASE_DIR:-SAFE}/go/alpine" "${OUTPUT_BASE_DIR:-SAFE}rust/alpine"
 
-pushd go/cobhan
-./clean.sh && ./build-alpine.sh && mkdir -p "${OUTPUT_DIR}/go/alpine/" && cp -f output/* "${OUTPUT_DIR}/go/alpine"
-popd
+build "build-alpine.sh" "rust/cobhan" "${OUTPUT_BASE_DIR}rust/alpine"
 
-pushd go/libcobhandemo
-./clean.sh && ./build-alpine.sh && mkdir -p "${OUTPUT_DIR}/go/alpine/" && cp -f output/* "${OUTPUT_DIR}/go/alpine"
-popd
+build "build-alpine.sh" "rust/libcobhandemo" "${OUTPUT_BASE_DIR}rust/alpine"
 
-pushd rust/cobhan
-./clean.sh && ./build-alpine.sh && mkdir -p "${OUTPUT_DIR}/rust/alpine/" && cp -f output/* "${OUTPUT_DIR}/rust/alpine"
-popd
+build "build-alpine.sh" "go/cobhan" "${OUTPUT_BASE_DIR}go/alpine"
 
-pushd rust/libcobhandemo
-./clean.sh && ./build-alpine.sh && mkdir -p "${OUTPUT_DIR}/rust/alpine/" && cp -f output/* "${OUTPUT_DIR}/rust/alpine"
-popd
+build "build-alpine.sh" "go/libcobhandemo" "${OUTPUT_BASE_DIR}go/alpine"

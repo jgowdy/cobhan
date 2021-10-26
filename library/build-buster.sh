@@ -1,20 +1,18 @@
 #!/bin/bash
 set -e
-OUTPUT_DIR="$(pwd)/output"
-. ./build-shared.sh
+OUTPUT_BASE_DIR="$(pwd)/output/"
+. ./.build-all-shared.sh
 
-pushd go/cobhan
-./clean.sh && ./build-buster.sh && mkdir -p "${OUTPUT_DIR}/go/buster/" && cp output/* "${OUTPUT_DIR}/go/buster"
-popd
+rm -rf "${OUTPUT_DIR:-.}/go/buster" "${OUTPUT_DIR:-.}rust/buster"
 
-pushd go/libcobhandemo
-./clean.sh && ./build-buster.sh && mkdir -p "${OUTPUT_DIR}/go/buster/" && cp output/* "${OUTPUT_DIR}/go/buster"
-popd
+build "build-buster.sh" "rust/cobhan" "${OUTPUT_BASE_DIR}rust/buster"
 
-pushd rust/cobhan
-./clean.sh && ./build-buster.sh && mkdir -p "${OUTPUT_DIR}/rust/buster/" && cp output/* "${OUTPUT_DIR}/rust/buster"
-popd
+build "build-buster.sh" "rust/libcobhandemo" "${OUTPUT_BASE_DIR}rust/buster"
 
-pushd rust/libcobhandemo
-./clean.sh && ./build-buster.sh && mkdir -p "${OUTPUT_DIR}/rust/buster/" && cp output/* "${OUTPUT_DIR}/rust/buster"
-popd
+build "build-buster.sh" "go/cobhan" "${OUTPUT_BASE_DIR}go/buster"
+
+build "build-buster.sh" "go/libcobhandemo" "${OUTPUT_BASE_DIR}go/buster"
+
+
+
+

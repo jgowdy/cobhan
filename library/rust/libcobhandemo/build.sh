@@ -1,30 +1,7 @@
 #!/bin/sh
-set -e
-[ -e ../../build-shared.sh ] && cp ../../build-shared.sh .build-shared.sh
-. ./.build-shared.sh
 
-if [ "${DEBUG:-0}" -eq "1" ]; then
-    BUILD_FLAGS="--features cobhan_debug"
-    BUILD_DIR="debug"
-else
-    BUILD_FLAGS="--release"
-    BUILD_DIR="release"
-fi
+# Prepare the local directory for build
+. ../../.build-prepare.sh
 
-if [ "${ALPINE:-0}" -eq "1" ]; then
-    RUSTFLAGS="-C target-feature=-crt-static"
-    export RUSTFLAGS
-fi
-
-# Build
-cargo build --verbose ${BUILD_FLAGS} --target-dir target/
-
-# Test Rust dynamic library file
-python3 test/test.py "target/${BUILD_DIR}/libcobhandemo${DYN_EXT}"
-if [ "$?" -eq "0" ]; then
-    # Copy Rust dynamic library file
-    cp "target/${BUILD_DIR}/libcobhandemo${DYN_EXT}" "output/libcobhandemo-${DYN_SUFFIX}"
-
-    # Copy Rust static library file
-    cp "target/${BUILD_DIR}/libcobhandemo.rlib" "output/libcobhandemo-${RLIB_SUFFIX}"
-fi
+# Execute the build locally
+./.build.sh

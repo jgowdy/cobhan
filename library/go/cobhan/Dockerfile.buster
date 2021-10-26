@@ -6,4 +6,4 @@ COPY . /cobhan/
 
 WORKDIR /cobhan
 
-RUN /cobhan/build.sh
+RUN /cobhan/.build.sh

@@ -33,3 +33,5 @@ result4 = lib.filterJson({'test': 'foo', 'test2': 'kittens'}, 'foo')
 if result4["test2"] != "kittens":
     print("filterJson test failed")
     sys.exit(255)
+
+print(f"Passed: {lib_file}")
