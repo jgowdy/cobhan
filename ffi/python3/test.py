@@ -4,12 +4,15 @@ from libcobhandemo import CobhanDemoLib
 
 lib_file = sys.argv[1]
 
+print(f"Testing: {lib_file}")
+
 if os.path.isfile(lib_file):
     lib = CobhanDemoLib.from_library_file(str(os.path.abspath(lib_file)))
 else:
+    print("Library file is missing")
     sys.exit(255)
 
-print(f"Testing: {lib_file}")
+print(f"Loaded: {lib_file}")
 
 result = lib.to_upper('Initial value')
 if result != "INITIAL VALUE":

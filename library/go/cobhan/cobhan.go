@@ -10,8 +10,6 @@ import (
 	"unsafe"
 )
 
-type Buffer *C.char
-
 const ERR_NONE = 0
 
 //One of the provided pointers is NULL / nil / 0
@@ -85,33 +83,31 @@ func tempToBytes(ptr unsafe.Pointer, length C.int) ([]byte, int32) {
 	return fileData, ERR_NONE
 }
 
-func BufferToBytes(srcPtr Buffer) ([]byte, int32) {
-	ptr := unsafe.Pointer(srcPtr)
-	length := bufferPtrToLength(ptr)
+func BufferToBytes(srcPtr unsafe.Pointer) ([]byte, int32) {
+	length := bufferPtrToLength(srcPtr)
 
 	if DefaultBufferMaximum < int(length) {
 		return nil, ERR_BUFFER_TOO_LARGE
 	}
 
 	if length >= 0 {
-		return bufferPtrToBytes(ptr, length), ERR_NONE
+		return bufferPtrToBytes(srcPtr, length), ERR_NONE
 	} else {
-		return tempToBytes(ptr, length)
+		return tempToBytes(srcPtr, length)
 	}
 }
 
-func BufferToString(srcPtr Buffer) (string, int32) {
-	ptr := unsafe.Pointer(srcPtr)
-	length := bufferPtrToLength(ptr)
+func BufferToString(srcPtr unsafe.Pointer) (string, int32) {
+	length := bufferPtrToLength(srcPtr)
 
 	if DefaultBufferMaximum < int(length) {
 		return "", ERR_BUFFER_TOO_LARGE
 	}
 
 	if length >= 0 {
-		return bufferPtrToString(ptr, length), ERR_NONE
+		return bufferPtrToString(srcPtr, length), ERR_NONE
 	} else {
-		bytes, result := tempToBytes(ptr, length)
+		bytes, result := tempToBytes(srcPtr, length)
 		if result < 0 {
 			return "", result
 		}
@@ -119,7 +115,7 @@ func BufferToString(srcPtr Buffer) (string, int32) {
 	}
 }
 
-func BufferToJson(srcPtr Buffer) (map[string]interface{}, int32) {
+func BufferToJson(srcPtr unsafe.Pointer) (map[string]interface{}, int32) {
 	bytes, result := BufferToBytes(srcPtr)
 	if result < 0 {
 		return nil, result
@@ -133,11 +129,11 @@ func BufferToJson(srcPtr Buffer) (map[string]interface{}, int32) {
 	return loadedJson.(map[string]interface{}), ERR_NONE
 }
 
-func StringToBuffer(str string, dstPtr Buffer) int32 {
+func StringToBuffer(str string, dstPtr unsafe.Pointer) int32 {
 	return BytesToBuffer([]byte(str), dstPtr)
 }
 
-func JsonToBuffer(v interface{}, dstPtr Buffer) int32 {
+func JsonToBuffer(v interface{}, dstPtr unsafe.Pointer) int32 {
 	outputBytes, err := json.Marshal(v)
 	if err != nil {
 		return ERR_JSON_ENCODE_FAILED
@@ -145,10 +141,9 @@ func JsonToBuffer(v interface{}, dstPtr Buffer) int32 {
 	return BytesToBuffer(outputBytes, dstPtr)
 }
 
-func BytesToBuffer(bytes []byte, dstPtr Buffer) int32 {
-	ptr := unsafe.Pointer(dstPtr)
+func BytesToBuffer(bytes []byte, dstPtr unsafe.Pointer) int32 {
 	//Get the destination capacity from the Buffer
-	dstCap := bufferPtrToLength(ptr)
+	dstCap := bufferPtrToLength(dstPtr)
 
 	dstCapInt := int(dstCap)
 	bytesLen := len(bytes)
@@ -161,7 +156,7 @@ func BytesToBuffer(bytes []byte, dstPtr Buffer) int32 {
 
 	var dst []byte
 	sh := (*reflect.SliceHeader)(unsafe.Pointer(&dst))
-	sh.Data = (uintptr)(bufferPtrToDataPtr(ptr))
+	sh.Data = (uintptr)(bufferPtrToDataPtr(dstPtr))
 	sh.Len = dstCapInt
 	sh.Cap = dstCapInt
 
@@ -216,7 +211,7 @@ func BytesToBuffer(bytes []byte, dstPtr Buffer) int32 {
 	}
 
 	//Update the output buffer length
-	updateBufferPtrLength(ptr, result)
+	updateBufferPtrLength(dstPtr, result)
 
 	return ERR_NONE
 }
