@@ -16,6 +16,8 @@ else
 fi
 
 # Build
+echo "Compiling (Rust) libcobhan-${RLIB_SUFFIX}"
+
 cargo build --verbose ${BUILD_FLAGS}
 
 # Copy Rust static library file

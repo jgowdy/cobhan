@@ -21,6 +21,7 @@ if [ "${ALPINE:-0}" -eq "1" ]; then
 fi
 
 # Build
+echo "Compiling (Rust) ${BUILD_DIR}/libcobhandemo${DYN_EXT}"
 cargo build --verbose ${BUILD_FLAGS} --target-dir target/
 
 # Test Rust dynamic library file

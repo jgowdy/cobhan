@@ -10,12 +10,12 @@ fi
 case $(uname -s) in
 "Darwin")
     # gccgo does not support macOS
-    echo "Compiling libcobhandemo-${DYN_SUFFIX} on macOS"
+    echo "Compiling (Go) libcobhandemo-${DYN_SUFFIX} on macOS"
     CC=gcc CGO_ENABLED=1 go build -v -buildmode=c-shared \
         -o "target/libcobhandemo-${DYN_SUFFIX}" libcobhandemo.go
     ;;
 "Linux")
-    echo "Compiling libcobhandemo-${DYN_SUFFIX} on Linux"
+    echo "Compiling (Go) libcobhandemo-${DYN_SUFFIX} on Linux"
     alias gccgo=gccgo-10
     LD_RUN_PATH=\$ORIGIN CGO_ENABLED=1 go build -v -compiler=gccgo -buildmode=c-shared \
         -o "target/libcobhandemo-${DYN_SUFFIX}" libcobhandemo.go
