@@ -5,7 +5,11 @@ OUTPUT_DIR="$(pwd)/output"
 rm -rf "${OUTPUT_DIR:-SAFE}"
 
 
-./build-macos.sh
-./build-buster.sh
-./build-bullseye.sh
-./build-alpine.sh
+./build-macos-go.sh
+./build-macos-rust.sh
+./build-buster-go.sh
+./build-buster-rust.sh
+./build-bullseye-go.sh
+./build-bullseye-rust.sh
+./build-alpine-go.sh
+./build-alpine-rust.sh
