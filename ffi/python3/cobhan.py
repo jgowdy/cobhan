@@ -1,4 +1,3 @@
-
 from io import UnsupportedOperation
 import pathlib
 import platform
@@ -78,7 +77,7 @@ class Cobhan():
 
     def set_payload(self, buf, payload, length):
         self.set_header(buf, length)
-        self.__ffi.memmove(buf[self.__sizeof_header:self.__sizeof_header + length], payload, length)
+        self.__ffi.memmove(buf[self.__sizeof_header:self.__sizeof_header + length - 1], payload, length)
 
     def bytearray_to_buf(self, payload):
         length = len(payload)
