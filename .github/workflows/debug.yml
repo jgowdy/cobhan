@@ -10,16 +10,24 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build-linux:
+  build-buster:
     runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v2
     - name: Build Buster
       run: ./build-buster.sh
       working-directory: library
+  build-bullseye:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - uses: actions/checkout@v2
     - name: Build Bullseye
       run: ./build-bullseye.sh
       working-directory: library
+  build-alpine:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - uses: actions/checkout@v2
     - name: Build Alpine
       run: ./build-alpine.sh
       working-directory: library
