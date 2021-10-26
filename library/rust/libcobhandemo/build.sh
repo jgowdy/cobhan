@@ -19,8 +19,12 @@ fi
 # Build
 cargo build --verbose ${BUILD_FLAGS} --target-dir target/
 
+# Test
+# TODO: Test libcobhandemo's functions using Python
+
 # Copy Rust static library file
 cp "target/${BUILD_DIR}/libcobhandemo.rlib" "output/libcobhandemo-${RLIB_SUFFIX}"
 
 # Copy Rust dynamic library file
 cp "target/${BUILD_DIR}/libcobhandemo${DYN_EXT}" "output/libcobhandemo-${DYN_SUFFIX}"
+

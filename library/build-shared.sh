@@ -1,5 +1,7 @@
 #!/bin/bash
 
+[ -e ../../../ffi/python3/cobhan.py ] && cp ../../../ffi/python3/*.py .
+
 DOCKER_BIN="${DOCKER_BIN:-docker}"
 
 if [ "${DEBUG:-0}" -eq "1" ]; then
