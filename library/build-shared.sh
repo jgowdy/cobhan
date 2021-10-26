@@ -32,11 +32,13 @@ fi
 
 case $(uname -s) in
 "Darwin")
+    IS_MACOS=1
     DYN_EXT=".dylib"
     RUST_EXT="-darwin.rlib"
     A_EXT="-darwin.a"
     ;;
 "Linux")
+    IS_MACOS=0
     DYN_EXT=".so"
     RUST_EXT=".rlib"
     A_EXT=".a"

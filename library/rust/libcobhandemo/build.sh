@@ -11,6 +11,11 @@ else
     BUILD_DIR="release"
 fi
 
+if [ "${ALPINE:-0}" -eq "1" ]; then
+    RUSTFLAGS="-C target-feature=-crt-static"
+    export RUSTFLAGS
+fi
+
 # Build
 cargo build --verbose ${BUILD_FLAGS} --target-dir target/
 

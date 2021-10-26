@@ -1,44 +1,42 @@
 #!/bin/sh
-
-mkdir -p output/go
-mkdir -p output/rust
+set -e
+OUTPUT_DIR="$(pwd)/output"
+rm -rf "${OUTPUT_DIR}"
+. build-shared.sh
 
 pushd go/cobhan
-./clean.sh
-./build.sh
-./build-alpine.sh
-./build-bullseye.sh
-./build-buster.sh
+if [ "${IS_MACOS:-0}" -eq "1" ]; then
+    ./clean.sh && ./build.sh && mkdir -p "${OUTPUT_DIR}/go/macos/" && cp output/* "${OUTPUT_DIR}/go/macos/"
+fi
+./clean.sh && ./build-bullseye.sh && mkdir -p "${OUTPUT_DIR}/go/bullseye/" && cp output/* "${OUTPUT_DIR}/go/bullseye"
+./clean.sh && ./build-buster.sh && mkdir -p "${OUTPUT_DIR}/go/buster/" && cp output/* "${OUTPUT_DIR}/go/buster"
+./clean.sh && ./build-alpine.sh && mkdir -p "${OUTPUT_DIR}/go/alpine/" && cp output/* "${OUTPUT_DIR}/go/alpine"
 popd
 
-cp go/cobhan/output/* output/go/
 
 pushd go/libcobhandemo
-./clean.sh
-./build.sh
-./build-alpine.sh
-./build-bullseye.sh
-./build-buster.sh
+if [ "${IS_MACOS:-0}" -eq "1" ]; then
+    ./clean.sh && ./build.sh && mkdir -p "${OUTPUT_DIR}/go/macos/" && cp output/* "${OUTPUT_DIR}/go/macos/"
+fi
+./clean.sh && ./build-bullseye.sh && mkdir -p "${OUTPUT_DIR}/go/bullseye/" && cp output/* "${OUTPUT_DIR}/go/bullseye"
+./clean.sh && ./build-buster.sh && mkdir -p "${OUTPUT_DIR}/go/buster/" && cp output/* "${OUTPUT_DIR}/go/buster"
+./clean.sh && ./build-alpine.sh && mkdir -p "${OUTPUT_DIR}/go/alpine/" && cp output/* "${OUTPUT_DIR}/go/alpine"
 popd
 
-cp go/libcobhandemo/output/* output/go/
-
-pushd rust/libcobhan
-./clean.sh
-./build.sh
-./build-alpine.sh
-./build-bullseye.sh
-./build-buster.sh
+pushd rust/cobhan
+if [ "${IS_MACOS:-0}" -eq "1" ]; then
+    ./clean.sh && ./build.sh && mkdir -p "${OUTPUT_DIR}/rust/macos/" && cp output/* "${OUTPUT_DIR}/rust/macos/"
+fi
+./clean.sh && ./build-bullseye.sh && mkdir -p "${OUTPUT_DIR}/rust/bullseye/" && cp output/* "${OUTPUT_DIR}/rust/bullseye"
+./clean.sh && ./build-buster.sh && mkdir -p "${OUTPUT_DIR}/rust/buster/" && cp output/* "${OUTPUT_DIR}/rust/buster"
+./clean.sh && ./build-alpine.sh && mkdir -p "${OUTPUT_DIR}/rust/alpine/" && cp output/* "${OUTPUT_DIR}/rust/alpine"
 popd
-
-cp rust/libcobhan/output/* output/rust/
 
 pushd rust/libcobhandemo
-./clean.sh
-./build.sh
-./build-alpine.sh
-./build-bullseye.sh
-./build-buster.sh
+if [ "${IS_MACOS:-0}" -eq "1" ]; then
+    ./clean.sh && ./build.sh && mkdir -p "${OUTPUT_DIR}/rust/macos/" && cp output/* "${OUTPUT_DIR}/rust/macos/"
+fi
+./clean.sh && ./build-bullseye.sh && mkdir -p "${OUTPUT_DIR}/rust/bullseye/" && cp output/* "${OUTPUT_DIR}/rust/bullseye"
+./clean.sh && ./build-buster.sh && mkdir -p "${OUTPUT_DIR}/rust/buster/" && cp output/* "${OUTPUT_DIR}/rust/buster"
+./clean.sh && ./build-alpine.sh && mkdir -p "${OUTPUT_DIR}/rust/alpine/" && cp output/* "${OUTPUT_DIR}/rust/alpine"
 popd
-
-cp rust/libcobhandemo/output/* output/rust/

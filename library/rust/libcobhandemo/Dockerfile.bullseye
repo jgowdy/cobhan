@@ -1,4 +1,4 @@
-FROM docker.io/rust:bullseye
+FROM docker.io/rust:slim-bullseye
 
 COPY cobhan /cobhan/
 

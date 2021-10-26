@@ -2,6 +2,8 @@ FROM docker.io/rust:alpine
 
 ENV ALPINE=1
 
+RUN apk add build-base
+
 COPY . /cobhan/
 
 WORKDIR /cobhan
