@@ -38,12 +38,4 @@ jobs:
     - name: Build MacOS
       run: ./build-macos.sh
       working-directory: library
-  build-arm64:
-    runs-on: 'ubuntu-latest'
-    steps:
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@master
-        with:
-          platforms: 'linux-arm64'
-          image: 'arm64v8/rust:slim-bullseye'
-          run: 'echo test'
+
