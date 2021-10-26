@@ -25,15 +25,24 @@ echo "Compiling (Rust) ${BUILD_DIR}/libcobhandemo${DYN_EXT}"
 cargo build --verbose ${BUILD_FLAGS} --target-dir target/
 
 # Test Rust dynamic library file
-python3 .test/test-libcobhandemo.py "target/${BUILD_DIR}/libcobhandemo${DYN_EXT}"
-if [ "$?" -eq "0" ]; then
-    # Copy Rust dynamic library file
-    cp "target/${BUILD_DIR}/libcobhandemo${DYN_EXT}" "output/libcobhandemo-${DYN_SUFFIX}"
+count=0
+while [ $count -lt 20 ]
+do
+    echo "Test iteration ${count}"
+    python3 .test/test-libcobhandemo.py "target/${BUILD_DIR}/libcobhandemo${DYN_EXT}"
+    if [ "$?" -eq "0" ]; then
+        echo "Passed"
+    else
+        echo "Tests failed (Rust): libcobhandemo-${DYN_SUFFIX} Result: $?"
+        exit 255
+    fi
+    count=`expr ${count} + 1`
+done
 
-    # Copy Rust static library file
-    cp "target/${BUILD_DIR}/libcobhandemo.rlib" "output/libcobhandemo-${RLIB_SUFFIX}"
+echo "Tests passed (Rust): libcobhandemo-${DYN_SUFFIX}"
 
-    echo "Tests passed (Rust): libcobhandemo-${DYN_SUFFIX}"
-else
-    echo "Tests failed (Rust): libcobhandemo-${DYN_SUFFIX} Result: $?"
-fi
+# Copy Rust dynamic library file
+cp "target/${BUILD_DIR}/libcobhandemo${DYN_EXT}" "output/libcobhandemo-${DYN_SUFFIX}"
+
+# Copy Rust static library file
+cp "target/${BUILD_DIR}/libcobhandemo.rlib" "output/libcobhandemo-${RLIB_SUFFIX}"

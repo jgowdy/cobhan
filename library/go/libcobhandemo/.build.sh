@@ -29,12 +29,20 @@ esac
 [ -e "target/libcobhandemo-${DYN_SUFFIX}" ] || (echo "target/libcobhandemo-${DYN_SUFFIX} does not exist" && exit 255)
 
 # Test Go dynamic library file
-python3 .test/test-libcobhandemo.py "target/libcobhandemo-${DYN_SUFFIX}"
-if [ "$?" -eq "0" ]; then
-    # Copy Go dynamic library file
-    cp "target/libcobhandemo-${DYN_SUFFIX}" "output/libcobhandemo-${DYN_SUFFIX}"
+count=0
+while [ $count -lt 20 ]
+do
+    echo "Test iteration ${count}"
+    python3 .test/test-libcobhandemo.py "target/libcobhandemo-${DYN_SUFFIX}"
+    if [ "$?" -eq "0" ]; then
+        echo "Passed"
+    else
+        echo "Tests failed (Go): libcobhandemo-${DYN_SUFFIX} Result: $?"
+        exit 255
+    fi
+    count=`expr ${count} + 1`
+done
 
-    echo "Tests passed (Go): libcobhandemo-${DYN_SUFFIX}"
-else
-    echo "Tests failed (Go): libcobhandemo-${DYN_SUFFIX} Result: $?"
-fi
+# Copy Go dynamic library file
+echo "Tests passed (Go): libcobhandemo-${DYN_SUFFIX}"
+cp "target/libcobhandemo-${DYN_SUFFIX}" "output/libcobhandemo-${DYN_SUFFIX}"
