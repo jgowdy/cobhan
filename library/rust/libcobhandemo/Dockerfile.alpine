@@ -2,8 +2,6 @@ FROM ghcr.io/jgowdy/cobhan-rust-alpine:latest
 
 ENV ALPINE=1
 
-RUN apk add build-base py3-cffi
-
 COPY cobhan /cobhan/
 
 COPY libcobhandemo /libcobhandemo/
