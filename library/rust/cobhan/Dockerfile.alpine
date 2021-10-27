@@ -1,4 +1,4 @@
-FROM docker.io/rust:alpine
+FROM ghcr.io/jgowdy/cobhan-rust-alpine:latest
 
 ENV ALPINE=1
 
