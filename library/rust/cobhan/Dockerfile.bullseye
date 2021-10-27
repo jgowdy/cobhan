@@ -1,4 +1,4 @@
-FROM docker.io/rust:slim-bullseye
+FROM ghcr.io/jgowdy/cobhan-rust-bullseye:latest
 
 COPY . /cobhan/
 
