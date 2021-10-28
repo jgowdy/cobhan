@@ -7,6 +7,9 @@ USER root
 
 RUN apk add go build-base py3-cffi
 
+# Output apk files are in /home/build/packages
+RUN apk add --allow-untrusted /home/build/packages/*.apk
+
 COPY cobhan /cobhan/
 
 COPY libcobhandemo /libcobhandemo/
