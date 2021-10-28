@@ -13,6 +13,10 @@ else
     GO_BUILD_ARGS=""
 fi
 
+if [ "${ALPINE}" -eq "1" ]; then
+    GO_BUILD_ARGS=" ${GO_BUILD_ARGS} -compiler=gccgo "
+fi
+
 case $(uname -s) in
 "Darwin")
     # gccgo does not support macOS
