@@ -3,6 +3,8 @@ FROM ghcr.io/jgowdy/libgo-linux-musl:latest
 
 ENV ALPINE=1
 
+USER root
+
 RUN apk add go build-base
 
 COPY . /cobhan/
