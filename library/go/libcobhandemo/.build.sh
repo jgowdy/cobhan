@@ -13,11 +13,15 @@ else
     GO_BUILD_ARGS=""
 fi
 
+if [ "${ALPINE}" -eq "1" ]; then
+    GO_BUILD_ARGS=" ${GO_BUILD_ARGS} -compiler=gccgo "
+fi
+
 case $(uname -s) in
 "Darwin")
     # gccgo does not support macOS
     echo "Compiling (Go) libcobhandemo-${DYN_SUFFIX} on macOS"
-    CC=gcc CGO_ENABLED=1 go build -v -buildmode=c-shared \
+    LD_RUN_PATH=\$ORIGIN CC=gcc CGO_ENABLED=1 go build -v -buildmode=c-shared \
         ${GO_BUILD_ARGS} -o "target/libcobhandemo-${DYN_SUFFIX}"
     ;;
 "Linux")
