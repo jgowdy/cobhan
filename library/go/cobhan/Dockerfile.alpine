@@ -1,11 +1,11 @@
-#FROM docker.io/golang:alpine
-FROM ghcr.io/jgowdy/libgo-linux-musl:latest
+FROM ghcr.io/jgowdy/alpine-gccgo:latest
 
 ENV ALPINE=1
 
 USER root
 
-RUN apk add go build-base
+# build-base is for CGO
+RUN apk add build-base
 
 COPY . /cobhan/
 
