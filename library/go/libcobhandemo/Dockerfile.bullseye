@@ -1,4 +1,4 @@
-FROM docker.io/golang:bullseye
+FROM ghcr.io/jgowdy/golang-bullseye-cache
 
 RUN apt-get update && apt-get install python3-cffi -y
 
