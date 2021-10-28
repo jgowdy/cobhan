@@ -4,9 +4,8 @@ ENV ALPINE=1
 
 USER root
 
-# build-base is for CGO
 # py3-cffi is for Python tests
-RUN apk add build-base py3-cffi
+RUN apk add py3-cffi
 
 # Output apk files are in /home/build/packages
 RUN apk add --allow-untrusted /home/build/packages/*.apk
