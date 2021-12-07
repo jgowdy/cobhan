@@ -15,9 +15,14 @@ jobs:
     runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v2
-    - name: Build Bullseye
+    - name: Build Bullseye Rust
       run: ./build-bullseye-rust.sh
       working-directory: library
+    - name: Create github release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        VERSION: v0.1
+      run: ./create-release.sh
   build-macos-rust:
     timeout-minutes: 5
     runs-on: 'macos-latest'
