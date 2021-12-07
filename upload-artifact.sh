@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/bin/bash
 set -u
 echo "$GITHUB_TOKEN" >.githubtoken
 unset GITHUB_TOKEN
