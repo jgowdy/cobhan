@@ -1,4 +1,4 @@
-FROM ghcr.io/jgowdy/cobhan-rust-alpine:latest
+FROM ghcr.io/golden-containers/alpine:latest
 
 ENV ALPINE=1
 

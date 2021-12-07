@@ -1,4 +1,4 @@
-FROM ghcr.io/jgowdy/cobhan-rust-bullseye:latest
+FROM ghcr.io/golden-containers/rust:1.56.1-bullseye
 
 RUN apt-get update && apt-get install python3-cffi -y
 

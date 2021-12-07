@@ -1,4 +1,4 @@
-FROM ghcr.io/jgowdy/golang-bullseye-cache
+FROM ghcr.io/golden-containers/golang:1.17-bullseye
 
 #RUN apt-get update && apt-get install gccgo -y
 
