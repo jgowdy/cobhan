@@ -25,7 +25,6 @@ jobs:
       run: ./create-release.sh
     - name: Upload Bullseye Rust
       run: ./upload-artifact.sh rust/libcobhandemo/output/libcobhandemo.so
-      working-directory: library
   build-macos-rust:
     timeout-minutes: 5
     runs-on: 'macos-latest'
