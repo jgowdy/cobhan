@@ -1,5 +1,5 @@
 #!/bin/sh
-set -ef
+set -e
 
 if [ -e ./.build/.build-shared.sh ]; then
     . ./.build/.build-shared.sh

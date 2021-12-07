@@ -1,7 +1,17 @@
 FROM rust:bullseye
 
+# Create shell project to cache cobhan dependencies in Docker
+WORKDIR /
+RUN USER=root cargo new --lib cobhan
+COPY ./Cargo.lock /cobhan/Cargo.lock
+COPY ./Cargo.toml /cobhan/Cargo.toml
+WORKDIR /cobhan
+RUN cargo build --release
+
+# Clean up shell project source and artifacts
+RUN rm /cobhan/src/*.rs /cobhan/target/release/deps/cobhan*
+
 COPY . /cobhan/
 
 WORKDIR /cobhan
-
 RUN /cobhan/.build.sh
