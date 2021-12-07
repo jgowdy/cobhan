@@ -60,9 +60,9 @@ pub unsafe extern "C" fn filterJson(input: *const c_char, disallowed_value: *con
 // Example of a safe function
 pub fn filter_json(json: &mut HashMap<String, Value>, disallowed: &str) {
     json.retain(|_key, value| {
-        match value.as_str() {
-            None => return true,
-            v => return !v.unwrap().contains(&disallowed)
+        return match value.as_str() {
+            None => true,
+            v => !v.unwrap().contains(&disallowed)
         }
     });
 }
