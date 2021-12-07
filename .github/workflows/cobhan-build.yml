@@ -25,6 +25,8 @@ jobs:
       run: ./create-release.sh
     - name: Upload Bullseye Rust
       run: ./upload-artifact.sh rust/libcobhandemo/output/libcobhandemo.so
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   build-macos-rust:
     timeout-minutes: 5
     runs-on: 'macos-latest'
