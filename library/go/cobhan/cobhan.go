@@ -30,6 +30,7 @@ const ERR_JSON_DECODE_FAILED = -5
 // ERR_JSON_ENCODE_FAILED Failed to encode to JSON buffer
 const ERR_JSON_ENCODE_FAILED = -6
 
+// ERR_INVALID_UTF8 Buffer contains invalid utf-8
 const ERR_INVALID_UTF8 = -7
 
 const ERR_READ_TEMP_FILE_FAILED = -8
