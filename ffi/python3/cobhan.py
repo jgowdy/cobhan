@@ -6,6 +6,7 @@ import json
 
 from cffi import FFI
 
+
 class Cobhan():
 
     def __init__(self):
@@ -71,9 +72,9 @@ class Cobhan():
 
     def set_header(self, buf, length):
         self.__ffi.memmove(buf[0:self.__sizeof_int32],
-            length.to_bytes(self.__sizeof_int32, byteorder='little', signed=True), self.__sizeof_int32)
+                           length.to_bytes(self.__sizeof_int32, byteorder='little', signed=True), self.__sizeof_int32)
         self.__ffi.memmove(buf[self.__sizeof_int32:self.__sizeof_int32 * 2],
-            self.__int32_zero_bytes, self.__sizeof_int32)
+                           self.__int32_zero_bytes, self.__sizeof_int32)
 
     def set_payload(self, buf, payload, length):
         self.set_header(buf, length)
@@ -92,8 +93,8 @@ class Cobhan():
         self.set_payload(buf, encoded_bytes, length)
         return buf
 
-    def allocate_buf(self, len):
-        length = int(len)
+    def allocate_buf(self, buffer_len):
+        length = int(buffer_len)
         length = max(length, self.__minimum_allocation)
         buf = self.__ffi.new(f'char[{self.__sizeof_header + length}]')
         self.set_header(buf, length)

@@ -13,13 +13,13 @@ public class CobhanDemoLib
     private delegate Int32 CalculatePiDelegate(Int32 digits, IntPtr output, Int32 outputCapacity);
     private delegate int ToUpperDelegate(IntPtr input, Int32 inputLen, IntPtr output, Int32 outputCapacity);
 
-    private static AddInt32Delegate addInt32Delegate;
-    private static AddInt64Delegate addInt64Delegate;
-    private static AddDoubleDelegate addDoubleDelegate;
-    private static SleepTestDelegate sleepTestDelegate;
-    private static CalculatePiDelegate calculatePiDelegate;
-    private static ToUpperDelegate toUpperDelegate;
-    private static IntPtr hLibrary = IntPtr.Zero;
+    private static readonly AddInt32Delegate addInt32Delegate;
+    private static readonly AddInt64Delegate addInt64Delegate;
+    private static readonly AddDoubleDelegate addDoubleDelegate;
+    private static readonly SleepTestDelegate sleepTestDelegate;
+    private static readonly CalculatePiDelegate calculatePiDelegate;
+    private static readonly ToUpperDelegate toUpperDelegate;
+    private static readonly IntPtr hLibrary = IntPtr.Zero;
 
     static CobhanDemoLib()
     {
@@ -50,18 +50,12 @@ public class CobhanDemoLib
             throw new Exception("Unsupported OS");
         }
 
-        string arch;
-        switch (RuntimeInformation.ProcessArchitecture)
+        string arch = RuntimeInformation.ProcessArchitecture switch
         {
-            case Architecture.Arm64:
-                arch = "arm64";
-                break;
-            case Architecture.X64:
-                arch = "amd64";
-                break;
-            default:
-                throw new Exception("Unsupported CPU");
-        }
+            Architecture.Arm64 => "arm64",
+            Architecture.X64 => "amd64",
+            _ => throw new Exception("Unsupported CPU")
+        };
 
         string libraryBasePath = "../output/";
         string libraryPath = Path.GetFullPath(Path.Join(libraryBasePath, os, arch));

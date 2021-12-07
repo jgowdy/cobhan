@@ -12,22 +12,22 @@ import (
 
 const ERR_NONE = 0
 
-//One of the provided pointers is NULL / nil / 0
+// ERR_NULL_PTR One of the provided pointers is NULL / nil / 0
 const ERR_NULL_PTR = -1
 
-//One of the provided buffer lengths is too large
+// ERR_BUFFER_TOO_LARGE One of the provided buffer lengths is too large
 const ERR_BUFFER_TOO_LARGE = -2
 
-//One of the provided buffers was too small
+// ERR_BUFFER_TOO_SMALL One of the provided buffers was too small
 const ERR_BUFFER_TOO_SMALL = -3
 
-//Failed to copy into the buffer (copy length != expected length)
+// ERR_COPY_FAILED Failed to copy into the buffer (copy length != expected length)
 const ERR_COPY_FAILED = -4
 
-//Failed to decode a JSON buffer
+// ERR_JSON_DECODE_FAILED Failed to decode a JSON buffer
 const ERR_JSON_DECODE_FAILED = -5
 
-//Failed to encode to JSON buffer
+// ERR_JSON_ENCODE_FAILED Failed to encode to JSON buffer
 const ERR_JSON_ENCODE_FAILED = -6
 
 const ERR_INVALID_UTF8 = -7
