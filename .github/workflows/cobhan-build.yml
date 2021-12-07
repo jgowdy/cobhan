@@ -23,6 +23,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         VERSION: v0.1
       run: ./create-release.sh
+    - name: List output
+      run: sh -c "find rust/"
     - name: Upload Bullseye Rust
       run: ./upload-artifact.sh rust/libcobhandemo/output/libcobhandemo.so
       env:
