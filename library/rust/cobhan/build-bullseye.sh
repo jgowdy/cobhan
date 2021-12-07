@@ -17,7 +17,7 @@ CID="$(${DOCKER_BIN} create ${TAG})"
 docker cp "${CID}:/cobhan/output" .
 docker rm "${CID}"
 
-"${DOCKER_BIN}" build -f Dockerfile.bullseye --platform linux/arm64 -t ${TAG} ${CONTEXT_DIR}
-CID="$(${DOCKER_BIN} create ${TAG})"
-docker cp "${CID}:/cobhan/output" .
-docker rm "${CID}"
+#"${DOCKER_BIN}" build -f Dockerfile.bullseye --platform linux/arm64 -t ${TAG} ${CONTEXT_DIR}
+#CID="$(${DOCKER_BIN} create ${TAG})"
+#docker cp "${CID}:/cobhan/output" .
+#docker rm "${CID}"
