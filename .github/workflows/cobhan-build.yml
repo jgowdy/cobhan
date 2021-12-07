@@ -10,10 +10,6 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  create-release:
-    runs-on: 'ubuntu-latest'
-    steps:
-
   build-bullseye-rust:
     timeout-minutes: 5
     runs-on: 'ubuntu-latest'
