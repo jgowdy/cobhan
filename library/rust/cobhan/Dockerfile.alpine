@@ -1,4 +1,4 @@
-FROM ghcr.io/golden-containers/alpine:latest
+FROM ghcr.io/golden-containers/rust:1.57.0-alpine3.14
 
 ENV ALPINE=1
 
