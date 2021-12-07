@@ -27,6 +27,7 @@ jobs:
       run: ./upload-artifact.sh rust/libcobhandemo/output/libcobhandemo.so
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        VERSION: v0.1
   build-macos-rust:
     timeout-minutes: 5
     runs-on: 'macos-latest'
