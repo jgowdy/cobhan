@@ -42,14 +42,6 @@ jobs:
     - name: Build Bullseye
       run: ./build-bullseye-go.sh
       working-directory: library
-  build-alpine-go:
-    timeout-minutes: 5
-    runs-on: 'ubuntu-latest'
-    steps:
-    - uses: actions/checkout@v2
-    - name: Build Alpine
-      run: ./build-alpine-go.sh
-      working-directory: library
   build-macos-go:
     timeout-minutes: 5
     runs-on: 'macos-latest'
