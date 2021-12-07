@@ -1,6 +1,4 @@
-FROM ghcr.io/golden-containers/golang:1.17-bullseye
-
-#RUN apt-get update && apt-get install gccgo -y
+FROM golang:bullseye
 
 COPY . /cobhan/
 

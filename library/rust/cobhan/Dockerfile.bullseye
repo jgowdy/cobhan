@@ -1,4 +1,4 @@
-FROM ghcr.io/golden-containers/rust:1.56.1-bullseye
+FROM rust:bullseye
 
 COPY . /cobhan/
 

@@ -10,6 +10,14 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
+  create-release:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Create github release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: v0.1
+        run: ./create-release.sh
   build-bullseye-rust:
     timeout-minutes: 5
     runs-on: 'ubuntu-latest'
@@ -18,11 +26,8 @@ jobs:
     - name: Build Bullseye Rust
       run: ./build-bullseye-rust.sh
       working-directory: library
-    - name: Create github release
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        VERSION: v0.1
-      run: ./create-release.sh
+    - name: Upload Bullseye Rust
+      run: ./upload-artifact.sh
   build-macos-rust:
     timeout-minutes: 5
     runs-on: 'macos-latest'

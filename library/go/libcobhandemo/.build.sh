@@ -1,5 +1,6 @@
 #!/bin/sh
-set -e
+set -ef
+
 if [ -e ./.build/.build-shared.sh ]; then
     . ./.build/.build-shared.sh
 else
@@ -13,7 +14,7 @@ else
     GO_BUILD_ARGS=""
 fi
 
-if [ "${ALPINE}" -eq "1" ]; then
+if [ "${ALPINE:-0}" -eq "1" ]; then
     GO_BUILD_ARGS=" ${GO_BUILD_ARGS} -compiler=gccgo "
 fi
 
@@ -39,17 +40,15 @@ esac
 
 # Test Go dynamic library file
 count=0
-while [ $count -lt 20 ]
-do
+while [ $count -lt 20 ]; do
     echo "Test iteration ${count}"
-    python3 .test/test-libcobhandemo.py "target/libcobhandemo-${DYN_SUFFIX}"
-    if [ "$?" -eq "0" ]; then
+    if python3 .test/test-libcobhandemo.py "target/libcobhandemo-${DYN_SUFFIX}"; then
         echo "Passed"
     else
         echo "Tests failed (Go): libcobhandemo-${DYN_SUFFIX} Result: $?"
         exit 255
     fi
-    count=`expr ${count} + 1`
+    count=$((count + 1))
 done
 
 # Copy Go dynamic library file

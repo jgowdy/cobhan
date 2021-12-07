@@ -1,4 +1,4 @@
-FROM ghcr.io/golden-containers/golang:1.17-bullseye
+FROM golang:bullseye
 
 RUN apt-get update && apt-get install python3-cffi -y
 
