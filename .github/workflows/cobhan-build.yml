@@ -36,6 +36,16 @@ jobs:
     - name: Build MacOS
       run: ./build-macos-rust.sh
       working-directory: library
+    - name: Create github release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        VERSION: v0.1
+      run: ./create-release.sh
+    - name: Upload Bullseye Rust
+      run: ./upload-artifact.sh library/rust/libcobhandemo/output/libcobhandemo-x64.dylib
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        VERSION: v0.1
   build-bullseye-go:
     timeout-minutes: 5
     runs-on: 'ubuntu-latest'
