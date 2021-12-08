@@ -21,13 +21,13 @@ jobs:
     - name: Create github release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        VERSION: v0.1
+        VERSION: current
       run: ./create-release.sh
     - name: Upload Bullseye Rust
       run: ./upload-artifacts.sh library/rust/libcobhandemo/output/libcobhandemo-x64.so library/rust/libcobhandemo/output/libcobhandemo-x64.rlib library/rust/cobhan/output/libcobhan-x64.rlib
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        VERSION: v0.1
+        VERSION: current
   build-macos-rust:
     timeout-minutes: 5
     runs-on: 'macos-latest'
@@ -39,13 +39,13 @@ jobs:
     - name: Create github release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        VERSION: v0.1
+        VERSION: current
       run: ./create-release.sh
     - name: Upload Bullseye Rust
       run: ./upload-artifacts.sh library/rust/libcobhandemo/output/libcobhandemo-x64.dylib library/rust/libcobhandemo/output/libcobhandemo-x64-darwin.rlib library/rust/cobhan/output/libcobhan-x64-darwin.rlib
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        VERSION: v0.1
+        VERSION: current
   build-bullseye-go:
     timeout-minutes: 5
     runs-on: 'ubuntu-latest'
