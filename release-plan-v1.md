@@ -77,16 +77,10 @@ ConsumerConsoleApp is a *sample* per-FFI language console application that consu
 ## Specifically Excluded for 1.0
 
 * Windows support
-
 * arm64 support
-
 * Linux / musl (Alpine) support
-
 * FFI - Swift
-
 * FFI - PHP
-
 * Library - C
-
 * gcc-go
-
+* Custom base containers
