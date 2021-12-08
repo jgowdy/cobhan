@@ -84,3 +84,4 @@ ConsumerConsoleApp is a *sample* per-FFI language console application that consu
 * Library - C
 * gcc-go
 * Custom base containers
+* Callbacks
