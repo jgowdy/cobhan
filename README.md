@@ -22,11 +22,3 @@ Cobhan FFI is a proof of concept system for enabling shared code to be written i
             represent error or overflow conditions
         * Functions *can* allow scalar values to wrap
         * Functions should document their overflow / underflow behavior
-
-## Todo
-
-* Add callbacks
-* Add logging & debug callback
-* Add last error functionality
-* Add example of binary buffer (e.g. encrypt)
-* Add PHP extension support
