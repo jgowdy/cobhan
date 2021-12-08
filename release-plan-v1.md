@@ -26,12 +26,6 @@
 - [ ] Libcobhandemo
 - [ ] Libcobhan
 
-### .NET Core 3
-
-- [ ] ConsumerConsoleApp
-- [ ] Libcobhandemo
-- [ ] Libcobhan
-
 ### Ruby 3
 
 - [ ] ConsumerConsoleApp
@@ -39,18 +33,6 @@
 - [ ] Libcobhan
 
 ### Python 3
-
-- [ ] ConsumerConsoleApp
-- [ ] Libcobhandemo
-- [ ] Libcobhan
-
-### OpenJDK 11 JNA
-
-- [ ] ConsumerConsoleApp
-- [ ] Libcobhandemo
-- [ ] Libcobhan
-
-### OpenJDK 17 FFI
 
 - [ ] ConsumerConsoleApp
 - [ ] Libcobhandemo
@@ -81,6 +63,8 @@ ConsumerConsoleApp is a *sample* per-FFI language console application that consu
 * Linux / musl (Alpine) support
 * FFI - Swift
 * FFI - PHP
+* FFI - OpenJDK / Java
+* FFI - .NET Core / C#
 * Library - C
 * gcc-go
 * Custom base containers
