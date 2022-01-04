@@ -26,17 +26,16 @@ cargo build --verbose ${BUILD_FLAGS} --target-dir target/
 
 # Test Rust dynamic library file
 count=0
-while [ $count -lt 20 ]
-do
+while [ $count -lt 20 ]; do
     echo "Test iteration ${count}"
-    python3 .test/test-libcobhandemo.py "target/${BUILD_DIR}/libcobhandemo${DYN_EXT}"
+    python3 .test/consumer_console_app.py "target/${BUILD_DIR}/libcobhandemo${DYN_EXT}"
     if [ "$?" -eq "0" ]; then
         echo "Passed"
     else
         echo "Tests failed (Rust): libcobhandemo-${DYN_SUFFIX} Result: $?"
         exit 255
     fi
-    count=`expr ${count} + 1`
+    count=$(expr ${count} + 1)
 done
 
 echo "Tests passed (Rust): libcobhandemo-${DYN_SUFFIX}"
