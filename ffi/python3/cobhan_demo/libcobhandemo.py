@@ -1,4 +1,4 @@
-from cobhan import Cobhan
+from cobhan.cobhan import Cobhan
 
 class CobhanDemoLib(Cobhan):
     CDEFINES = """
