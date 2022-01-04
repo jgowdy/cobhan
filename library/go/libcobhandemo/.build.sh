@@ -42,7 +42,7 @@ esac
 count=0
 while [ $count -lt 20 ]; do
     echo "Test iteration ${count}"
-    if python3 .test/test-libcobhandemo.py "target/libcobhandemo-${DYN_SUFFIX}"; then
+    if python3 .test/consumer_console_app.py "target/libcobhandemo-${DYN_SUFFIX}"; then
         echo "Passed"
     else
         echo "Tests failed (Go): libcobhandemo-${DYN_SUFFIX} Result: $?"
