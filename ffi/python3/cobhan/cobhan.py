@@ -6,7 +6,6 @@ import json
 
 from cffi import FFI
 
-
 class Cobhan():
 
     def __init__(self):

@@ -1,6 +1,6 @@
 import os
 import sys
-from cobhan_demo.libcobhandemo import CobhanDemoLib
+from cobhan_demo.cobhan_demo import CobhanDemoLib
 
 lib_file = sys.argv[1]
 
