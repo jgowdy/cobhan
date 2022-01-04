@@ -13,7 +13,7 @@ cp ../../.build-shared.sh .build/.build-shared.sh
 mkdir -p ./.test/
 
 # Copy the test Python scripts into the test directory
-cp ../../../ffi/python3/*.py ./.test/
+cp -r ../../../ffi/python3/* ./.test/
 
 # Create the output directory
 mkdir -p ./output
