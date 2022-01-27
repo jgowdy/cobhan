@@ -15,7 +15,7 @@ module Cobhan
   BUFFER_HEADER_SIZE = SIZEOF_INT32 * 2
   MINIMUM_ALLOCATION = 1024
 
-  def load_library(lib_root_path, name)
+  def load_library(lib_root_path, name, functions)
     os_path =
       if FFI::Platform::OS == 'linux' && RbConfig::CONFIG['arch'].include?('musl')
         'linux-musl'
@@ -33,6 +33,18 @@ module Cobhan
     # To properly load libgo.so.16 on Alpine, we need to change to lib path directory
     Dir.chdir(lib_path) do
       ffi_lib File.join(lib_path, "#{name}.#{ext}")
+    end
+
+    functions.each do |function|
+      attach_function *function
+    end
+  end
+
+  def load_library_direct(lib_root_path, name, functions)
+    ffi_lib File.expand_path(File.join(lib_root_path, name))
+
+    functions.each do |function|
+      attach_function *function
     end
   end
 

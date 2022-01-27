@@ -2,4 +2,3 @@
 
 require_relative "cobhan/version"
 require_relative "cobhan/functions"
-

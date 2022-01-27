@@ -1,4 +1,0 @@
-example_id                 | status | run_time        |
--------------------------- | ------ | --------------- |
-./spec/cobhan_spec.rb[1:1] | passed | 0.00791 seconds |
-./spec/cobhan_spec.rb[1:2] | failed | 0.0003 seconds  |

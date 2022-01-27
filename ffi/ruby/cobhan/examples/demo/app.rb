@@ -1,20 +1,22 @@
 require 'cobhan'
 
-module CobhanDemoLib
+module App
   module FFI
     extend Cobhan
 
-    load_library File.join(__dir__, '..', 'binaries'), 'libcobhandemo-x64'
+    def self.load_library_file(lib_root_path, name)
+      functions = [
+        [ :addInt32, [ :int32, :int32 ], :int32 ],
+        [ :addInt64, [ :int64, :int64 ], :int64 ],
+        [ :addDouble, [ :double, :double ], :double ],
+        [ :toUpper, [ :pointer, :pointer ], :int32 ],
+        [ :filterJson, [ :pointer, :pointer, :pointer ], :int32 ],
+        [ :sleepTest, [ :int32 ], :void, blocking: true ],
+      ]
 
-    attach_function :addInt32, %i[int32 int32], :int32
-    attach_function :addInt64, %i[int64 int64], :int64
-    attach_function :addDouble, %i[double double], :double
-    attach_function :toUpper, %i[pointer pointer], :int32
-    attach_function :filterJson, %i[pointer pointer pointer], :int32
-    attach_function :sleepTest, [:int32], :void, blocking: true
+      load_library_direct lib_root_path, name, functions
+    end
   end
-
-  extend self
 
   def add_int32(first, second)
     FFI.addInt32(first, second)
@@ -44,7 +46,7 @@ module CobhanDemoLib
     json_output_buffer = FFI.allocate_cbuffer(json_input.length)
 
     result = FFI.filterJson(json_input_buffer, disallowed_value_buffer, json_output_buffer)
-    raise 'Failed to calculate pi' if result.negative?
+    raise 'Failed to filter json' if result.negative?
 
     FFI.cbuffer_to_string(json_output_buffer)
   end

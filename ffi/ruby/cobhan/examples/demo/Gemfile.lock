@@ -1,11 +1,5 @@
 PATH
-  remote: ../cobhan-demo-lib
-  specs:
-    cobhan-demo-lib (0.1.0)
-      cobhan
-
-PATH
-  remote: ../cobhan
+  remote: ../..
   specs:
     cobhan (0.1.0)
       ffi (~> 1.15.4)
@@ -13,14 +7,14 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    ffi (1.15.4)
+    ffi (1.15.5)
 
 PLATFORMS
+  x86_64-darwin-18
   x86_64-darwin-20
 
 DEPENDENCIES
   cobhan!
-  cobhan-demo-lib!
 
 BUNDLED WITH
-   2.2.15
+   2.3.0
