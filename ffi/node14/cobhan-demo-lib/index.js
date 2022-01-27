@@ -6,7 +6,7 @@ import { load_platform_library, string_to_cbuffer, cbuffer_to_string, cbuffer_to
 * @param {string} disallowedValue
 * @return {object}
 */
-function filterJsonObjectInGo(input, disallowedValue) {
+function filterJsonObject(input, disallowedValue) {
     const inputBuffer = string_to_cbuffer(JSON.stringify(input));
     const disallowedBuffer = string_to_cbuffer(disallowedValue);
     const outputBuffer = allocate_cbuffer(input.length);
@@ -24,7 +24,7 @@ function filterJsonObjectInGo(input, disallowedValue) {
 * @param {string} disallowedValue
 * @return {string}
 */
-function filterJsonStringInGo(inputJson, disallowedValue) {
+function filterJsonString(inputJson, disallowedValue) {
     const inputBuffer = string_to_cbuffer(inputJson);
     const disallowedBuffer = string_to_cbuffer(disallowedValue);
     const outputBuffer = allocate_cbuffer(inputJson.length);
@@ -41,7 +41,7 @@ function filterJsonStringInGo(inputJson, disallowedValue) {
 * @param {string} input
 * @return {string}
 */
-function toUpperInGo(input) {
+function toUpper(input) {
     const inputBuffer = string_to_cbuffer(input);
     const outputBuffer = allocate_cbuffer(input.length);
 
@@ -58,7 +58,7 @@ function toUpperInGo(input) {
 * @param {number} y
 * @return {number}
 */
-function addInt32InGo(x, y) {
+function addInt32(x, y) {
   return cobhanDemoLib.addInt32(x, y);
 }
 
@@ -67,7 +67,7 @@ function addInt32InGo(x, y) {
 * @param {number} y
 * @return {number}
 */
-function addInt64InGo(x, y) {
+function addInt64(x, y) {
   return cobhanDemoLib.addInt64(x, y);
 }
 
@@ -76,7 +76,7 @@ function addInt64InGo(x, y) {
 * @param {number} y
 * @return {number}
 */
-function addDoubleInGo(x, y) {
+function addDouble(x, y) {
   return cobhanDemoLib.addDouble(x, y);
 }
 
@@ -84,7 +84,7 @@ function addDoubleInGo(x, y) {
 * @param {number} seconds
 * @return {Promise}
 */
-function sleepInGo(seconds) {
+function sleepTest(seconds) {
   return new Promise((resolve) => {
     cobhanDemoLib.sleepTest.async(seconds, () => {
     resolve();
@@ -105,4 +105,4 @@ const cobhanDemoLib = load_platform_library(libraryRootPath, 'cobhanDemoLib', {
     'filterJson': ['int32', ['pointer', 'pointer', 'pointer']]
     });
 
-export default { filterJsonObjectInGo, filterJsonStringInGo, toUpperInGo, sleepInGo, addInt32InGo, addInt64InGo, addDoubleInGo };
+export default { filterJsonObject, filterJsonString, toUpper, sleepTest, addInt32, addInt64, addDouble };

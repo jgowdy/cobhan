@@ -1,8 +1,6 @@
 import { Library } from 'ffi-napi';
 import { resolve, join } from 'path';
 
-//TODO: Create Cobhan buffer class / function that is initialized with strings and returns strings
-
 const header_size = 64 / 8
 const sizeof_int32 = 32 / 8
 /**

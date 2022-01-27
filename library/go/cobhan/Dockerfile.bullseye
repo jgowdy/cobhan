@@ -1,0 +1,7 @@
+FROM golang:bullseye
+
+COPY . /cobhan/
+
+WORKDIR /cobhan
+
+RUN /cobhan/.build.sh

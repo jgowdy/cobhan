@@ -1,0 +1,28 @@
+name: Build-alpine
+
+on:
+  push:
+    branches: [ alpine ]
+  pull_request:
+    branches: [ alpine ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build-alpine-rust:
+    timeout-minutes: 5
+    runs-on: 'ubuntu-latest'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build Alpine
+      run: ./build-alpine-rust.sh
+      working-directory: library
+  build-alpine-go:
+    timeout-minutes: 5
+    runs-on: 'ubuntu-latest'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build Alpine
+      run: ./build-alpine-go.sh
+      working-directory: library

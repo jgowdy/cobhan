@@ -1,0 +1,64 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build-bullseye-rust:
+    timeout-minutes: 5
+    runs-on: 'ubuntu-latest'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build Bullseye Rust
+      run: ./build-bullseye-rust.sh
+      working-directory: library
+    - name: Create github release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        VERSION: current
+      run: ./create-release.sh
+    - name: Upload Bullseye Rust
+      run: ./upload-artifacts.sh library/rust/libcobhandemo/output/libcobhandemo-x64.so library/rust/libcobhandemo/output/libcobhandemo-x64.rlib library/rust/cobhan/output/libcobhan-x64.rlib
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        VERSION: current
+  build-macos-rust:
+    timeout-minutes: 5
+    runs-on: 'macos-latest'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build MacOS
+      run: ./build-macos-rust.sh
+      working-directory: library
+    - name: Create github release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        VERSION: current
+      run: ./create-release.sh
+    - name: Upload Bullseye Rust
+      run: ./upload-artifacts.sh library/rust/libcobhandemo/output/libcobhandemo-x64.dylib library/rust/libcobhandemo/output/libcobhandemo-x64-darwin.rlib library/rust/cobhan/output/libcobhan-x64-darwin.rlib
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        VERSION: current
+  build-bullseye-go:
+    timeout-minutes: 5
+    runs-on: 'ubuntu-latest'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build Bullseye
+      run: ./build-bullseye-go.sh
+      working-directory: library
+  build-macos-go:
+    timeout-minutes: 5
+    runs-on: 'macos-latest'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build MacOS
+      run: ./build-macos-go.sh
+      working-directory: library

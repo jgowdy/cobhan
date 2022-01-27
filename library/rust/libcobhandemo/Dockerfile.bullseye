@@ -1,0 +1,34 @@
+FROM rust:bullseye
+
+RUN apt-get update && apt-get install python3-cffi -y
+
+# Create shell project to cache cobhan dependencies in Docker
+WORKDIR /
+RUN USER=root cargo new --lib cobhan
+COPY cobhan/Cargo.lock /cobhan/Cargo.lock
+COPY cobhan/Cargo.toml /cobhan/Cargo.toml
+WORKDIR /cobhan
+RUN cargo build --release
+
+# Clean up shell project source and artifacts
+RUN rm /cobhan/src/*.rs /cobhan/target/release/deps/cobhan*
+
+# Copy cobhan project
+COPY cobhan /cobhan/
+
+# Create shell project to cache libcobhandemo dependencies in Docker
+WORKDIR /
+RUN USER=root cargo new --lib libcobhandemo
+COPY libcobhandemo/Cargo.lock /libcobhandemo/Cargo.lock
+COPY libcobhandemo/Cargo.toml /libcobhandemo/Cargo.toml
+WORKDIR /libcobhandemo
+RUN cargo build --release
+
+# Clean up shell project source and artifacts
+RUN rm /libcobhandemo/src/*.rs /libcobhandemo/target/release/deps/libcobhandemo* /libcobhandemo/target/release/deps/cobhan*
+
+# Copy libcobhandemo project
+COPY libcobhandemo /libcobhandemo/
+
+WORKDIR /libcobhandemo
+RUN /libcobhandemo/.build.sh

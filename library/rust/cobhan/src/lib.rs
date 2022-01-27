@@ -83,11 +83,11 @@ unsafe fn temp_to_vector(payload: *const u8, length: i32)  -> Result<Vec<u8>, i3
         }
     }
 
-    match fs::read(file_name) {
-        Ok(s) => return Ok(s),
+    return match fs::read(file_name) {
+        Ok(s) => Ok(s),
         Err(_e) => {
             debug_print!("temp_to_vector: failed to read temporary file {}: {}", file_name, _e);
-            return Err(ERR_READ_TEMP_FILE_FAILED);
+            Err(ERR_READ_TEMP_FILE_FAILED)
         }
     }
 }
@@ -115,11 +115,11 @@ pub unsafe fn cbuffer_to_string(buffer: *const c_char) -> Result<String, i32> {
     }
 
     //Allocation: to_vec() is a clone/copy
-    match String::from_utf8(from_raw_parts(payload, length as usize).to_vec()) {
-        Ok(input_str) => return Ok(input_str),
+    return match String::from_utf8(from_raw_parts(payload, length as usize).to_vec()) {
+        Ok(input_str) => Ok(input_str),
         Err(..) => {
             debug_print!("cbuffer_to_string: payload is invalid utf-8 string (length = {})", length);
-            return Err(ERR_INVALID_UTF8);
+            Err(ERR_INVALID_UTF8)
         }
     }
 }
@@ -136,11 +136,11 @@ unsafe fn temp_to_string(payload: *const u8, length: i32) -> Result<String, i32>
 
     debug_print!("temp_to_string: reading temp file {}", file_name);
 
-    match fs::read_to_string(file_name) {
-        Ok(s) => return Ok(s),
+    return match fs::read_to_string(file_name) {
+        Ok(s) => Ok(s),
         Err(_e) => {
             debug_print!("temp_to_string: Error reading temp file {}: {}", file_name, _e);
-            return Err(ERR_READ_TEMP_FILE_FAILED);
+            Err(ERR_READ_TEMP_FILE_FAILED)
         }
     }
 }
@@ -184,20 +184,20 @@ pub unsafe fn cbuffer_to_hashmap_json(buffer: *const c_char) -> Result<HashMap<S
         }
     }
 
-    match serde_json::from_str(&json_str) {
-        Ok(json) => return Ok(json),
+    return match serde_json::from_str(&json_str) {
+        Ok(json) => Ok(json),
         Err(_e) => {
             debug_print!("cbuffer_to_hashmap_json: serde_json::from_str / JSON decode failed {}", _e);
-            return Err(ERR_JSON_DECODE_FAILED);
+            Err(ERR_JSON_DECODE_FAILED)
         }
     }
 }
 
 pub unsafe fn hashmap_json_to_cbuffer(json: &HashMap<String,Value>, buffer: *mut c_char) -> i32 {
     //TODO: Use tovec?
-    match serde_json::to_string(&json) {
-        Ok(json_str) => return string_to_cbuffer(&json_str, buffer),
-        Err(..) => return ERR_JSON_ENCODE_FAILED
+    return match serde_json::to_string(&json) {
+        Ok(json_str) => string_to_cbuffer(&json_str, buffer),
+        Err(..) => ERR_JSON_ENCODE_FAILED
     }
 }
 
@@ -293,11 +293,10 @@ unsafe fn write_new_file(bytes: &[u8]) -> Result<String, i32> {
     }
     let (_, path) = result;
 
-    match path.into_os_string().into_string() {
-        Ok(tmp_path) => return Ok(tmp_path),
+    return match path.into_os_string().into_string() {
+        Ok(tmp_path) => Ok(tmp_path),
         Err(..) => {
-
-            return Err(ERR_WRITE_TEMP_FILE_FAILED);
+            Err(ERR_WRITE_TEMP_FILE_FAILED)
         }
     }
 }

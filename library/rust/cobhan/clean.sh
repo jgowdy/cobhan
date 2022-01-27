@@ -1,3 +1,3 @@
 #!/bin/sh
 
-rm -rf output target
+rm -rf target output .build .test
