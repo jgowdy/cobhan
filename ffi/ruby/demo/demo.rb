@@ -1,23 +1,22 @@
 # frozen_string_literal: true
 
-require_relative './app'
+require 'cobhan'
+require_relative './../spec/support/download_binary'
+require_relative './../spec/support/cobhan_module'
 
-class Demo
-  include App
+
+LIB_ROOT_PATH =  File.join(File.expand_path(File.dirname(__FILE__)), '../tmp')
+LIB_NAME = 'libcobhandemo'
+
+download_binary(LIB_ROOT_PATH, LIB_NAME)
+
+class CobhanDemo
+  include CobhanModule
+
+  FFI.init(LIB_ROOT_PATH, LIB_NAME)
 end
 
-lib_file = ARGV[0]
-
-if File.exists?(lib_file)
-  puts "Testing: #{lib_file}"
-  absolute_path = File.expand_path(lib_file)
-  lib_root_path, name = Pathname.new(absolute_path).split.map(&:to_s)
-  App::FFI.load_library_file(lib_root_path, name)
-else
-  abort('Library file is missing')
-end
-
-demo = Demo.new
+demo = CobhanDemo.new
 puts demo.add_int32(2.9, 2.0)
 puts demo.add_int64(2.9, 2.0)
 puts demo.add_double(2.9, 2.0)

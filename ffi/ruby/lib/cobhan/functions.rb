@@ -9,13 +9,13 @@ module Cobhan
 
   OS_PATHS = { 'linux' => 'linux', 'darwin' => 'macos', 'windows' => 'windows' }.freeze
   EXTS = { 'linux' => 'so', 'darwin' => 'dylib', 'windows' => 'dll' }.freeze
-  CPU_ARCHS = { 'x86_64' => 'amd64', 'aarch64' => 'arm64' }.freeze
+  CPU_ARCHS = { 'x86_64' => 'x64', 'aarch64' => 'arm64' }.freeze
 
   SIZEOF_INT32 = 32 / 8
   BUFFER_HEADER_SIZE = SIZEOF_INT32 * 2
   MINIMUM_ALLOCATION = 1024
 
-  def load_library(lib_root_path, name, functions)
+  def library_file_name(name)
     os_path =
       if FFI::Platform::OS == 'linux' && RbConfig::CONFIG['arch'].include?('musl')
         'linux-musl'
@@ -28,11 +28,14 @@ module Cobhan
     raise UnsupportedPlatformError, "Unsupported CPU: #{FFI::Platform::CPU_ARCH}" unless cpu_arch
 
     ext = EXTS.fetch(FFI::Platform::OS)
-    lib_path = File.expand_path(File.join(lib_root_path, os_path, cpu_arch))
 
+    "#{name}-#{cpu_arch}.#{ext}"
+  end
+
+  def load_library(lib_root_path, name, functions)
     # To load other libs that depend on relative paths, chdir to lib path dir.
-    Dir.chdir(lib_path) do
-      ffi_lib File.join(lib_path, "#{name}.#{ext}")
+    Dir.chdir(lib_root_path) do
+      ffi_lib File.join(lib_root_path, library_file_name(name))
     end
 
     functions.each do |function|

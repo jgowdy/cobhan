@@ -9,7 +9,7 @@ GEM
   specs:
     ast (2.4.2)
     diff-lcs (1.4.4)
-    ffi (1.15.4)
+    ffi (1.15.5)
     parallel (1.21.0)
     parser (3.0.2.0)
       ast (~> 2.4.1)

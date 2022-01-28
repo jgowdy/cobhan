@@ -1,8 +1,6 @@
 # Cobhan
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/cobhan`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+TODO: Write description here
 
 ## Installation
 
@@ -14,15 +12,33 @@ gem 'cobhan'
 
 And then execute:
 
-    $ bundle install
+```bash
+bundle install
+```
 
 Or install it yourself as:
 
-    $ gem install cobhan
+```bash
+gem install cobhan
+```
 
 ## Usage
 
 TODO: Write usage instructions here
+
+## Demo
+
+To run the demo, bundle install the `demo/Gemfile` with:
+
+```bash
+bundle install --gemfile demo/Gemfile
+```
+
+And run then run the demo script. It will automatically download the binary from the [releases page](https://github.com/jgowdy/cobhan/releases/tag/current).
+
+```bash
+bundle exec ruby demo/demo.rb
+```
 
 ## Development
 
@@ -32,7 +48,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/cobhan.
+Bug reports and pull requests are welcome on GitHub at https://github.com/jgowdy/cobhan.
 
 ## License
 

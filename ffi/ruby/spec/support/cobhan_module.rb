@@ -1,21 +1,19 @@
-require 'cobhan'
-
-module App
+module CobhanModule
   module FFI
     extend Cobhan
 
-    def self.load_library_file(lib_root_path, name)
-      functions = [
-        [ :addInt32, [ :int32, :int32 ], :int32 ],
-        [ :addInt64, [ :int64, :int64 ], :int64 ],
-        [ :addDouble, [ :double, :double ], :double ],
-        [ :toUpper, [ :pointer, :pointer ], :int32 ],
-        [ :filterJson, [ :pointer, :pointer, :pointer ], :int32 ],
-        [ :sleepTest, [ :int32 ], :void, blocking: true ],
-        [ :base64Encode, [ :pointer, :pointer], :int32 ],
-      ]
+    FUNCTIONS = [
+      [ :addInt32, [ :int32, :int32 ], :int32 ],
+      [ :addInt64, [ :int64, :int64 ], :int64 ],
+      [ :addDouble, [ :double, :double ], :double ],
+      [ :toUpper, [ :pointer, :pointer ], :int32 ],
+      [ :filterJson, [ :pointer, :pointer, :pointer ], :int32 ],
+      [ :sleepTest, [ :int32 ], :void, blocking: true ],
+      [ :base64Encode, [ :pointer, :pointer], :int32 ],
+    ]
 
-      load_library_direct lib_root_path, name, functions
+    def self.init(lib_root_path, name)
+      load_library(lib_root_path, name, FUNCTIONS)
     end
   end
 
@@ -61,7 +59,6 @@ module App
 
     FFI.cbuffer_to_string(output_buffer)
   end
-
 
   def sleep_test(seconds)
     FFI.sleepTest(seconds)
