@@ -7,10 +7,5 @@
 /spec/reports/
 /tmp/
 
-demo/*.so
-demo/*.dylib
-demo/*.rlib
-
 # rspec failure tracking
 .rspec_status
-

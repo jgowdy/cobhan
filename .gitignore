@@ -14,5 +14,3 @@ target/
 .classpath
 .project
 *.tgz
-/bak
-/ffi/ruby/cobhan_demo/libcobhandemo
