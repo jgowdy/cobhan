@@ -2,20 +2,19 @@
 
 To run the demo, install dependencies first:
 
-```
+```bash
 bundle install
 ```
 
 Then, download the binary file for your platform from the [releases page](https://github.com/jgowdy/cobhan/releases/tag/current).
 
-For MacOS x64, that would be:
-
+```bash
+BINARY_FILE_NAME=libcobhandemo-x64.dylib # for macOS x64
+wget https://github.com/jgowdy/cobhan/releases/download/current/$BINARY_FILE_NAME
 ```
-wget https://github.com/jgowdy/cobhan/releases/download/current/libcobhandemo-x64.dylib
-```
 
-Finally, run the demo with the file as the first argument:
+Finally, run the demo with the binary file path as the first argument.
 
-```
-bundle exec ruby demo.rb ./libcobhandemo-x64.dylib
+```bash
+bundle exec ruby demo.rb ./$BINARY_FILE_NAME
 ```

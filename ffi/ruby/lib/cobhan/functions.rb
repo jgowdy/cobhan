@@ -30,7 +30,7 @@ module Cobhan
     ext = EXTS.fetch(FFI::Platform::OS)
     lib_path = File.expand_path(File.join(lib_root_path, os_path, cpu_arch))
 
-    # To properly load libgo.so.16 on Alpine, we need to change to lib path directory
+    # To load other libs that depend on relative paths, chdir to lib path dir.
     Dir.chdir(lib_path) do
       ffi_lib File.join(lib_path, "#{name}.#{ext}")
     end
