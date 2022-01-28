@@ -2,6 +2,7 @@
 
 require 'cobhan'
 require_relative './../spec/support/download_binary'
+require_relative './../spec/support/measure_time'
 require_relative './../spec/support/cobhan_module'
 
 
@@ -23,4 +24,4 @@ puts demo.add_double(2.9, 2.0)
 puts demo.to_upper('foo bar baz')
 puts demo.filter_json('{"foo":"bar","baz":"qux"}', 'foo')
 puts demo.base64_encode('Test')
-puts "Sleep: #{t1 = Time.now; demo.sleep_test(1); t2 = Time.now; t2-t1}"
+puts "Sleep: #{measure_time { demo.sleep_test(1) }}"
