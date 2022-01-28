@@ -16,16 +16,11 @@ module Cobhan
   MINIMUM_ALLOCATION = 1024
 
   def library_file_name(name)
-    os_path =
-      if FFI::Platform::OS == 'linux' && RbConfig::CONFIG['arch'].include?('musl')
-        'linux-musl'
-      else
-        OS_PATHS[FFI::Platform::OS]
-      end
-    raise UnsupportedPlatformError, "Unsupported operating system: #{FFI::Platform::OS}" unless os_path
+    os_path = OS_PATHS[FFI::Platform::OS]
+    raise UnsupportedPlatformError, "Unsupported OS: #{FFI::Platform::OS}" unless os_path
 
     cpu_arch = CPU_ARCHS[FFI::Platform::ARCH]
-    raise UnsupportedPlatformError, "Unsupported CPU: #{FFI::Platform::CPU_ARCH}" unless cpu_arch
+    raise UnsupportedPlatformError, "Unsupported CPU: #{FFI::Platform::ARCH}" unless cpu_arch
 
     ext = EXTS.fetch(FFI::Platform::OS)
 
@@ -37,14 +32,6 @@ module Cobhan
     Dir.chdir(lib_root_path) do
       ffi_lib File.join(lib_root_path, library_file_name(name))
     end
-
-    functions.each do |function|
-      attach_function(*function)
-    end
-  end
-
-  def load_library_direct(lib_root_path, name, functions)
-    ffi_lib File.expand_path(File.join(lib_root_path, name))
 
     functions.each do |function|
       attach_function(*function)

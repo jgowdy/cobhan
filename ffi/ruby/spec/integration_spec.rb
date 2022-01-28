@@ -4,7 +4,7 @@ class CobhanApp
   include CobhanModule
 end
 
-RSpec.describe 'Integration' do
+RSpec.describe 'Cobhan Integration' do
   before :all do
     CobhanApp::FFI.init(LIB_ROOT_PATH, LIB_NAME)
   end
@@ -41,6 +41,6 @@ RSpec.describe 'Integration' do
 
   it 'base64 encodes' do
     result = instance.base64_encode('Test')
-    expect(result).to eq("VGVzdA==")
+    expect(result).to eq('VGVzdA==')
   end
 end
