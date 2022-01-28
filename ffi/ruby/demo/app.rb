@@ -52,20 +52,6 @@ module App
     FFI.cbuffer_to_string(json_output_buffer)
   end
 
-  # def filter_json(input, disallowed)
-  #   in_ptr = FFI::MemoryPointer.from_string(input)
-  #   disallowed_ptr = FFI::MemoryPointer.from_string(disallowed)
-
-  #   # multiply by 1.5 to allow extra space for reformatting
-  #   out_len = Integer(in_ptr.size * 1.5)
-  #   out_ptr = FFI::MemoryPointer.new(1, out_len, false)
-
-  #   result = CobhanFFI.filterJson(input, input.length, disallowed, disallowed.length, out_ptr,  out_ptr.size)
-  #   raise 'Failed to convert filterJson' if result.negative?
-
-  #   out_ptr.get_string(0, result)
-  # end
-
   def base64_encode(input)
     input_buffer = FFI.string_to_cbuffer(input)
     output_buffer = FFI.allocate_cbuffer(input.length)
