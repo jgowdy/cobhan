@@ -7,7 +7,7 @@ LIB_ROOT_PATH = File.join(ROOT, 'tmp')
 LIB_NAME = 'libcobhandemo'
 
 # Load support files
-Dir["#{ROOT}/spec/support/**/*.rb"].each { |f| require f }
+Dir["#{ROOT}/spec/support/**/*.rb"].sort.each { |f| require f }
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

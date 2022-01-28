@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
+class CobhanApp
+  include CobhanModule
+end
+
 RSpec.describe 'Integration' do
   before :all do
-    class CobhanApp
-      include CobhanModule
-
-      FFI.init(LIB_ROOT_PATH, LIB_NAME)
-    end
+    CobhanApp::FFI.init(LIB_ROOT_PATH, LIB_NAME)
   end
 
   subject(:instance) { CobhanApp.new }

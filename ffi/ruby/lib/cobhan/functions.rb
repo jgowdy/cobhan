@@ -39,7 +39,7 @@ module Cobhan
     end
 
     functions.each do |function|
-      attach_function *function
+      attach_function(*function)
     end
   end
 
@@ -47,7 +47,7 @@ module Cobhan
     ffi_lib File.expand_path(File.join(lib_root_path, name))
 
     functions.each do |function|
-      attach_function *function
+      attach_function(*function)
     end
   end
 
