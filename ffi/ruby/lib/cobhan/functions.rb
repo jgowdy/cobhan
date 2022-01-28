@@ -49,18 +49,17 @@ module Cobhan
   end
 
   def string_to_cbuffer(input)
-    # Why is this extra byte needed?
-    buffer_ptr = FFI::MemoryPointer.new(1, BUFFER_HEADER_SIZE + input.bytesize + 1, false)
+    buffer_ptr = FFI::MemoryPointer.new(1, BUFFER_HEADER_SIZE + input.bytesize, false)
     buffer_ptr.put_int32(0, input.bytesize)
     buffer_ptr.put_int32(SIZEOF_INT32, 0) # Reserved - must be zero
-    buffer_ptr.put_string(BUFFER_HEADER_SIZE, input)
+    buffer_ptr.put_bytes(BUFFER_HEADER_SIZE, input)
     buffer_ptr
   end
 
   def cbuffer_to_string(buffer)
     length = buffer.get_int32(0)
     if length >= 0
-      buffer.get_string(BUFFER_HEADER_SIZE, length)
+      buffer.get_bytes(BUFFER_HEADER_SIZE, length)
     else
       temp_to_string(buffer, length)
     end
@@ -68,7 +67,7 @@ module Cobhan
 
   def temp_to_string(buffer, length)
     length = 0 - length
-    filename = buffer.get_string(BUFFER_HEADER_SIZE, length)
+    filename = buffer.get_bytes(BUFFER_HEADER_SIZE, length)
     # Read file with name in payload, and replace payload
     bytes = IO.binread(filename)
     File.delete(filename)
