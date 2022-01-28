@@ -11,11 +11,11 @@ Then, download the binary file for your platform from the [releases page](https:
 For MacOS x64, that would be:
 
 ```
-wget -O bin/libcobhandemo https://github.com/jgowdy/cobhan/releases/download/current/libcobhandemo-x64.dylib
+wget https://github.com/jgowdy/cobhan/releases/download/current/libcobhandemo-x64.dylib
 ```
 
 Finally, run the demo with the file as the first argument:
 
 ```
-bundle exec ruby demo.rb ./libcobhandemo
+bundle exec ruby demo.rb ./libcobhandemo-x64.dylib
 ```

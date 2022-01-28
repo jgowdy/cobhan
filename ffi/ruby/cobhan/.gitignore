@@ -6,13 +6,11 @@
 /pkg/
 /spec/reports/
 /tmp/
-*.bundle
-*.so
-*.o
-*.a
-mkmf.log
+
+examples/*.so
+examples/*.dylib
+examples/*.rlib
 
 # rspec failure tracking
 .rspec_status
 
-examples/demo/binaries/*
