@@ -1,36 +1,50 @@
 # Cobhan
 
+TODO: Write description here
+
+## Installation
+
+Add this line to your application's Gemfile:
+
+```ruby
+gem 'cobhan'
+```
+
+And then execute:
+
+```bash
+bundle install
+```
+
+Or install it yourself as:
+
+```bash
+gem install cobhan
+```
+
 ## Usage
 
-Start a shell
+TODO: Write usage instructions here
 
-    ./bin/docker.sh sh
+## Demo
 
-Start a shell for specific distro
+To run the demo, bundle install the `demo/Gemfile` with:
 
-    DISTRO=debian ./bin/docker.sh sh
+```bash
+bundle install --gemfile demo/Gemfile
+```
 
-Run tests
+And run then run the demo script. It will automatically download the binary from the [releases page](https://github.com/jgowdy/cobhan/releases/tag/current).
 
-    ./bin/docker.sh rspec spec
+```bash
+bundle exec ruby demo/demo.rb
+```
 
-Build a single gem for all platforms
+## Development
 
-    ./bin/docker.sh rake build
+After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
-Build gem per platform
-
-    ./bin/docker.sh rake build_many
-
-Build a gem and run a smoke test
-
-    ./bin/docker.sh rake build_smoke_test
-
-### Starting shell
-
-## Links
-
-https://github.com/ffi/ffi
+To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 

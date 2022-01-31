@@ -33,4 +33,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'ffi', '~> 1.15.4'
 
   spec.add_development_dependency 'rspec', '~> 3.10.0'
+  spec.add_development_dependency 'rubocop', '~> 1.7'
 end
