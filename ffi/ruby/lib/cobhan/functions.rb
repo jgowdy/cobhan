@@ -7,7 +7,6 @@ module Cobhan
 
   include FFI::Library
 
-  OS_PATHS = { 'linux' => 'linux', 'darwin' => 'macos', 'windows' => 'windows' }.freeze
   EXTS = { 'linux' => 'so', 'darwin' => 'dylib', 'windows' => 'dll' }.freeze
   CPU_ARCHS = { 'x86_64' => 'x64', 'aarch64' => 'arm64' }.freeze
 
@@ -16,13 +15,11 @@ module Cobhan
   MINIMUM_ALLOCATION = 1024
 
   def library_file_name(name)
-    os_path = OS_PATHS[FFI::Platform::OS]
-    raise UnsupportedPlatformError, "Unsupported OS: #{FFI::Platform::OS}" unless os_path
+    ext = EXTS[FFI::Platform::OS]
+    raise UnsupportedPlatformError, "Unsupported OS: #{FFI::Platform::OS}" unless ext
 
     cpu_arch = CPU_ARCHS[FFI::Platform::ARCH]
     raise UnsupportedPlatformError, "Unsupported CPU: #{FFI::Platform::ARCH}" unless cpu_arch
-
-    ext = EXTS.fetch(FFI::Platform::OS)
 
     "#{name}-#{cpu_arch}.#{ext}"
   end
