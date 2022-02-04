@@ -28,16 +28,16 @@ TODO: Write usage instructions here
 
 ## Demo
 
-To run the demo, bundle install the `demo/Gemfile` with:
-
-```bash
-bundle install --gemfile demo/Gemfile
-```
-
-And run then run the demo script. It will automatically download the binary from the [releases page](https://github.com/jgowdy/cobhan/releases/tag/current).
+By running the demo, it will automatically download the binary from the [releases page](https://github.com/jgowdy/cobhan/releases/tag/current).
 
 ```bash
 bundle exec ruby demo/demo.rb
+```
+
+## Running specs
+
+```bash
+bundle exec rspec spec
 ```
 
 ## Development
