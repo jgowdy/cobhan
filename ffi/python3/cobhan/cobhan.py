@@ -15,40 +15,37 @@ class Cobhan():
         self.__minimum_allocation = 1024
         self.__int32_zero_bytes = int(0).to_bytes(self.__sizeof_int32, byteorder='little', signed=True)
 
-    def _load_library(self, library_root_path, library_name, cdefines):
+    def _load_library(self, library_path, library_name, cdefines):
         self.__ffi.cdef(cdefines)
 
         system = platform.system()
         need_chdir = 0
         if system == "Linux":
             if pathlib.Path("/lib").match("libc.musl*"):
-                os_path = "linux-musl"
+                os_ext = "-musl.so"
                 need_chdir = 1
             else:
-                os_path = "linux"
-            ext = "so"
+                os_path = ".so"
         elif system == "Darwin":
-            os_path = "macos"
-            ext = "dylib"
+            os_ext = ".dylib"
         elif system == "Windows":
-            os_path = "windows"
-            ext = "dll"
+            os_ext = ".dll"
         else:
             raise UnsupportedOperation("Unsupported operating system")
 
         machine = platform.machine()
         if machine == "x86_64" or machine == "AMD64":
-            cpu_arch = "amd64"
+            arch_part = "-x64"
         elif machine == "arm64":
-            cpu_arch = "arm64"
+            arch_part = "-arm64"
         else:
             raise UnsupportedOperation("Unsupported CPU")
 
         # Get absolute library path
-        library_path = pathlib.Path(os.path.join(library_root_path, os_path, cpu_arch)).resolve()
+        resolved_library_path = pathlib.Path(os.path.join(library_path, os_path, cpu_arch)).resolve()
 
         # Build library path with file name
-        library_file_path = os.path.join(str(library_path), f"{library_name}.{ext}")
+        library_file_path = os.path.join(str(resolved_library_path), f"{library_name}{arch_part}{os_ext}")
 
         if need_chdir:
             old_dir = os.getcwd()
