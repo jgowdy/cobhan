@@ -1,5 +1,5 @@
-import { Library } from 'ffi-napi';
-import { resolve, join } from 'path';
+import ffi from 'ffi-napi'
+import path from 'path'
 
 const header_size = 64 / 8
 const sizeof_int32 = 32 / 8
@@ -16,6 +16,16 @@ function string_to_cbuffer(str) {
     return buffer
 }
 
+function int64_to_buffer(number) {
+    let buffer = Buffer.allocUnsafe(64 / 8)
+    buffer.writeBigInt64LE(BigInt(number), 0)
+    return buffer
+}
+
+function buffer_to_int64(buffer) {
+    return buffer.readInt64LE(0)
+}
+
 /**
 * @param {Buffer} buf
 * @return {string}
@@ -25,7 +35,8 @@ function cbuffer_to_string(buf) {
     if (length < 0) {
         return temp_to_string(buf, length)
     }
-    return buf.toString('utf8', header_size, length)
+    console.log('cbuffer_to_string: got ' + length + ' bytes')
+    return buf.toString('utf8', header_size, length + header_size)
 }
 
 /**
@@ -35,7 +46,7 @@ function cbuffer_to_string(buf) {
 */
 function temp_to_string(buf, length) {
     length = 0 - length
-    tempfile = buf.toString('utf8', header_size, length)
+    tempfile = buf.toString('utf8', header_size, length + header_size)
     result = fs.readFileSync(tempfile, 'utf8')
     fs.unlinkSync(tempfile)
     return result
@@ -60,7 +71,7 @@ function cbuffer_to_buffer(buf) {
 */
 function temp_to_buffer(buf, length) {
     length = 0 - length
-    tempfile = buf.toString('utf8', header_size, length)
+    tempfile = buf.toString('utf8', header_size, length + header_size)
     result = fs.readFileSync(tempfile)
     fs.unlinkSync(tempfile)
     return result
@@ -125,7 +136,7 @@ function load_platform_library(libraryPath, libraryName, functions) {
         throw new Error('Unsupported architecture');
     }
 
-    let libraryFile = resolve(join(libraryPath, libraryName, archPart, osExt));
+    let libraryFile = path.resolve(path.join(libraryPath, libraryName + archPart + osExt));
 
     let oldCwd;
     if (needChdir) {
@@ -133,7 +144,7 @@ function load_platform_library(libraryPath, libraryName, functions) {
         process.chdir(libraryPath);
     }
 
-    let library = new Library(libraryFile, functions);
+    let library = new ffi.Library(libraryFile, functions);
 
     if (needChdir) {
         process.chdir(oldCwd);
@@ -148,10 +159,10 @@ function load_platform_library(libraryPath, libraryName, functions) {
 * @return {any}
 */
 function load_library_direct(libraryFilePath, functions) {
-    let library = new Library(libraryFilePath, functions);
+    let library = new ffi.Library(libraryFilePath, functions);
     return library
   }
 
   export default {
-    load_platform_library, string_to_cbuffer, cbuffer_to_string, cbuffer_to_buffer, buffer_to_cbuffer, allocate_cbuffer
+    load_platform_library, string_to_cbuffer, cbuffer_to_string, cbuffer_to_buffer, buffer_to_cbuffer, allocate_cbuffer, int64_to_buffer, buffer_to_int64, load_library_direct
 };

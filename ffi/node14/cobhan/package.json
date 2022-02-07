@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "eslint-config-google": "^0.14.0",
-    "ffi-napi": "^4.0.3"
+    "ffi-napi": "^4.0.3",
+    "cobhan": "file:../cobhan"
   }
 }

@@ -84,6 +84,16 @@ func tempToBytes(ptr unsafe.Pointer, length C.int) ([]byte, int32) {
 	return fileData, ERR_NONE
 }
 
+func Int64ToBuffer(value int64, dstPtr unsafe.Pointer) {
+    intPtr := (*int64)(dstPtr)
+    *intPtr = value
+}
+
+func Int32ToBuffer(value int32, dstPtr unsafe.Pointer) {
+    intPtr := (*int32)(dstPtr)
+    *intPtr = value
+}
+
 func BufferToBytes(srcPtr unsafe.Pointer) ([]byte, int32) {
 	length := bufferPtrToLength(srcPtr)
 
