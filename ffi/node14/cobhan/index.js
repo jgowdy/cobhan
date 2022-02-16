@@ -128,10 +128,10 @@ function load_platform_library(libraryPath, libraryName, functions) {
     }
 
     let needChdir = false;
-    if (osExt == 'linux') {
+    if (osExt == '.so') {
         const files = fs.readdirSync('/lib').filter((fn) => fn.startsWith('libc.musl'));
         if (files.length > 0) {
-            osExt = '-musl' + osExt;
+            osExt = '-musl.so';
             needChdir = true;
         }
     }
