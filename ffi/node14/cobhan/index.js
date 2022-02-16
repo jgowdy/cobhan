@@ -8,6 +8,11 @@ const sizeof_int32 = 32 / 8
 * @return {Buffer}
 */
 function string_to_cbuffer(str) {
+    if (str == null) {
+        let buffer = Buffer.allocUnsafe(header_size)
+        buffer.writeInt64LE(0, 0)
+        return buffer
+    }
     // string.length returns number of two byte UTF-16 code units
     let buffer = Buffer.allocUnsafe(header_size + str.length * 2)
     buffer.writeInt32LE(str.length, 0)

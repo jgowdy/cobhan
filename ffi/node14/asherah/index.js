@@ -1,4 +1,3 @@
-import path from 'path'
 import cobhan from 'cobhan'
 
 // KeyMeta contains the ID and Created timestamp for an encryption key.
@@ -33,7 +32,42 @@ import cobhan from 'cobhan'
   const libasherah = cobhan.load_platform_library('node_modules/asherah/binaries', 'libasherah', {
     'Encrypt': ['int32', ['pointer', 'pointer', 'pointer', 'pointer', 'pointer', 'pointer', 'pointer']],
     'Decrypt': ['int32', ['pointer', 'pointer', 'pointer', 'int64', 'pointer', 'int64', 'pointer']],
+    'Setup': ['int32', ['pointer', 'pointer', 'pointer', 'pointer', 'pointer', 'pointer', 'int32', 'pointer', 'pointer', 'pointer', 'int32', 'int32' ]],
     });
+
+/**
+* @param {string} kmsType
+* @param {string} metastore
+* @param {string} [rdbmsConnectionString]
+* @param {string} [dynamoDbEndpoint]
+* @param {string} [dynamoDbRegion]
+* @param {string} [dynamoDbTableName]
+* @param {boolean} [enableRegionSuffix]
+* @param {string} serviceName
+* @param {string} productId
+* @param {string} [preferredRegion]
+* @param {boolean} verbose
+* @param {boolean} sessionCache
+*/
+function setup(kmsType, metastore, rdbmsConnectionString, dynamoDbEndpoint, dynamoDbRegion, dynamoDbTableName, enableRegionSuffix, serviceName, productId, preferredRegion, verbose, sessionCache) {
+    const kmsTypeBuffer = cobhan.string_to_cbuffer(kmsType)
+    const metastoreBuffer = cobhan.string_to_cbuffer(metastore)
+    const rdbmsConnectionStringBuffer = cobhan.string_to_cbuffer(rdbmsConnectionString)
+    const dynamoDbEndpointBuffer = cobhan.string_to_cbuffer(dynamoDbEndpoint)
+    const dynamoDbRegionBuffer = cobhan.string_to_cbuffer(dynamoDbRegion)
+    const dynamoDbTableNameBuffer = cobhan.string_to_cbuffer(dynamoDbTableName)
+    const enableRegionSuffixInt = enableRegionSuffix ? 1 : 0
+    const serviceNameBuffer = cobhan.string_to_cbuffer(serviceName)
+    const productIdBuffer = cobhan.string_to_cbuffer(productId)
+    const preferredRegionBuffer = cobhan.string_to_cbuffer(preferredRegion)
+    const verboseInt = verbose ? 1 : 0
+    const sessionCacheInt = sessionCache ? 1 : 0
+
+    const result = libasherah.Setup(kmsTypeBuffer, metastoreBuffer, rdbmsConnectionStringBuffer, dynamoDbEndpointBuffer, dynamoDbRegionBuffer, dynamoDbTableNameBuffer, enableRegionSuffixInt, serviceNameBuffer, productIdBuffer, preferredRegionBuffer, verboseInt, sessionCacheInt);
+    if (result < 0) {
+        throw new Error('setup failed: ' + result);
+    }
+}
 
 /**
 * @param {string} partitionId
@@ -95,4 +129,4 @@ function encrypt(partitionId, data) {
     return dataRowRecord;
 }
 
-export default { encrypt, decrypt };
+export default { encrypt, decrypt, setup };

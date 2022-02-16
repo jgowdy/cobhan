@@ -68,6 +68,7 @@ typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
 extern "C" {
 #endif
 
+extern GoInt32 Setup(void* kmsTypePtr, void* metastorePtr, void* rdbmsConnectionStringPtr, void* dynamoDbEndpointPtr, void* dynamoDbRegionPtr, void* dynamoDbTableNamePtr, GoInt32 enableRegionSuffixInt, void* serviceNamePtr, void* productIdPtr, void* preferredRegionPtr, GoInt32 verboseInt, GoInt32 sessionCacheInt);
 extern GoInt32 Decrypt(void* partitionIdPtr, void* encryptedDataPtr, void* encryptedKeyPtr, GoInt64 created, void* parentKeyIdPtr, GoInt64 parentKeyCreated, void* outputDecryptedDataPtr);
 extern GoInt32 Encrypt(void* partitionIdPtr, void* dataPtr, void* outputEncryptedDataPtr, void* outputEncryptedKeyPtr, void* outputCreatedPtr, void* outputParentKeyIdPtr, void* outputParentKeyCreatedPtr);
 

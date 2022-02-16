@@ -5,6 +5,7 @@ import (
 )
 import (
 	"context"
+	"github.com/godaddy/asherah/go/securememory/memguard"
 	"godaddy.com/cobhan"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -13,13 +14,15 @@ import (
 	"github.com/godaddy/asherah/go/appencryption/pkg/crypto/aead"
 	"github.com/godaddy/asherah/go/appencryption/pkg/kms"
 	"github.com/godaddy/asherah/go/appencryption/pkg/persistence"
-	"github.com/godaddy/asherah/go/securememory/memguard"
 	"unsafe"
 )
 
-const ERR_GET_SESSION_FAILED = -100
-const ERR_ENCRYPT_FAILED = -101
-const ERR_DECRYPT_FAILED = -102
+const ERR_NONE = 0
+const ERR_NOT_INITIALIZED = -100
+const ERR_ALREADY_INITIALIZED = -101
+const ERR_GET_SESSION_FAILED = -102
+const ERR_ENCRYPT_FAILED = -103
+const ERR_DECRYPT_FAILED = -104
 
 func main() {
 }
@@ -27,17 +30,94 @@ func main() {
 var globalSessionFactory *appencryption.SessionFactory
 var globalCtx context.Context
 var globalSession *appencryption.Session
+var globalInitialized = false
 
-//TODO: Move this to an exported initialize function that takes these values by parameter
 func init() {
-	options := &Options{}
-	options.KMS = "static"
-	options.ServiceName = "TestService"
-	options.ProductID = "TestProduct"
-	options.Verbose = true
-	options.EnableSessionCaching = true
+}
 
+//export Setup
+func Setup(kmsTypePtr unsafe.Pointer, metastorePtr unsafe.Pointer, rdbmsConnectionStringPtr unsafe.Pointer, dynamoDbEndpointPtr unsafe.Pointer, dynamoDbRegionPtr unsafe.Pointer,
+	dynamoDbTableNamePtr unsafe.Pointer, enableRegionSuffixInt int32, serviceNamePtr unsafe.Pointer, productIdPtr unsafe.Pointer, preferredRegionPtr unsafe.Pointer, verboseInt int32,
+	sessionCacheInt int32) int32 {
+
+	if globalInitialized == true {
+		return ERR_ALREADY_INITIALIZED
+	}
+
+	kmsType, result := cobhan.BufferToString(kmsTypePtr)
+	if result != 0 {
+		return result
+	}
+
+	metastore, result := cobhan.BufferToString(metastorePtr)
+	if result != 0 {
+		return result
+	}
+
+	rdbmsConnectionString, result := cobhan.BufferToString(rdbmsConnectionStringPtr)
+	if result != 0 {
+		return result
+	}
+
+	dynamoDbEndpoint, result := cobhan.BufferToString(dynamoDbEndpointPtr)
+	if result != 0 {
+		return result
+	}
+
+	dynamoDbRegion, result := cobhan.BufferToString(dynamoDbRegionPtr)
+	if result != 0 {
+		return result
+	}
+
+	dynamoDbTableName, result := cobhan.BufferToString(dynamoDbTableNamePtr)
+	if result != 0 {
+		return result
+	}
+
+	enableRegionSuffix := enableRegionSuffixInt != 0
+
+	serviceName, result := cobhan.BufferToString(serviceNamePtr)
+	if result != 0 {
+		return result
+	}
+
+	productId, result := cobhan.BufferToString(productIdPtr)
+	if result != 0 {
+		return result
+	}
+
+	preferredRegion, result := cobhan.BufferToString(preferredRegionPtr)
+	if result != 0 {
+		return result
+	}
+
+	verbose := verboseInt != 0
+
+	sessionCache := sessionCacheInt != 0
+
+	setupAsherah(kmsType, metastore, rdbmsConnectionString, dynamoDbEndpoint, dynamoDbRegion, dynamoDbTableName,
+		enableRegionSuffix, serviceName, productId, preferredRegion, verbose, sessionCache)
+
+	return ERR_NONE
+}
+
+func setupAsherah(kmsType string, metaStore string, rdbmsConnectionString string, dynamoDbEndpoint string,
+	dynamoDbRegion string, dynamoDbTableName string, enableRegionSuffix bool, serviceName string, productId string,
+	preferredRegion string, verbose bool, sessionCache bool) {
+	options := &Options{}
+	options.KMS = kmsType             // "kms"
+	options.ServiceName = serviceName // "chatterbox"
+	options.ProductID = productId     //"facebook"
+	options.Verbose = verbose
+	options.EnableSessionCaching = sessionCache
+	options.Metastore = metaStore //"dynamodb"
 	crypto := aead.NewAES256GCM()
+	options.ConnectionString = rdbmsConnectionString
+	options.DynamoDBEndpoint = dynamoDbEndpoint
+	options.DynamoDBRegion = dynamoDbRegion
+	options.DynamoDBTableName = dynamoDbTableName
+	options.EnableRegionSuffix = enableRegionSuffix
+	options.PreferredRegion = preferredRegion
 
 	globalSessionFactory = appencryption.NewSessionFactory(
 		&appencryption.Config{
@@ -51,6 +131,7 @@ func init() {
 		appencryption.WithSecretFactory(new(memguard.SecretFactory)),
 		appencryption.WithMetrics(false),
 	)
+	globalInitialized = true
 }
 
 func NewMetastore(opts *Options) appencryption.Metastore {
@@ -113,7 +194,12 @@ func NewKMS(opts *Options, crypto appencryption.AEAD) appencryption.KeyManagemen
 }
 
 //export Decrypt
-func Decrypt(partitionIdPtr unsafe.Pointer, encryptedDataPtr unsafe.Pointer, encryptedKeyPtr unsafe.Pointer, created int64, parentKeyIdPtr unsafe.Pointer, parentKeyCreated int64, outputDecryptedDataPtr unsafe.Pointer) int32 {
+func Decrypt(partitionIdPtr unsafe.Pointer, encryptedDataPtr unsafe.Pointer, encryptedKeyPtr unsafe.Pointer,
+	created int64, parentKeyIdPtr unsafe.Pointer, parentKeyCreated int64, outputDecryptedDataPtr unsafe.Pointer) int32 {
+	if !globalInitialized {
+		return ERR_NOT_INITIALIZED
+	}
+
 	DebugOutput("Decrypt()")
 	partitionId, result := cobhan.BufferToString(partitionIdPtr)
 	if result != 0 {
@@ -172,7 +258,13 @@ func Decrypt(partitionIdPtr unsafe.Pointer, encryptedDataPtr unsafe.Pointer, enc
 }
 
 //export Encrypt
-func Encrypt(partitionIdPtr unsafe.Pointer, dataPtr unsafe.Pointer, outputEncryptedDataPtr unsafe.Pointer, outputEncryptedKeyPtr unsafe.Pointer, outputCreatedPtr unsafe.Pointer, outputParentKeyIdPtr unsafe.Pointer, outputParentKeyCreatedPtr unsafe.Pointer) int32 {
+func Encrypt(partitionIdPtr unsafe.Pointer, dataPtr unsafe.Pointer, outputEncryptedDataPtr unsafe.Pointer,
+	outputEncryptedKeyPtr unsafe.Pointer, outputCreatedPtr unsafe.Pointer, outputParentKeyIdPtr unsafe.Pointer,
+	outputParentKeyCreatedPtr unsafe.Pointer) int32 {
+	if !globalInitialized {
+		return ERR_NOT_INITIALIZED
+	}
+
 	DebugOutput("Encrypt()")
 
 	partitionId, result := cobhan.BufferToString(partitionIdPtr)
@@ -231,6 +323,7 @@ func Encrypt(partitionIdPtr unsafe.Pointer, dataPtr unsafe.Pointer, outputEncryp
 }
 
 func NewCryptoPolicy(options *Options) *appencryption.CryptoPolicy {
+	//TODO: Add these variables to setup
 	policyOpts := []appencryption.PolicyOption{
 		appencryption.WithExpireAfterDuration(options.ExpireAfter),
 		appencryption.WithRevokeCheckInterval(options.CheckInterval),
