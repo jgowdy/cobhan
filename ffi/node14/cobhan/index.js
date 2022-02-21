@@ -40,7 +40,6 @@ function cbuffer_to_string(buf) {
     if (length < 0) {
         return temp_to_string(buf, length)
     }
-    console.log('cbuffer_to_string: got ' + length + ' bytes')
     return buf.toString('utf8', header_size, length + header_size)
 }
 
