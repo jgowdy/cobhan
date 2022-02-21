@@ -1,6 +1,6 @@
 {
   "name": "cobhan",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Functions to enable cobhan wrapper libraries",
   "main": "index.js",
   "type": "module",
@@ -10,7 +10,9 @@
   "author": "Jeremiah Gowdy",
   "license": "ISC",
   "dependencies": {
-    "eslint-config-google": "^0.14.0",
     "ffi-napi": "^4.0.3"
+  },
+  "devDependencies": {
+    "eslint-config-google": "^0.14.0"
   }
 }
