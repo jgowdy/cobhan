@@ -10,7 +10,8 @@
   "author": "Jeremiah Gowdy",
   "license": "ISC",
   "dependencies": {
-    "ffi-napi": "^4.0.3"
+    "ffi-napi": "^4.0.3",
+    "fs": "^0.0.1-security"
   },
   "devDependencies": {
     "eslint-config-google": "^0.14.0"
